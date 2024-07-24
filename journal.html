@@ -1,41 +1,30 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <style>
-        .appSheet { background-color: #ffffff; touch - action: none!important; }
-    </style>
-    <script>
-        (function() {
-    function findIframe(frameElement) {
-        var iframeList = document.querySelectorAll('iframe');
-
-        for (var i = 0; i < iframeList.length; ++i) {
-            if (iframeList[i].contentWindow === frameElement) {
-                return iframeList[i];
-            }
-        }
-    }
-
-    function receiveMessage(e) {
-        try {
-            var data = JSON.parse(e.data);
-            var height = data['iframe-height'];
-            var iframe;
-
-            if (height && (iframe = findIframe(e.source))) {
-                iframe.style.height = height + 'px';
-            }
-        } catch (err) {
-        }
-    }
-
-    window.addEventListener('message', receiveMessage, false);
-})();
-    </script>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <title>User Data</title>
 </head>
-    <body>
-        <div class="appSheet">
-            <iframe src="https://www.appsheet.com/start/0aa0c44d-fe12-4155-b81b-e5e89d80c48f" frameborder="0" width="100%" height="100%"></iframe>
-        </div>
-    </body>
+<body>
+    <h1>User ID</h1>
+    <p id="userId">User ID:</p>
+    <button id="saveBtn">Save User ID</button>
+    <script>
+        var userId = window.Telegram.WebApp.initDataUnsafe.user.id;
+	$('#userId').append(' ' + userId);
+	$('#saveBtn').on('click', function() {
+	    $.ajax({
+	        url: 'save.php',
+		type: 'post',
+		data: { userId: userId },
+		success: function(response) {
+		    alert(response);
+		},
+		error: function(xhr, status, error) {
+		    alert("Error: " + xhr.responseText);
+		}
+	    });
+        });
+    </script>
+</body>
 </html>
