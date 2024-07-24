@@ -11,12 +11,6 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
         let tg = window.Telegram.WebApp;
-        tg.ThemeParams.bg_color;
-        tg.ThemeParams.text_color;
-        tg.ThemeParams.hint_color;
-        tg.ThemeParams.link_color;
-        tg.ThemeParams.button_color;
-        tg.ThemeParams.button_text_colorString;
         (function() {
             function findIframe(frameElement) {
                 var iframeList = document.querySelectorAll('iframe');
@@ -39,6 +33,9 @@
             }
             window.addEventListener('message', receiveMessage, false);
         })();
+	let usercard = document.createElement('p'); //создаем параграф 
+        usercard.innerText = `${tg.initDataUnsafe.user.id}`; //показываем user_id
+        usercard.appendChild(usercard);
     </script>
     <style>
         body{
@@ -72,18 +69,12 @@
         #usercard{
         	text-align: center;
         }
-        .yaForm { background-color: #ffffff; }
     </style>
 </head>
     <body>
         <div id="usercard"> <!--Карта профиля, человека, который к нам обратился--></div>
-        <div class="yaForm">
+        <div class="body">
             <iframe src="https://forms.yandex.ru/u/668e55ae2530c24b27c69ea5/?iframe=1&answer_choices_53030971=102662277" frameborder="0" name="ya-form-668e55ae2530c24b27c69ea5" width="100%" height="100%"></iframe>
         </div>
     </body>
-    <script>
-        let usercard = document.createElement('p'); //создаем параграф 
-        usercard.innerText = `${tg.initDataUnsafe.user.id}`; //показываем user_id
-        usercard.appendChild(usercard);
-    </script>
 </html>
