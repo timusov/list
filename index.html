@@ -13,6 +13,7 @@
     <script>
         const tg = window.Telegram.WebApp;
 	var userId = window.Telegram.WebApp.initDataUnsafe.user.id;
+	document.getElementById('iframe').src = 'https://forms.yandex.ru/u/668e55ae2530c24b27c69ea5/?iframe=1&answer_choices_53030971=102662277&answer_choices_52985821=' + userID;
     </script>
     <style>
         body{
@@ -47,7 +48,7 @@
 </head>
     <body>
         <div class="body">
-            <iframe src="https://forms.yandex.ru/u/668e55ae2530c24b27c69ea5/?iframe=1&answer_choices_53030971=102662277&answer_choices_52985821={{userID}}" frameborder="0" name="ya-form-668e55ae2530c24b27c69ea5"></iframe>
+            <iframe  id="iframe src="" frameborder="0" name="ya-form-668e55ae2530c24b27c69ea5"></iframe>
         </div>
     </body>
 </html>
