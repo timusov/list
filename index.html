@@ -35,9 +35,10 @@
             }
             window.addEventListener('message', receiveMessage, false);
         })();
-	let usercard = document.createElement('p'); //создаем параграф 
-        usercard.innerText = `${tg.initDataUnsafe.user.id}`; //показываем user_id
-        usercard.appendChild(usercard);
+	let usercard = document.getElementById("usercard"); //получаем блок usercard 
+	let userid = document.createElement('p'); //создаем еще параграф 
+	userid.innerText = `${tg.initDataUnsafe.user.id}`; //показываем user_id
+	usercard.appendChild(userid); //добавляем
     </script>
     <style>
         body{
