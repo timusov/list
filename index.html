@@ -70,7 +70,7 @@
 		startParam[1] = "";
 	}
 	else {
-		startParam[1] = "&answer_short_text_53031114=" + startParam[1];
+		startParam[1] = "&answer_short_text_53031114="+ startParam[1] +"/"+ startParam[2];
 	}
 	var textToInsert = window.Telegram.WebApp.initDataUnsafe.user.first_name;
 	var textContainer = document.getElementById("text-container");
