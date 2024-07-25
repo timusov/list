@@ -46,32 +46,40 @@
     </body>
 <script>
 	var startParam = window.Telegram.WebApp.initDataUnsafe.start_param;
-	startParam = startParam.split('_')
-	if (startParam[0] == "reg") {
-		startParam[0] = "102662277";
-	}
-	else if (startParam[0] == "work") {
-		startParam[0] = "102662359";
-	}
-	else if (startParam[0] == "edit") {
-		startParam[0] = "102662360";
-	}
-	else if (startParam[0] == "comp") {
-		startParam[0] = "102662361";
-	}
-	else if (startParam[0] == "other") {
-		startParam[0] = "103406632";
+	if (startParam != "") {
+		startParam = startParam.split('_')
+		if (startParam[0] == "reg") {
+			startParam[0] = "102662277";
+		}
+		else if (startParam[0] == "work") {
+			startParam[0] = "102662359";
+		}
+		else if (startParam[0] == "edit") {
+			startParam[0] = "102662360";
+		}
+		else if (startParam[0] == "comp") {
+			startParam[0] = "102662361";
+		}
+		else if (startParam[0] == "other") {
+			startParam[0] = "103406632";
+		}
+		else {
+			startParam[0] = "102662277";
+		}
+	
+		if (startParam[1] == undefined) {
+			startParam[1] = "";
+		}
+		else {
+			startParam[1] = "&answer_short_text_53031114="+ startParam[1] +"/"+ startParam[2];
+		}
 	}
 	else {
 		startParam[0] = "102662277";
-	}
-	
-	if (startParam[1] == undefined) {
 		startParam[1] = "";
 	}
-	else {
-		startParam[1] = "&answer_short_text_53031114="+ startParam[1] +"/"+ startParam[2];
-	}
+	
+	
 	var textToInsert = window.Telegram.WebApp.initDataUnsafe.user.first_name;
 	var textContainer = document.getElementById("text-container");
 	textContainer.innerHTML += textToInsert + "!";
