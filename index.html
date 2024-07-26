@@ -75,7 +75,12 @@
 			var ticketID = "";
 		}
 		else {
-			var ticketID = "&answer_short_text_53031114="+ startParam[1] +"/"+ startParam[2];
+			if (startParam[2] == undefined) {
+				var ticketID = "&answer_short_text_53031114="+ startParam[1];
+			}
+			else {
+				var ticketID = "&answer_short_text_53031114="+ startParam[1] +"/"+ startParam[2];	
+			}
 		}
 	}
 	else {
