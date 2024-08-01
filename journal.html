@@ -39,10 +39,23 @@
 </head>
     <body>
         <div class="body">
-		<iframe id="iframe" frameborder="0" height= "800"; scrolling="yes" src="https://www.appsheet.com/start/0aa0c44d-fe12-4155-b81b-e5e89d80c48f"></iframe>
+		<iframe id="iframe" frameborder="0" height= "800" scrolling="yes" src=""></iframe>
         </div>
     </body>
 <script>
 	window.Telegram.WebApp.disableVerticalSwipes()
+	var startParam = window.Telegram.WebApp.initDataUnsafe.start_param;
+	if (startParam != undefined) {
+		if (startParam == "reg") {
+			var url = "#view=%D0%94%D0%BE%D0%B1%D0%B0%D0%B2%D0%BB%D0%B5%D0%BD%D0%BD%D1%8B%D0%B5";
+		}
+		else if (startParam == "work") {
+			var url = "#view=%D0%92%20%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%B5";
+		}
+	}
+	else {
+		var url = "";
+	}
+	document.getElementById("iframe").src = "https://www.appsheet.com/start/0aa0c44d-fe12-4155-b81b-e5e89d80c48f"+ url;
 </script>
 </html>
