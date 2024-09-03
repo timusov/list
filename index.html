@@ -95,12 +95,11 @@
 	var textToInsert = window.Telegram.WebApp.initDataUnsafe.user.first_name;
 	var textContainer = document.getElementById("text-container");
 	if (startParam[1] != undefined && startParam[2] != undefined) {
-		var textToInsert == textToInsert + "! Заявка № "+ startParam[1] +"/"+ startParam[2];
+		textContainer.innerHTML +=  textToInsert + "! Заявка № "+ startParam[1] +"/"+ startParam[2];
 	}
 	else {
-		var textToInsert == textToInsert + "!";
+		textContainer.innerHTML +=  textToInsert + "!";
 	}
-	textContainer.innerHTML += textToInsert;
 	var userId = window.Telegram.WebApp.initDataUnsafe.user.id;
 	document.getElementById("iframe").src = "https://forms.yandex.ru/u/668e55ae2530c24b27c69ea5/?iframe=1&answer_choices_53030971="+ action + answerUserID + userId + ticketID;
 </script>
