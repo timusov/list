@@ -95,7 +95,7 @@
 	var textToInsert = window.Telegram.WebApp.initDataUnsafe.user.first_name;
 	var textContainer = document.getElementById("text-container");
 	if (startParam[1] != undefined && startParam[2] != undefined) {
-		textToInsert += "! Заявка № "+ticketID;
+		textToInsert += "! Заявка № "+ startParam[1] +"/"+ startParam[2];
 	}
 	else {
 		textToInsert += "!";
