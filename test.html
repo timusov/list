@@ -25,7 +25,7 @@
             margin-bottom: .5rem;
         }
 
-        input, textarea {
+        select, input, textarea {
             width: 100%;
             padding: .5rem;
             border: 1px solid #ddd;
@@ -33,7 +33,9 @@
         }
 
         textarea {
-            height: 100px;
+            min-height: 50px;
+            max-height: 200px;
+            overflow: auto;
         }
 
         button {
@@ -58,11 +60,22 @@
     <div class="container">
         <h1>Создание заявки</h1>
         <form action="" id="contactForm">
+            <!-- Объект -->
             <label for="object">Объект:</label>
-            <input type="text" name="object" id="object" required>
+            <select name="object" id="object" required>
+                <option value="">-- Выберите объект --</option>
+                <option value="object1">Объект 1</option>
+                <option value="object2">Объект 2</option>
+                <option value="object3">Объект 3</option>
+            </select>
             
+            <!-- Опишите проблему -->
             <label for="problemDescription">Опишите проблему:</label>
-            <textarea name="problemDescription" id="problemDescription" cols="30" rows="10"></textarea>
+            <textarea name="problemDescription" id="problemDescription" cols="30" rows="5" style="resize: vertical;" placeholder="Опишите проблему здесь..."></textarea>
+            
+            <!-- Загрузить файл -->
+            <label for="fileUpload">Загрузить файл:</label>
+            <input type="file" name="fileUpload" id="fileUpload" accept=".pdf,.jpg,.png">
             
             <button type="submit" id="submitButton">Отправить</button>
         </form>
@@ -78,8 +91,9 @@
 
                 const objectField = document.getElementById('object').value;
                 const problemDescriptionField = document.getElementById('problemDescription').value;
+                const fileUploadField = document.getElementById('fileUpload').files[0];
 
-                if (!objectField || !problemDescriptionField) {
+                if (!objectField || !problemDescriptionField || !fileUploadField) {
                     alert('Все поля должны быть заполнены');
                     return;
                 }
@@ -88,7 +102,7 @@
                     const response = await fetch('/your-google-api-endpoint', {
                         method: 'POST',
                         headers: {
-                            'Content-Type': 'application/json'
+                            'Content-Type': 'multipart/form-data'
                         },
                         body: JSON.stringify({
                             object: objectField,
