@@ -3,118 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Заявка</title>
+    <title>Telegram Style Form</title>
     <style>
-        /* Светлый стиль */
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #fafafa;
-            color: #333;
-        }
-
+        /* Стилизация контейнера */
         .container {
             width: 400px;
             margin: auto;
-            padding: 1rem;
+        }
+
+        /* Общая стилизация для input-field */
+        .input-field {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             border: 1px solid #ccc;
-            box-shadow: 0 0 10px rgba(0, 0, 0, .1);
+            padding: 10px;
+            margin-bottom: 10px;
         }
 
-        label {
-            display: block;
-            margin-bottom: .5rem;
+        /* Поле для текста с возможностью увеличения высоты */
+        #description {
+            resize: vertical;
         }
 
-        select, input, textarea {
-            width: 100%;
-            padding: .5rem;
-            border: 1px solid #ddd;
-            outline: none;
+        /* Форма в целом */
+        #telegramForm {
+            background-color: #f9f9f9;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, .1);
         }
 
-        textarea {
-            min-height: 50px;
-            max-height: 200px;
-            overflow: auto;
-        }
-
-        button {
+        /* Кнопка отправки */
+        #sendButton {
             cursor: pointer;
-            padding: .5rem 1rem;
-            border: none;
-            background-color: #4CAF50; /* Цвет зеленый */
             color: white;
-            transition: all .3s ease;
+            background-color: #2FABE9;
+            font-size: 1rem;
+            padding: 7px 15px;
+            border: none;
+            transition: background-color 0.2s ease-in-out;
         }
 
-        button:hover {
-            background-color: #43A047;
-        }
-
-        button:active {
-            transform: scale(.95);
+        #sendButton:hover {
+            background-color: #00b2ff;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Создание заявки</h1>
-        <form action="" id="contactForm">
-            <!-- Объект -->
-            <label for="object">Объект:</label>
-            <select name="object" id="object" required>
-                <option value="">-- Выберите объект --</option>
-                <option value="object1">Объект 1</option>
-                <option value="object2">Объект 2</option>
-                <option value="object3">Объект 3</option>
-            </select>
+        <form id="telegramForm" action="" method="post">
+            <div class="input-field">
+                <label for="object">Объект</label>
+                <select id="object" name="object">
+                    <!-- Можно добавить сюда реальный список объектов -->
+                    <option value="">Выберите объект</option>
+                    <option value="Object 1">Объект 1</option>
+                    <option value="Object 2">Объект 2</option>
+                    <option value="Object 3">Объект 3</option>
+                </select>
+            </div>
             
-            <!-- Опишите проблему -->
-            <label for="problemDescription">Опишите проблему:</label>
-            <textarea name="problemDescription" id="problemDescription" cols="30" rows="5" style="resize: vertical;" placeholder="Опишите проблему здесь..."></textarea>
+            <textarea id="description" rows="6" placeholder="Опишите проблему"></textarea>
+
+            <input type="file" id="uploadFile" accept=".jpg,.png" />
             
-            <!-- Загрузить файл -->
-            <label for="fileUpload">Загрузить файл:</label>
-            <input type="file" name="fileUpload" id="fileUpload" accept=".pdf,.jpg,.png">
-            
-            <button type="submit" id="submitButton">Отправить</button>
+            <button type="submit" id="sendButton">Отправить</button>
         </form>
     </div>
-    
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const form = document.getElementById('contactForm');
-            const submitButton = document.getElementById('submitButton');
+            // Обработка события выбора объекта
+            document.getElementById('object').addEventListener('change', () => {
+                const selectedObject = document.getElementById('object');
+                console.log(`Объект выбран: ${selectedObject.value}`);
+            });
 
-            submitButton.addEventListener('click', async (event) => {
+            // Обработка отправки данных
+            document.getElementById('sendButton').addEventListener('click', async (event) => {
                 event.preventDefault();
 
-                const objectField = document.getElementById('object').value;
-                const problemDescriptionField = document.getElementById('problemDescription').value;
-                const fileUploadField = document.getElementById('fileUpload').files[0];
-
-                if (!objectField || !problemDescriptionField || !fileUploadField) {
-                    alert('Все поля должны быть заполнены');
-                    return;
-                }
-
+                const formData = new FormData(document.getElementById('telegramForm'));
                 try {
-                    const response = await fetch('/your-google-api-endpoint', {
+                    const response = await fetch('/path/to/your/googleAPI', {
                         method: 'POST',
-                        headers: {
-                            'Content-Type': 'multipart/form-data'
-                        },
-                        body: JSON.stringify({
-                            object: objectField,
-                            problemDescription: problemDescriptionField
-                        })
+                        body: formData
                     });
-
-                    if (!response.ok) {
-                        throw new Error('Ошибка при отправке данных');
-                    }
-
-                    alert('Заявка успешно отправлена!');
+                    if (!response.ok) throw new Error(`${response.status}: ${response.statusText}`);
+                    console.log('Данные успешно отправлены!');
                 } catch (error) {
                     alert('Произошла ошибка при отправке данных: ' + error.message);
                 }
