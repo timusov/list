@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Заявка</title>
+    <style>
+        /* Светлый стиль */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fafafa;
+            color: #333;
+        }
+
+        .container {
+            width: 400px;
+            margin: auto;
+            padding: 1rem;
+            border: 1px solid #ccc;
+            box-shadow: 0 0 10px rgba(0, 0, 0, .1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: .5rem;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: .5rem;
+            border: 1px solid #ddd;
+            outline: none;
+        }
+
+        textarea {
+            height: 100px;
+        }
+
+        button {
+            cursor: pointer;
+            padding: .5rem 1rem;
+            border: none;
+            background-color: #4CAF50; /* Цвет зеленый */
+            color: white;
+            transition: all .3s ease;
+        }
+
+        button:hover {
+            background-color: #43A047;
+        }
+
+        button:active {
+            transform: scale(.95);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Создание заявки</h1>
+        <form action="" id="contactForm">
+            <label for="object">Объект:</label>
+            <input type="text" name="object" id="object" required>
+            
+            <label for="problemDescription">Опишите проблему:</label>
+            <textarea name="problemDescription" id="problemDescription" cols="30" rows="10"></textarea>
+            
+            <button type="submit" id="submitButton">Отправить</button>
+        </form>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('contactForm');
+            const submitButton = document.getElementById('submitButton');
+
+            submitButton.addEventListener('click', async (event) => {
+                event.preventDefault();
+
+                const objectField = document.getElementById('object').value;
+                const problemDescriptionField = document.getElementById('problemDescription').value;
+
+                if (!objectField || !problemDescriptionField) {
+                    alert('Все поля должны быть заполнены');
+                    return;
+                }
+
+                try {
+                    const response = await fetch('/your-google-api-endpoint', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            object: objectField,
+                            problemDescription: problemDescriptionField
+                        })
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Ошибка при отправке данных');
+                    }
+
+                    alert('Заявка успешно отправлена!');
+                } catch (error) {
+                    alert('Произошла ошибка при отправке данных: ' + error.message);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
