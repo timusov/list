@@ -3,56 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Telegram Style Form</title>
+    <title>Yandex Style Form</title>
     <style>
-        /* Стилизация контейнера */
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+        }
+
         .container {
-            width: 400px;
-            margin: auto;
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 1em;
         }
 
-        /* Общая стилизация для input-field */
-        .input-field {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border: 1px solid #ccc;
-            padding: 10px;
-            margin-bottom: 10px;
+        .form-control {
+            position: relative;
+            margin-bottom: 1em;
         }
 
-        /* Поле для текста с возможностью увеличения высоты */
-        #description {
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 0.25em;
+        }
+
+        select,
+        textarea,
+        input[type="text"],
+        input[type="file"] {
+            display: block;
+            width: 100%;
+            padding: 0.5em;
+            border: 1px solid #ddd;
+            outline: none;
+        }
+
+        textarea {
+            height: 10em;
             resize: vertical;
         }
 
-        /* Форма в целом */
-        #telegramForm {
-            background-color: #f9f9f9;
-            padding: 20px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, .1);
-        }
-
-        /* Кнопка отправки */
-        #sendButton {
-            cursor: pointer;
-            color: white;
-            background-color: #2FABE9;
-            font-size: 1rem;
-            padding: 7px 15px;
+        button {
+            display: inline-block;
+            padding: 0.5em 1em;
+            background-color: #4CAF50;
+            color: #fff;
             border: none;
+            cursor: pointer;
             transition: background-color 0.2s ease-in-out;
         }
 
-        #sendButton:hover {
-            background-color: #00b2ff;
+        button:hover {
+            background-color: #42A547;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <form id="telegramForm" action="" method="post">
-            <div class="input-field">
+        <form id="yandexForm" action="" method="post">
+            <div class="form-control">
                 <label for="object">Объект</label>
                 <select id="object" name="object">
                     <!-- Можно добавить сюда реальный список объектов -->
@@ -62,11 +74,17 @@
                     <option value="Object 3">Объект 3</option>
                 </select>
             </div>
-            
-            <textarea id="description" rows="6" placeholder="Опишите проблему"></textarea>
 
-            <input type="file" id="uploadFile" accept=".jpg,.png" />
-            
+            <div class="form-control">
+                <label for="description">Опишите проблему</label>
+                <textarea id="description" rows="6" placeholder="Опишите проблему"></textarea>
+            </div>
+
+            <div class="form-control">
+                <label for="uploadFile">Загрузить файл</label>
+                <input type="file" id="uploadFile" accept=".jpg,.png">
+            </div>
+
             <button type="submit" id="sendButton">Отправить</button>
         </form>
     </div>
@@ -83,7 +101,7 @@
             document.getElementById('sendButton').addEventListener('click', async (event) => {
                 event.preventDefault();
 
-                const formData = new FormData(document.getElementById('telegramForm'));
+                const formData = new FormData(document.getElementById('yandexForm'));
                 try {
                     const response = await fetch('/path/to/your/googleAPI', {
                         method: 'POST',
