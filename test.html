@@ -85,16 +85,16 @@
             const form = document.getElementById('contactForm');
             const submitButton = document.getElementById('submitButton');
 
-            submitButton.disabled = true;
+            submitButton.hide();
 
             form.addEventListener('input', (event) => {
                 const objectField = document.getElementById('object');
                 const problemDescriptionField = document.getElementById('problemDescription');
 
                 if (objectField.value && problemDescriptionField.value) {
-                    submitButton.disabled = false;
+                    submitButton.show();
                 } else {
-                    submitButton.disabled = true;
+                    submitButton.hide();
                 }
             });
         });
