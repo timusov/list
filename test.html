@@ -6,59 +6,151 @@
     <title>Отправить заявку</title>
     <!-- подключение CSS библиотек -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css">
-    <style>
-        body {
-            background-color: white;
-        }
-    </style>
+<style>
+/* Стиль дизайна Яндекса */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #fff;
+    color: #333;
+}
+
+.container {
+    width: 600px;
+    margin: auto;
+    padding: 1rem;
+    border: 1px solid #ccc;
+    box-shadow: 0 0 10px rgba(0, 0, 0, .1);
+}
+
+label {
+    display: block;
+    margin-bottom: .5rem;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: .5rem;
+    border: 1px solid #ddd;
+    outline: none;
+}
+
+textarea {
+    min-height: 50px;
+    max-height: 200px;
+    overflow: auto;
+}
+
+button {
+    cursor: pointer;
+    padding: .5rem 1rem;
+    border: none;
+    background-color: #4CAF50; /* Цвет зеленый */
+    color: white;
+    transition: all .3s ease;
+}
+
+button:hover {
+    background-color: #43A047;
+}
+
+button:active {
+    transform: scale(.95);
+}
+</style>
+</head>
+<body>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Заявка</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
         <h1>Создание заявки</h1>
         <form action="" id="contactForm">
-            <label for="object">Объект:</label>
-            <input type="text" name="object" id="object" required>
+            <!-- Логин -->
+            <label for="userLogin">Логин:</label>
+            <input type="text" name="userLogin" id="userLogin" required>
             
+            <!-- Объект -->
+            <label for="object">Объект:</label>
+            <select name="object" id="object" required>
+                <option value="">-- Выберите объект --</option>
+                <option value="object1">Объект 1</option>
+                <option value="object2">Объект 2</option>
+                <option value="object3">Объект 3</option>
+            </select>
+            
+            <!-- Опишите проблему -->
             <label for="problemDescription">Опишите проблему:</label>
-            <textarea name="problemDescription" id="problemDescription" cols="30" rows="10"></textarea>
+            <textarea name="problemDescription" id="problemDescription" cols="30" rows="5" style="resize: vertical;" placeholder="Опишите проблему здесь..."></textarea>
+            
+            <!-- Загрузить файл -->
+            <label for="fileUpload">Загрузить файл:</label>
+            <input type="file" name="fileUpload" id="fileUpload" accept=".pdf,.jpg,.png">
             
             <button type="submit" id="submitButton">Отправить</button>
         </form>
     </div>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const form = document.getElementById('contactForm');
-            const submitButton = document.getElementById('submitButton');
+<script src="app.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('contactForm');
+    const submitButton = document.getElementById('submitButton');
 
-            submitButton.addEventListener('click', async (event) => {
-                event.preventDefault();
-                const objectField = document.getElementById('objectSelect').value;
-                const problemDescriptionField = document.getElementById('problemDescription').value;
-                const fileUploadField = document.getElementById('fileUpload').files[0];
-                if (!objectField || !problemDescriptionField) {
-                    alert('Все поля должны быть заполнены');
-                     return;
-                }
-                    try {
-                    const response = await fetch('https://script.google.com/macros/s/AKfycbzBntFZxmicsNi-fw002CcH-nE1wZeO-w7rzEdzB8mIFGjmLW4W-Yfvya9j94ZUmQDb/exec', {
-                        method: 'GET',
-                        headers: {
-                            'Content-Type': 'multipart/form-data'
-                        },
-                        body: JSON.stringify({
-                                                object: objectField,
-                                                problemDescription: problemDescriptionField
-                                            })
-                    });
-                    if (!response.ok) {
-                        throw new Error('Ошибка при отправке данных');
-                    }
-                        alert('Заявка успешно отправлена!');
-                    } catch (error) {
-                        alert('Произошла ошибка при отправке данных: ' + error.message);
-                    }
-            }
+    submitButton.disabled = true;
+
+    form.addEventListener('input', (event) => {
+        const loginField = document.getElementById('userLogin');
+        const objectField = document.getElementById('object');
+        const problemDescriptionField = document.getElementById('problemDescription');
+
+        if (loginField.value && objectField.value && problemDescriptionField.value) {
+            submitButton.disabled = false;
+        } else {
+            submitButton.disabled = true;
         }
-    </script>
+    });
+
+    submitButton.addEventListener('click', async (event) => {
+        event.preventDefault();
+
+        const loginField = document.getElementById('userLogin').value;
+        const objectField = document.getElementById('object').value;
+        const problemDescriptionField = document.getElementById('problemDescription').value;
+        const fileUploadField = document.getElementById('fileUpload').files[0];
+
+        if (!loginField || !objectField || !problemDescriptionField || !fileUploadField) {
+            alert('Все поля должны быть заполнены');
+            return;
+        }
+
+        try {
+            const response = await fetch('/your-google-api-endpoint', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                },
+                body: new FormData(form)
+            });
+
+            if (!response.ok) {
+                throw new Error('Ошибка при отправке данных');
+            }
+
+            alert('Заявка успешно отправлена!');
+        } catch (error) {
+            alert('Произошла ошибка при отправке данных: ' + error.message);
+        }
+    });
+});
+</script>
 </body>
 </html>
