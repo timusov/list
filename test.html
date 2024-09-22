@@ -71,7 +71,7 @@ button:active {
 </head>
 <body>
     <div class="container">
-        <h1>Заявка</h1>
+        <h1>Заявка 2</h1>
         <form action="" id="contactForm">         
             <!-- Объект -->
             <label for="object">Объект:</label>
@@ -94,19 +94,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('contactForm');
     const submitButton = document.getElementById('submitButton');
 
-    submitButton.disabled = true;
-
-    form.addEventListener('input', (event) => {
-        const objectField = document.getElementById('object');
-        const problemDescriptionField = document.getElementById('problemDescription');
-
-        if (objectField.value && problemDescriptionField.value) {
-            submitButton.disabled = false;
-        } else {
-            submitButton.disabled = true;
-        }
-    });
-
     submitButton.addEventListener('click', async (event) => {
         event.preventDefault();
 
@@ -124,7 +111,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 },
-                body: new FormData(form)
+                body: {
+                    object: objectField,
+                    problem: problemDescriptionField
+                }
             });
 
             if (!response.ok) {
