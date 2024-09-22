@@ -62,9 +62,9 @@
 </head>
 <body>
     <div class="container">
-        <h1>Сообщить о проблеме</h1>
+        <h1>Отправить заявку</h1>
         <form action="https://script.google.com/macros/s/AKfycbzBntFZxmicsNi-fw002CcH-nE1wZeO-w7rzEdzB8mIFGjmLW4W-Yfvya9j94ZUmQDb/exec" method="GET">
-            <input type="hidden" id="uid" />
+            <input type="hidden" name="uid" id="uid" required/>
             <!-- Объект -->
             <label for="object">Объект:</label>
             <select name="object" id="object" required>
@@ -83,10 +83,10 @@
     </div>
     
     <script>
-        document.getElementById('uid').value = window.Telegram.WebApp.initDataUnsafe.user.id;
         document.addEventListener('DOMContentLoaded', () => {
             const form = document.getElementById('contactForm');
             const submitButton = document.getElementById('submitButton');
+            document.getElementById('uid').value = window.Telegram.WebApp.initDataUnsafe.user.id;
 
             submitButton.hide();
 
