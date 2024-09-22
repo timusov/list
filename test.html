@@ -61,7 +61,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>Создание заявки</h1>
+        <h1>Отправить заявку</h1>
         <form action="https://script.google.com/macros/s/AKfycbzBntFZxmicsNi-fw002CcH-nE1wZeO-w7rzEdzB8mIFGjmLW4W-Yfvya9j94ZUmQDb/exec" method="GET">
             <!-- Объект -->
             <label for="object">Объект:</label>
@@ -74,7 +74,7 @@
             
             <!-- Опишите проблему -->
             <label for="problemDescription">Опишите проблему:</label>
-            <textarea name="problemDescription" id="problemDescription" cols="30" rows="5" style="resize: vertical;" placeholder="Опишите проблему здесь..."></textarea>
+            <textarea name="problemDescription" id="problemDescription" cols="30" rows="5" style="resize: vertical;" placeholder="Опишите проблему здесь..." required></textarea>
             
             <button type="submit" id="submitButton">Отправить</button>
         </form>
