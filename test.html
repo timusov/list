@@ -3,117 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yandex Style Form</title>
+    <title>Яндекс Дизайн</title>
+    <!-- подключение CSS библиотек -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css">
     <style>
-        * {
-            box-sizing: border-box;
-        }
-
         body {
-            font-family: Arial, sans-serif;
-            background-color: #ffffff;
-            color: #333;
-        }
-
-        .container {
-            max-width: 500px;
-            margin: 0 auto;
-            padding: 1em;
-        }
-
-        .form-control {
-            position: relative;
-            margin-bottom: 1em;
-        }
-
-        label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 0.25em;
-        }
-
-        select,
-        textarea,
-        input[type="text"],
-        input[type="file"] {
-            display: block;
-            width: 100%;
-            padding: 0.5em;
-            border: 1px solid #ddd;
-            outline: none;
-        }
-
-        textarea {
-            height: 10em;
-            resize: vertical;
-        }
-
-        button {
-            display: inline-block;
-            padding: 0.5em 1em;
-            background-color: #4CAF50;
-            color: #fff;
-            border: none;
-            cursor: pointer;
-            transition: background-color 0.2s ease-in-out;
-        }
-
-        button:hover {
-            background-color: #42A547;
+            background-color: white;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <form id="yandexForm" action="" method="post">
-            <div class="form-control">
-                <label for="object">Объект</label>
-                <select id="object" name="object">
-                    <!-- Можно добавить сюда реальный список объектов -->
-                    <option value="">Выберите объект</option>
-                    <option value="Object 1">Объект 1</option>
-                    <option value="Object 2">Объект 2</option>
-                    <option value="Object 3">Объект 3</option>
-                </select>
+        <h1>Сообщение об ошибке</h1>
+        <form id="reportForm" method="POST" action="https://example.com/api/submitReport">
+            <div class="form-group row">
+                <label for="objectSelect" class="col-sm-2 col-form-label">Объект</label>
+                <div class="col-sm-10">
+                    <select class="form-control" id="objectSelect">
+                        <option value="item1">Элемент 1</option>
+                        <option value="item2">Элемент 2</option>
+                        <option value="item3">Элемент 3</option>
+                    </select>
+                </div>
             </div>
-
-            <div class="form-control">
-                <label for="description">Опишите проблему</label>
-                <textarea id="description" rows="6" placeholder="Опишите проблему"></textarea>
+            <div class="form-group row">
+                <label for="problemDescription" class="col-sm-2 col-form-label">Опишите проблему</label>
+                <div class="col-sm-10">
+                    <textarea class="form-control" rows="7" id="problemDescription"></textarea>
+                </div>
             </div>
-
-            <div class="form-control">
-                <label for="uploadFile">Загрузить файл</label>
-                <input type="file" id="uploadFile" accept=".jpg,.png">
+            <div class="form-group row">
+                <label for="fileUpload" class="col-sm-2 col-form-label">Загрузить файл</label>
+                <div class="col-sm-10">
+                    <input type="file" class="form-control-file" id="fileUpload">
+                </div>
             </div>
-
-            <button type="submit" id="sendButton">Отправить</button>
+            <button type="submit" class="btn btn-primary mt-3" id="submitButton">Отправить</button>
         </form>
     </div>
-
+    
+    <!-- подключение JS библиотек -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // Обработка события выбора объекта
-            document.getElementById('object').addEventListener('change', () => {
-                const selectedObject = document.getElementById('object');
-                console.log(`Объект выбран: ${selectedObject.value}`);
-            });
-
-            // Обработка отправки данных
-            document.getElementById('sendButton').addEventListener('click', async (event) => {
+        // Обработка события отправки формы
+        $(document).ready(function() {
+            $('#reportForm').on('submit', function(event) {
                 event.preventDefault();
 
-                const formData = new FormData(document.getElementById('yandexForm'));
-                try {
-                    const response = await fetch('/path/to/your/googleAPI', {
-                        method: 'POST',
-                        body: formData
-                    });
-                    if (!response.ok) throw new Error(`${response.status}: ${response.statusText}`);
-                    console.log('Данные успешно отправлены!');
-                } catch (error) {
-                    alert('Произошла ошибка при отправке данных: ' + error.message);
-                }
+                var formData = new FormData($('#reportForm')[0]);
+                $.ajax({
+                    url: $('#reportForm').attr('action'),
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        alert('Форма успешно отправлена');
+                    },
+                    error: function(error) {
+                        console.log('Ошибка при отправке формы: ', error);
+                    }
+                });
             });
         });
     </script>
