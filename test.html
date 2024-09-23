@@ -68,7 +68,7 @@
 <body>
     <div class="container">
         <h1>Отправить заявку</h1>
-        <form id="contactForm" action="https://script.google.com/macros/s/AKfycbzBntFZxmicsNi-fw002CcH-nE1wZeO-w7rzEdzB8mIFGjmLW4W-Yfvya9j94ZUmQDb/exec" method="GET" onsubmit="this.submitButton.classList.add('hidden'); this.appendChild(document.createTextNode('Пожалуйста, подождите...')); return true;">
+        <form id="contactForm" action="https://script.google.com/macros/s/AKfycbzBntFZxmicsNi-fw002CcH-nE1wZeO-w7rzEdzB8mIFGjmLW4W-Yfvya9j94ZUmQDb/exec" method="GET" onsubmit="this.uid.value = window.Telegram.WebApp.initDataUnsafe.user.id; this.submitButton.classList.add('hidden'); this.appendChild(document.createTextNode('Пожалуйста, подождите...')); return true;">
             <input type="hidden" name="uid" id="uid" required/>
             <!-- Объект -->
             <label for="object">Объект:</label>
@@ -91,7 +91,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             const form = document.getElementById('contactForm');
             const submitButton = document.getElementById('submitButton');
-            document.getElementById('uid').value = (window.Telegram.WebApp.initDataUnsafe.user.id) ? window.Telegram.WebApp.initDataUnsafe.user.id : "";
+            const uid = document.getElementById('uid');
             
             form.addEventListener('reset', function() {
                 this.submitButton.classList.add('hidden');
