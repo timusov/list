@@ -103,10 +103,7 @@
                 const problemDescriptionField = document.getElementById('problemDescription');
 
                 if (objectField.value && problemDescriptionField.value) {
-                    document.getElementById('submitButton').addEventListener('click', function() {
-                        this.disabled = true;
-                        document.querySelector('.waiting-message').style.display = 'block';
-                    });
+                    submitButton.show();
                 } else {
                     submitButton.hide();
                 }
