@@ -41,12 +41,10 @@
             max-height: 200px;
             overflow: auto;
         }
-        .waiting-message {
+        .hidden {
             display: none;
-            width: 100%;
-            margin-top: 10px;
-            text-align: center;
-            font-size: 16px;
+        }
+        .waiting {
             color: red;
         }
         button {
@@ -70,7 +68,7 @@
 <body>
     <div class="container">
         <h1>Отправить заявку</h1>
-        <form action="https://script.google.com/macros/s/AKfycbzBntFZxmicsNi-fw002CcH-nE1wZeO-w7rzEdzB8mIFGjmLW4W-Yfvya9j94ZUmQDb/exec" method="GET">
+        <form id="contactForm" action="https://script.google.com/macros/s/AKfycbzBntFZxmicsNi-fw002CcH-nE1wZeO-w7rzEdzB8mIFGjmLW4W-Yfvya9j94ZUmQDb/exec" method="GET" onsubmit="this.submitButton.classList.add('hidden'); this.appendChild(document.createTextNode('Пожалуйста, подождите...')); return true;">
             <input type="hidden" name="uid" id="uid" required/>
             <!-- Объект -->
             <label for="object">Объект:</label>
@@ -96,17 +94,9 @@
             const submitButton = document.getElementById('submitButton');
             document.getElementById('uid').value = window.Telegram.WebApp.initDataUnsafe.user.id;
 
-            submitButton.hide();
-
-            form.addEventListener('input', (event) => {
-                const objectField = document.getElementById('object');
-                const problemDescriptionField = document.getElementById('problemDescription');
-
-                if (objectField.value && problemDescriptionField.value) {
-                    submitButton.show();
-                } else {
-                    submitButton.hide();
-                }
+            form..addEventListener('reset', function() {
+                this.submitButton.classList.add('hidden');
+                this.appendChild(document.createTextNode('Пожалуйста, подождите...'));
             });
         });
     </script>
