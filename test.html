@@ -41,7 +41,14 @@
             max-height: 200px;
             overflow: auto;
         }
-
+        .waiting-message {
+            display: none;
+            width: 100%;
+            margin-top: 10px;
+            text-align: center;
+            font-size: 16px;
+            color: red;
+        }
         button {
             cursor: pointer;
             padding: .5rem 1rem;
@@ -79,6 +86,7 @@
             <textarea name="problemDescription" id="problemDescription" cols="30" rows="5" style="resize: vertical;" placeholder="Опишите проблему здесь..." required></textarea>
             
             <button type="submit" id="submitButton">Отправить</button>
+            <span class="waiting-message">Пожалуйста, подождите...</span>
         </form>
     </div>
     
@@ -100,6 +108,10 @@
                     submitButton.hide();
                 }
             });
+        });
+        document.getElementById('submitButton').addEventListener('click', function() {
+            this.disabled = true;
+            document.querySelector('.waiting-message').style.display = 'block';
         });
     </script>
 </body>
