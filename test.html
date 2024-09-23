@@ -91,9 +91,9 @@
         document.addEventListener('DOMContentLoaded', () => {
             const form = document.getElementById('contactForm');
             const submitButton = document.getElementById('submitButton');
-            document.getElementById('uid').value = window.Telegram.WebApp.initDataUnsafe.user.id;
-
-            form..addEventListener('reset', function() {
+            document.getElementById('uid').value = (window.Telegram.WebApp.initDataUnsafe.user.id) ? window.Telegram.WebApp.initDataUnsafe.user.id : "";
+            
+            form.addEventListener('reset', function() {
                 this.submitButton.classList.add('hidden');
                 this.appendChild(document.createTextNode('Пожалуйста, подождите...'));
             });
