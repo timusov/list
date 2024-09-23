@@ -103,15 +103,14 @@
                 const problemDescriptionField = document.getElementById('problemDescription');
 
                 if (objectField.value && problemDescriptionField.value) {
-                    submitButton.show();
+                    document.getElementById('submitButton').addEventListener('click', function() {
+                        this.disabled = true;
+                        document.querySelector('.waiting-message').style.display = 'block';
+                    });
                 } else {
                     submitButton.hide();
                 }
             });
-        });
-        document.getElementById('submitButton').addEventListener('click', function() {
-            this.disabled = true;
-            document.querySelector('.waiting-message').style.display = 'block';
         });
     </script>
 </body>
