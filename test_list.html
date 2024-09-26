@@ -45,6 +45,7 @@
                 <tr>
                     <th>Номер заявки</th>
                     <th>Статус заявки</th>
+                    <th>Обьект</th>
                     <th>Описание проблемы</th>
                 </tr>
             </thead>
@@ -66,6 +67,7 @@
                 row.innerHTML = `
                     <td>${order.id}</td>
                     <td>${order.status}</td>
+                    <td>${order.object}</td>
                     <td>${order.problem}</td>
                 `;
                 orderListElement.appendChild(row);
