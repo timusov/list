@@ -73,16 +73,26 @@
             <!-- Объект -->
             <label for="object">Объект:</label>
             <select name="object" id="object" required>
-                <option value="">-- Выберите объект --</option>
-                <option value="object1">АК</option>
-                <option value="object2">Музей</option>
-                <option value="object3">Столовая 45 и магазин</option>
-                <option value="object4">Медсанчасть</option>
+                <option value="">-- Выберите объект (территорию) --</option>
+                <option value="">-- Заводская территория --</option>
+                <option value="АБК-3">Бытовой корпус-3</option>
+                <option value="АБК-1">Бытовой корпус-1</option>
+                <option value="АБК РМЦ">Бытовой корпус РМЦ</option>
+                <option value="">-- Предзаводская территория --</option>
+                <option value="ЗУ">Заводоуправление</option>
+                <option value="АК">Административный корпус</option>
+                <option value="Музей">Музей</option>
+                <option value="Столовая 45 и магазин">Столовая 45 и магазин</option>
+                <option value="Здравпункт">Здравпункт</option>
+                <option value="Автостанция">Автостанция</option>
+                <option value="ПСС">Территория ПСС</option>
+                <option value="ГСЧ">Территория ГСЧ</option>
+                <option value="ПК-3">ПК-3 (ТЦ)</option>
             </select>
             
             <!-- Опишите проблему -->
             <br><br><label for="problemDescription">Опишите проблему:</label>
-            <textarea name="problemDescription" id="problemDescription" cols="30" rows="5" style="resize: vertical;" placeholder="Постарайтесь полностью описать проблему... (помещение, номер кабинета и что неисправно либо необходимо сделать)" required></textarea>
+            <textarea name="problemDescription" id="problemDescription" cols="30" rows="5" style="resize: vertical;" placeholder="Постарайтесь полностью описать проблему... (здание, помещение, номер кабинета и что неисправно либо необходимо сделать)" required></textarea>
             
             <br><br><button type="submit" id="submitButton">Отправить</button>
         </form>
