@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yandex Style Form</title>
+    <title>Мои заявки</title>
     <style>
         * {
             box-sizing: border-box;
@@ -35,20 +35,6 @@
             background-color: #f2f2f2;
             text-align: left;
         }
-
-        button {
-            display: inline-block;
-            padding: 0.5em 1em;
-            background-color: #4CAF50;
-            color: #fff;
-            border: none;
-            cursor: pointer;
-            transition: background-color 0.2s ease-in-out;
-        }
-
-        button:hover {
-            background-color: #42A547;
-        }
     </style>
 </head>
 <body>
@@ -58,7 +44,7 @@
                 <tr>
                     <th>Номер заявки</th>
                     <th>Статус заявки</th>
-                    <th></th>
+                    <th>Описание проблемы</th>
                 </tr>
             </thead>
             <tbody id="orderList"></tbody>
@@ -67,7 +53,7 @@
 
     <script>
         // Загрузка данных из JSON
-        fetch('/path/to/your/json')
+        fetch('https://script.google.com/macros/s/AKfycbwRXVLd8j-F-X9PC6EXNaHMAKcElipLBgPz1poNd5LDmk65z4W3oGSKa-o1f2Io4MTIcw/exec?uid=123123123')
             .then(response => response.json())
             .then(data => createOrderList(data))
             .catch(error => console.error('Ошибка при загрузке данных:', error));
@@ -79,7 +65,7 @@
                 row.innerHTML = `
                     <td>${order.id}</td>
                     <td>${order.status}</td>
-                    <td><button>Произвести</button></td>
+                    <td>${order.problem}</td>
                 `;
                 orderListElement.appendChild(row);
             });
