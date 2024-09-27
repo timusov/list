@@ -53,11 +53,9 @@
             </thead>
             <tbody id="orderList"></tbody>
         </table>
-        <label id="wait">Пожалуйста подождите...</label>
+        <br><label id="wait">Пожалуйста подождите...</label>
     </div>
-
     <script>
-        const waitLabel = document.getElementById('wait');
         // Загрузка данных из JSON
         fetch('https://script.google.com/macros/s/AKfycbwRXVLd8j-F-X9PC6EXNaHMAKcElipLBgPz1poNd5LDmk65z4W3oGSKa-o1f2Io4MTIcw/exec?uid='+window.Telegram.WebApp.initDataUnsafe.user.id)
             .then(response => response.json())
@@ -76,6 +74,7 @@
                 `;
                 orderListElement.appendChild(row);
             });
+            const waitLabel = document.getElementById('wait');
             this.waitLabel.classList.add('hidden');
         }
     </script>
