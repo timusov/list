@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+        <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -63,6 +63,50 @@
         button:active {
             transform: scale(.95);
         }
+        button img {
+            vertical-align: middle;
+            margin-right: 10px;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            z-index: 1;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+        }
+
+        .dropdown-content button {
+            background-color: white;
+            width: max-content;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            transition: all 0.3s ease;
+        }
+
+        .dropdown-content button:hover {
+            background-color: #f1f1f1;
+        }
+
+        #dropdownButton {
+            background-color: #3498db;
+            color: white;
+        }
+
+        #dropdownButton:hover,
+        #dropdownButton:focus {
+            background-color: #2980b9;
+        }
+
+        #dropdownMenu {
+            left: 0;
+            right: 0;
+            top: 50px;
+        }
+
+        #dropdownButton:hover + .dropdown-content {
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -103,7 +147,18 @@
             
             <br><br><button type="submit" id="submitButton">Отправить</button>
         </form>
-    </div>
+        <button id="dropdownButton">Кнопка с раскрывающимся списком</button>
+        <div id="dropdownMenu" class="dropdown-content">
+            <button class="dropdownItem" onclick="insertText('Текст для вставки 1')">
+                <img src="icon1.png" alt="Картинка 1"> Текст для вставки 1
+            </button>
+            <button class="dropdownItem" onclick="insertText('Текст для вставки 2')">
+                <img src="icon2.png" alt="Картинка 2"> Текст для вставки 2
+            </button>
+            <button class="dropdownItem" onclick="insertText('Текст для вставки 3')">
+                <img src="icon3.png" alt="Картинка 3"> Текст для вставки 3
+            </button>
+        </div>
     
     <script>
         document.addEventListener('DOMContentLoaded', () => {
