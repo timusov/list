@@ -63,6 +63,32 @@
         button:active {
             transform: scale(.95);
         }
+
+        table {
+            border-collapse: collapse;
+        }
+
+        .table-container {
+            display: none;
+        }
+
+        .table-container.visible {
+            display: block;
+        }
+
+        .table-container img {
+            vertical-align: middle;
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            cursor: pointer;
+        }
+
+        .table-container td {
+            text-align: center;
+            vertical-align: middle;
+            padding: 10px;
+        }
     </style>
 </head>
 <body>
@@ -103,8 +129,33 @@
             
             <br><br><button type="submit" id="submitButton">Отправить</button>
         </form>
+            <br><button id="toggleTableButton">Кнопка для показа/скрытия таблицы</button>
+            <div id="tableContainer" class="table-container">
+            <table id="itemTable" class="table">
+                <tr>
+                    <td><img src="icon1.png" alt="Картинка 1" onclick="insertText('Текст для вставки 1')"></td>
+                    <td><img src="icon2.png" alt="Картинка 2" onclick="insertText('Текст для вставки 2')"></td>
+                    <td><img src="icon3.png" alt="Картинка 3" onclick="insertText('Текст для вставки 3')"></td>
+                </tr>
+                <tr>
+                    <td><img src="icon4.png" alt="Картинка 4" onclick="insertText('Текст для вставки 4')"></td>
+                    <td><img src="icon5.png" alt="Картинка 5" onclick="insertText('Текст для вставки 5')"></td>
+                    <td><img src="icon6.png" alt="Картинка 6" onclick="insertText('Текст для вставки 6')"></td>
+                </tr>
+                <tr>
+                    <td><img src="icon7.png" alt="Картинка 7" onclick="insertText('Текст для вставки 7')"></td>
+                    <td><img src="icon8.png" alt="Картинка 8" onclick="insertText('Текст для вставки 8')"></td>
+                    <td><img src="icon9.png" alt="Картинка 9" onclick="insertText('Текст для вставки 9')"></td>
+                </tr>
+            </table>
+            </div>
         </div>
     <script>
+        function insertText(text) {
+            const mainInput = document.getElementById('mainInput');
+            mainInput.value += text;
+        }
+        
         document.addEventListener('DOMContentLoaded', () => {
             const form = document.getElementById('contactForm');
             const submitButton = document.getElementById('submitButton');
@@ -113,6 +164,13 @@
             form.addEventListener('reset', function() {
                 this.submitButton.classList.add('hidden');
                 this.appendChild(document.createTextNode('Пожалуйста, подождите...'));
+            });
+
+            const toggleTableButton = document.getElementById('toggleTableButton');
+            const tableContainer = document.getElementById('tableContainer');
+
+            toggleTableButton.addEventListener('click', function() {
+                tableContainer.classList.toggle('visible');
             });
         });
     </script>
