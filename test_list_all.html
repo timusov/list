@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мои заявки</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffffff;
+            color: #333;
+        }
+        .hidden {
+            display: none;
+        }
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 1em;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 0.5em;
+            border: 1px solid #ddd;
+        }
+
+        td {
+            font-size: 0.85rem;
+        }
+        
+        th {
+            background-color: #f2f2f2;
+            text-align: left;
+            font-size: 0.92rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <table id="orderTable">
+            <thead>
+                <tr>
+                    <th>№</th>
+                    <th>Статус</th>
+                    <th>Обьект</th>
+                    <th>Описание</th>
+                </tr>
+            </thead>
+            <tbody id="orderList"></tbody>
+        </table>
+        <br><span id="textToHide">Пожалуйста, подождите...</span>
+    </div>
+    <script>
+        // Загрузка данных из JSON
+        fetch('https://script.google.com/macros/s/AKfycbwRXVLd8j-F-X9PC6EXNaHMAKcElipLBgPz1poNd5LDmk65z4W3oGSKa-o1f2Io4MTIcw/exec?uid='+window.Telegram.WebApp.initDataUnsafe.user.id)
+            .then(response => response.json())
+            .then(data => createOrderList(data))
+            .catch(error => console.error('Ошибка при загрузке данных:', error));
+
+        function createOrderList(orders) {
+            const orderListElement = document.getElementById('orderList');
+            orders.forEach(order => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${order.id}</td>
+                    <td>${order.status}</td>
+                    <td>${order.object}</td>
+                    <td>${order.problem}</td>
+                `;
+                orderListElement.appendChild(row);
+            });
+            document.getElementById('textToHide').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
