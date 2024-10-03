@@ -147,10 +147,10 @@
             const headings = ['№ заявки', 'Отправил', 'Объект', 'Описание проблемы', 'Действия'];
             const rows = data.map(request => {
                 return [
-                    request.number,
+                    request.id,
                     request.sender,
                     request.object,
-                    request.description,
+                    request.problem,
                     <a href="#">Закрыть</a> | <a href="#">В работу</a> | <a href="#">Комментировать</a>
                 ];
             });
