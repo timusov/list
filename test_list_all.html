@@ -7,6 +7,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
+            line-height: 1.5;
             background-color: #ffffff;
             color: #333;
         }
@@ -14,153 +15,139 @@
         .tabs {
             display: flex;
             justify-content: space-around;
-        }
-        
-        .tabs label {
-            cursor: pointer;
-            color: #aaa;
-            transition: color 0.3s ease;
+            list-style: none;
+            padding: 0;
         }
         
         .tabs input[type="radio"] {
             display: none;
         }
         
+        .tabs label {
+            padding: 10px 20px;
+            background-color: #eee;
+            cursor: pointer;
+        }
+        
         .tabs label:hover {
-            color: #000;
+            background-color: #ddd;
         }
         
         .tabs input[type="radio"]:checked + label {
-            color: #000;
+            background-color: #fff;
+            border-bottom: 2px solid #000;
         }
         
-        .pages {
-            display: flex;
-        }
-        
-        .page {
-            width: 100%;
-            min-height: 300px;
-            overflow: auto;
-            border: 1px solid #ddd;
-            margin: 10px;
-            padding: 10px;
-            display: none;
-        }
-        
-        .page.active {
-            display: block;
-        }
-        
-        table {
+        #issueTable {
             width: 100%;
             border-collapse: collapse;
         }
         
-        table th,
-        table td {
+        #issueTable th,
+        #issueTable td {
             padding: 10px;
-            border: 1px solid #ddd;
-        }
-        
-        table thead th {
-            background-color: #f4f4f4;
             text-align: left;
         }
         
-        table tbody tr:nth-child(even) {
+        #issueTable thead th {
+            background-color: #eee;
+        }
+        
+        #issueTable tbody tr:nth-child(even) {
             background-color: #fafafa;
         }
         
-        table tbody tr:hover {
-            background-color: #f4f4f4;
+        #issueTable tbody tr:hover {
+            background-color: #f5f5f5;
         }
         
-        table td:last-child {
+        #issueTable tfoot td {
             text-align: center;
-        }
-        
-        table td a {
-            display: inline-block;
-            padding: 5px 10px;
-            background-color: #f4f4f4;
-            color: #000;
-            text-decoration: none;
-            margin-right: 5px;
-        }
-        
-        table td a:hover {
-            background-color: #ddd;
         }
     </style>
 </head>
 <body>
     <div class="tabs">
-        <input type="radio" id="tab1" name="tab" checked>
-        <label for="tab1">Открытые</label>
-        <input type="radio" id="tab2" name="tab">
-        <label for="tab2">В работе</label>
-        <input type="radio" id="tab3" name="tab">
-        <label for="tab3">Закрытые</label>
+        <input type="radio" id="\ud83d\udd34" name="tabGroup" checked>
+        <label for="openedTab">Открытые</label>
+        <input type="radio" id="\ud83d\udfe1" name="tabGroup">
+        <label for="inProgressTab">В работе</label>
+        <input type="radio" id="\ud83d\udfe2" name="tabGroup">
+        <label for="closedTab">Закрытые</label>
     </div>
-    <div class="pages">
-        <div class="page active">
-            <table id="requestsTable"></table>
-        </div>
-    </div>
+    <table id="issueTable"></table>
     <script>
-        const requestsTable = document.getElementById('requestsTable');
-
-        const tabs = document.querySelectorAll('.tabs input[type="radio"]');
-        tabs.forEach(tab => tab.addEventListener('change', updateTabContent));
+        const API_URL = 'https://script.google.com/macros/s/AKfycbwRXVLd8j-F-X9PC6EXNaHMAKcElipLBgPz1poNd5LDmk65z4W3oGSKa-o1f2Io4MTIcw/exec?uid='+window.Telegram.WebApp.initDataUnsafe.user.id;
         
-        const pages = document.querySelectorAll('.pages .page');
+        // Конфигурация таблицы
+        const TABLE_COLUMNS = [
+            { title: '№ заявки', field: 'id' },
+            { title: 'Отправил', field: 'sender' },
+            { title: 'Объект', field: 'object' },
+            { title: 'Описание проблемы', field: 'problem' },
+            { title: 'Действия', field: 'actions' }
+        ];
         
-        function updateTabContent() {
-            const currentTab = this.id;
-            const index = Number(currentTab.replace('tab', ''));
-        
-            tabs.forEach(tab => tab.checked = false);
-            this.checked = true;
-        
-            pages.forEach(page => {
-                page.classList.remove('active');
-                if (page.id === page${index + 1}) {
-                    page.classList.add('active');
-                }
+        // Функция для создания HTML строки таблицы
+        function generateTableRows(issues) {
+            let rowsHtml = '';
+            issues.forEach((issue, index) => {
+                rowsHtml += `<tr>`;
+                TABLE_COLUMNS.forEach(column => {
+                    switch (column.field) {
+                        case 'id':
+                            rowsHtml += `<td>${issue.id}</td>`;
+                            break;
+                        case 'sender':
+                            rowsHtml += `<td>${issue.sender}</td>`;
+                            break;
+                        case 'object':
+                            rowsHtml += `<td>${issue.object}</td>`;
+                            break;
+                        case 'problem':
+                            rowsHtml += `<td>${issue.problem}</td>`;
+                            break;
+                        case 'actions':
+                            rowsHtml += `<td><a href="#">Закрыть</a> | <a href="#">В работу</a> | <a href="#">Комментировать</a></td>`;
+                            break;
+                    }
+                });
+                rowsHtml += `</tr>`;
             });
+            return rowsHtml;
+        }
         
-            fetch('https://script.google.com/macros/s/AKfycbwRXVLd8j-F-X9PC6EXNaHMAKcElipLBgPz1poNd5LDmk65z4W3oGSKa-o1f2Io4MTIcw/exec?uid='+window.Telegram.WebApp.initDataUnsafe.user.id)
+        // Функция для сортировки и фильтрации данных
+        function fetchAndDisplayIssues(selectedStatus) {
+            fetch(API_URL)
                 .then(response => response.json())
-                .then(data => {
-                    renderTable(data);
+                .then(issues => {
+                    // Фильтрация по статусу
+                    const filteredIssues = issues.filter(issue => issue.status === selectedStatus);
+                    
+                    // Сортировка по id
+                    filteredIssues.sort((a, b) => a.id - b.id);
+                    
+                    // Создание таблицы
+                    const tableBody = document.createElement('tbody');
+                    tableBody.innerHTML = generateTableRows(filteredIssues);
+                    document.getElementById('issueTable').appendChild(tableBody);
                 })
-                .catch(error => console.error('Error:', error));
+                .catch(error => console.error('Ошибка при получении данных:', error));
         }
         
-        updateTabContent.call(tabs[0]);
-        
-        function renderTable(data) {
-            const thead = document.createElement('thead');
-            const tbody = document.createElement('tbody');
-        
-            const headings = ['№ заявки', 'Отправил', 'Объект', 'Описание проблемы', 'Действия'];
-            const rows = data.map(request => {
-                return [
-                    request.id,
-                    request.sender,
-                    request.object,
-                    request.problem,
-                    <a href="#">Закрыть</a> | <a href="#">В работу</a> | <a href="#">Комментировать</a>
-                ];
+        // Обработка событий выбора вкладки
+        document.addEventListener('DOMContentLoaded', () => {
+            const tabButtons = document.querySelectorAll('.tabs label');
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const radio = button.previousElementSibling;
+                    if (radio.checked) {
+                        fetchAndDisplayIssues(radio.id);
+                    }
+                });
             });
-        
-            thead.innerHTML = <tr>${headings.map(heading => <th>${heading}</th>).join('')}</tr>;
-            tbody.innerHTML = rows.map(row => <tr>${row.map(cell => <td>${cell}</td>).join('')}</tr>).join('');
-        
-            requestsTable.appendChild(thead);
-            requestsTable.appendChild(tbody);
-        }
+        });
     </script>
 </body>
 </html>
