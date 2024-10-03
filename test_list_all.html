@@ -11,10 +11,6 @@
             background-color: #ffffff;
             color: #333;
         }
-
-        .hidden {
-            display: none;
-        }
         
         .tabs {
             display: flex;
@@ -40,6 +36,34 @@
         .tabs input[type="radio"]:checked + label {
             background-color: #fff;
             border-bottom: 2px solid #000;
+        }
+        
+        #loadingAnimation {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            text-align: center;
+            color: white;
+        }
+        
+        .loading-spinner {
+            animation: loading-spinner 1s linear infinite;
+            width: 64px;
+            height: 64px;
+            border: 8px solid rgba(255, 255, 255, 0.5);
+            border-top-color: white;
+            border-radius: 50%;
+            margin: 100px auto;
+        }
+        
+        @keyframes loading-spinner {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
         
         #issueTable {
@@ -72,18 +96,21 @@
 </head>
 <body>
     <div class="tabs">
-        <input type="radio" id="\ud83d\udd34" name="tabGroup" checked>
-        <label for="\ud83d\udd34">\ud83d\udd34</label>
-        <input type="radio" id="\ud83d\udfe1" name="tabGroup">
-        <label for="\ud83d\udfe1">\ud83d\udfe1</label>
-        <input type="radio" id="\ud83d\udfe2" name="tabGroup">
-        <label for="\ud83d\udfe2">\ud83d\udfe2</label>
+        <input type="radio" id="openedTab" name="tabGroup" checked>
+        <label for="openedTab">Открытые</label>
+        <input type="radio" id="inProgressTab" name="tabGroup">
+        <label for="inProgressTab">В работе</label>
+        <input type="radio" id="closedTab" name="tabGroup">
+        <label for="closedTab">Закрытые</label>
     </div>
-    <br><span id="textToHide">Пожалуйста, подождите...</span>
+    <div id="loadingAnimation" class="loading">
+        <div class="loading-spinner"></div>
+        <span>Пожалуйста, подождите...</span>
+    </div>
     <table id="issueTable"></table>
     <script>
         const API_URL = 'https://script.google.com/macros/s/AKfycbwRXVLd8j-F-X9PC6EXNaHMAKcElipLBgPz1poNd5LDmk65z4W3oGSKa-o1f2Io4MTIcw/exec?uid='+window.Telegram.WebApp.initDataUnsafe.user.id;
-        
+                
         // Конфигурация таблицы
         const TABLE_COLUMNS = [
             { title: '№ заявки', field: 'id' },
@@ -123,23 +150,26 @@
         }
         
         // Функция для сортировки и фильтрации данных
-        function fetchAndDisplayIssues(selectedStatus) {
-            fetch(API_URL)
-                .then(response => response.json())
-                .then(issues => {
-                    // Фильтрация по статусу
-                    const filteredIssues = issues.filter(issue => issue.status === selectedStatus);
-                    
-                    // Сортировка по id
-                    filteredIssues.sort((a, b) => a.id - b.id);
-                    
-                    // Создание таблицы
-                    const tableBody = document.createElement('tbody');
-                    tableBody.innerHTML = generateTableRows(filteredIssues);
-                    document.getElementById('textToHide').classList.add('hidden');
-                    document.getElementById('issueTable').appendChild(tableBody);
-                })
-                .catch(error => console.error('Ошибка при получении данных:', error));
+        async function fetchAndDisplayIssues(selectedStatus) {
+            try {
+                const response = await fetch(API_URL);
+                const issues = await response.json();
+        
+                // Фильтрация по статусу
+                const filteredIssues = issues.filter(issue => issue.status === selectedStatus);
+        
+                // Сортировка по id
+                filteredIssues.sort((a, b) => a.id - b.id);
+        
+                // Создание таблицы
+                const tableBody = document.createElement('tbody');
+                tableBody.innerHTML = generateTableRows(filteredIssues);
+                document.getElementById('issueTable').appendChild(tableBody);
+            } catch (error) {
+                console.error('Ошибка при получении данных:', error);
+            } finally {
+                document.getElementById('loadingAnimation').style.display = 'none';
+            }
         }
         
         // Обработка событий выбора вкладки
@@ -149,6 +179,7 @@
                 button.addEventListener('click', () => {
                     const radio = button.previousElementSibling;
                     if (radio.checked) {
+                        document.getElementById('loadingAnimation').style.display = 'block';
                         fetchAndDisplayIssues(radio.id);
                     }
                 });
