@@ -2,84 +2,161 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Мои заявки</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <title>Заявки</title>
     <style>
-        * {
-            box-sizing: border-box;
-        }
-
         body {
             font-family: Arial, sans-serif;
-            background-color: #ffffff;
-            color: #333;
         }
-        .hidden {
+        
+        .tabs {
+            display: flex;
+            justify-content: space-around;
+        }
+        
+        .tabs label {
+            cursor: pointer;
+            color: #aaa;
+            transition: color 0.3s ease;
+        }
+        
+        .tabs input[type="radio"] {
             display: none;
         }
-        .container {
-            max-width: 500px;
-            margin: 0 auto;
-            padding: 1em;
+        
+        .tabs label:hover {
+            color: #000;
         }
-
+        
+        .tabs input[type="radio"]:checked + label {
+            color: #000;
+        }
+        
+        .pages {
+            display: flex;
+        }
+        
+        .page {
+            width: 100%;
+            min-height: 300px;
+            overflow: auto;
+            border: 1px solid #ddd;
+            margin: 10px;
+            padding: 10px;
+            display: none;
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
         table {
             width: 100%;
             border-collapse: collapse;
         }
-
-        th, td {
-            padding: 0.5em;
+        
+        table th,
+        table td {
+            padding: 10px;
             border: 1px solid #ddd;
         }
-
-        td {
-            font-size: 0.85rem;
+        
+        table thead th {
+            background-color: #f4f4f4;
+            text-align: left;
         }
         
-        th {
-            background-color: #f2f2f2;
-            text-align: left;
-            font-size: 0.92rem;
+        table tbody tr:nth-child(even) {
+            background-color: #fafafa;
+        }
+        
+        table tbody tr:hover {
+            background-color: #f4f4f4;
+        }
+        
+        table td:last-child {
+            text-align: center;
+        }
+        
+        table td a {
+            display: inline-block;
+            padding: 5px 10px;
+            background-color: #f4f4f4;
+            color: #000;
+            text-decoration: none;
+            margin-right: 5px;
+        }
+        
+        table td a:hover {
+            background-color: #ddd;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <table id="orderTable">
-            <thead>
-                <tr>
-                    <th>№</th>
-                    <th>Статус</th>
-                    <th>Обьект</th>
-                    <th>Описание</th>
-                </tr>
-            </thead>
-            <tbody id="orderList"></tbody>
-        </table>
-        <br><span id="textToHide">Пожалуйста, подождите...</span>
+    <div class="tabs">
+        <input type="radio" id="tab1" name="tab" checked>
+        <label for="tab1">Открытые</label>
+        <input type="radio" id="tab2" name="tab">
+        <label for="tab2">В работе</label>
+        <input type="radio" id="tab3" name="tab">
+        <label for="tab3">Закрытые</label>
+    </div>
+    <div class="pages">
+        <div class="page active">
+            <table id="requestsTable"></table>
+        </div>
     </div>
     <script>
-        // Загрузка данных из JSON
-        fetch('https://script.google.com/macros/s/AKfycbwRXVLd8j-F-X9PC6EXNaHMAKcElipLBgPz1poNd5LDmk65z4W3oGSKa-o1f2Io4MTIcw/exec?uid='+window.Telegram.WebApp.initDataUnsafe.user.id)
-            .then(response => response.json())
-            .then(data => createOrderList(data))
-            .catch(error => console.error('Ошибка при загрузке данных:', error));
+        const requestsTable = document.getElementById('requestsTable');
 
-        function createOrderList(orders) {
-            const orderListElement = document.getElementById('orderList');
-            orders.forEach(order => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${order.id}</td>
-                    <td>${order.status}</td>
-                    <td>${order.object}</td>
-                    <td>${order.problem}</td>
-                `;
-                orderListElement.appendChild(row);
+        const tabs = document.querySelectorAll('.tabs input[type="radio"]');
+        tabs.forEach(tab => tab.addEventListener('change', updateTabContent));
+        
+        const pages = document.querySelectorAll('.pages .page');
+        
+        function updateTabContent() {
+            const currentTab = this.id;
+            const index = Number(currentTab.replace('tab', ''));
+        
+            tabs.forEach(tab => tab.checked = false);
+            this.checked = true;
+        
+            pages.forEach(page => {
+                page.classList.remove('active');
+                if (page.id === page${index + 1}) {
+                    page.classList.add('active');
+                }
             });
-            document.getElementById('textToHide').classList.add('hidden');
+        
+            fetch(your_json_url_for_${index}_requests)
+                .then(response => response.json())
+                .then(data => {
+                    renderTable(data);
+                })
+                .catch(error => console.error('Error:', error));
+        }
+        
+        updateTabContent.call(tabs[0]);
+        
+        function renderTable(data) {
+            const thead = document.createElement('thead');
+            const tbody = document.createElement('tbody');
+        
+            const headings = ['№ заявки', 'Отправил', 'Объект', 'Описание проблемы', 'Действия'];
+            const rows = data.map(request => {
+                return [
+                    request.number,
+                    request.sender,
+                    request.object,
+                    request.description,
+                    <a href="#">Закрыть</a> | <a href="#">В работу</a> | <a href="#">Комментировать</a>
+                ];
+            });
+        
+            thead.innerHTML = <tr>${headings.map(heading => <th>${heading}</th>).join('')}</tr>;
+            tbody.innerHTML = rows.map(row => <tr>${row.map(cell => <td>${cell}</td>).join('')}</tr>).join('');
+        
+            requestsTable.appendChild(thead);
+            requestsTable.appendChild(tbody);
         }
     </script>
 </body>
