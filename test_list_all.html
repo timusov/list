@@ -162,9 +162,20 @@
                 filteredIssues.sort((a, b) => a.id - b.id);
         
                 // Создание таблицы
-                const tableBody = document.createElement('tbody');
+                
+const table = document.querySelector('table');
+if (table) {
+    const tableBody = table.tBodies[0];
+    while (tableBody.firstChild) {
+        tableBody.removeChild(tableBody.firstChild);
+    }
+    tableBody.appendChild(generateTableRows(filteredIssues));
+} else {
+
+const tableBody = document.createElement('tbody');
                 tableBody.innerHTML = generateTableRows(filteredIssues);
                 document.getElementById('issueTable').appendChild(tableBody);
+}
             } catch (error) {
                 console.error('Ошибка при получении данных:', error);
             } finally {
