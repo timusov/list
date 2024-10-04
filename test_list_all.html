@@ -186,7 +186,7 @@
         
         // Обработка событий выбора вкладки
         document.addEventListener('DOMContentLoaded', () => {
-            const tabButtons = document.querySelectorAll('.tabs label');
+            const tabButtons = document.querySelectorAll('input[type="radio"]');
             tabButtons.forEach(button => {
                 button.addEventListener('change', () => {
                     if (button.checked) {
