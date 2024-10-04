@@ -162,19 +162,21 @@
                 filteredIssues.sort((a, b) => a.id - b.id);
         
                 // Создание таблицы
-const tableBody = document.createElement('tbody');               
-const table = document.querySelector('tbody');
-if (table) {
-    const tableBody = table.tBodies[0];
-    while (tableBody.firstChild) {
-        tableBody.removeChild(tableBody.firstChild);
-    }
-    tableBody.appendChild(generateTableRows(filteredIssues));
-} else {
-
-                tableBody.innerHTML = generateTableRows(filteredIssues);
-                document.getElementById('issueTable').appendChild(tableBody);
-}
+                // Проверка наличия tbody внутри таблицы
+                const tableBody = document.createElement('tbody');
+                const existingTbody = table.querySelector('tbody');
+                if (existingTbody) {
+                    // Очистка существующего tbody
+                    const oldRows = existingTbody.querySelectorAll('tr');
+                    Array.from(oldRows).forEach(row => row.remove());
+                } else {
+                    // Создание нового tbody и добавление его в таблицу
+                    table.appendChild(tableBody);
+                }
+                
+                // Добавление новых строк в tbody
+                tableBody.appendChild(generateTableRows(filteredIssues));
+                
             } catch (error) {
                 console.error('Ошибка при получении данных:', error);
             } finally {
@@ -186,11 +188,10 @@ if (table) {
         document.addEventListener('DOMContentLoaded', () => {
             const tabButtons = document.querySelectorAll('.tabs label');
             tabButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    const radio = button.previousElementSibling;
-                    if (radio.checked) {
+                button.addEventListener('change', () => {
+                    if (button.checked) {
                         document.getElementById('loadingAnimation').style.display = 'block';
-                        fetchAndDisplayIssues(radio.id);
+                        fetchAndDisplayIssues(button.id);
                     }
                 });
             });
