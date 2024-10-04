@@ -162,7 +162,7 @@
                 filteredIssues.sort((a, b) => a.id - b.id);
         
                 // Создание таблицы
-                
+const tableBody = document.createElement('tbody');               
 const table = document.querySelector('tbody');
 if (table) {
     const tableBody = table.tBodies[0];
@@ -172,7 +172,6 @@ if (table) {
     tableBody.appendChild(generateTableRows(filteredIssues));
 } else {
 
-const tableBody = document.createElement('tbody');
                 tableBody.innerHTML = generateTableRows(filteredIssues);
                 document.getElementById('issueTable').appendChild(tableBody);
 }
