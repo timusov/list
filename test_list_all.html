@@ -162,6 +162,16 @@
                 filteredIssues.sort((a, b) => a.id - b.id);
         
                 // Создание таблицы
+                const existingTbody = table.querySelector('tbody');
+                if (existingTbody) {
+                    // Очистка существующего tbody
+                    const oldRows = existingTbody.querySelectorAll('tr');
+                    Array.from(oldRows).forEach(row => row.remove());
+                }
+                const tableBody = document.createElement('tbody');
+                tableBody.innerHTML = generateTableRows(filteredIssues);
+                document.getElementById('issueTable').appendChild(tableBody);
+                
                 // Проверка наличия tbody внутри таблицы
                 const tableBody = document.createElement('tbody');
                 let table = document.querySelector('table');
