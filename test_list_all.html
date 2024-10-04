@@ -164,6 +164,7 @@
                 // Создание таблицы
                 // Проверка наличия tbody внутри таблицы
                 const tableBody = document.createElement('tbody');
+                let table = document.querySelector('table');
                 const existingTbody = table.querySelector('tbody');
                 if (existingTbody) {
                     // Очистка существующего tbody
