@@ -197,13 +197,11 @@
         
         // Обработка событий выбора вкладки
         document.addEventListener('DOMContentLoaded', () => {
-            const tabButtons = document.querySelectorAll('input[type="radio"]');
+            const tabButtons = document.querySelectorAll('input[name="tabGroup"]');
             tabButtons.forEach(button => {
                 button.addEventListener('click', () => {
-                    if (button.checked) {
                         document.getElementById('loadingAnimation').style.display = 'block';
                         fetchAndDisplayIssues(button.id);
-                    }
                 });
             });
         });
