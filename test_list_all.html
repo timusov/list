@@ -197,7 +197,7 @@
         
         // Обработка событий выбора вкладки
         document.addEventListener('DOMContentLoaded', () => {
-            const tabButtons = document.querySelectorAll('input[name="tabGroup"]');
+            const tabButtons = document.querySelectorAll('label');
             tabButtons.forEach(button => {
                 button.addEventListener('click', () => {
                         document.getElementById('loadingAnimation').style.display = 'block';
