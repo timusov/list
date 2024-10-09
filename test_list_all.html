@@ -96,7 +96,7 @@
 </head>
 <body>
     <div class="tabs">
-        <input type="radio" id="opened" name="tabGroup" checked>
+        <input type="radio" id="opened" name="tabGroup">
         <label for="opened">Открытые</label>
         <input type="radio" id="inProgress" name="tabGroup">
         <label for="inProgress">В работе</label>
@@ -200,8 +200,7 @@
             const tabButtons = document.querySelectorAll('input[type="radio"]');
             tabButtons.forEach(button => {
                 button.addEventListener('click', () => {
-                    const radio = button.previousElementSibling;
-                    if (radio.checked) {
+                    if (button.checked) {
                         document.getElementById('loadingAnimation').style.display = 'block';
                         fetchAndDisplayIssues(button.id);
                     }
