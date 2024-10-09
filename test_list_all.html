@@ -199,9 +199,12 @@
         document.addEventListener('DOMContentLoaded', () => {
             const tabButtons = document.querySelectorAll('input[type="radio"]');
             tabButtons.forEach(button => {
-                button.addEventListener('check', () => {
-                    document.getElementById('loadingAnimation').style.display = 'block';
-                    fetchAndDisplayIssues(button.id);
+                button.addEventListener('click', () => {
+                    const radio = button.previousElementSibling;
+                    if (radio.checked) {
+                        document.getElementById('loadingAnimation').style.display = 'block';
+                        fetchAndDisplayIssues(button.id);
+                    }
                 });
             });
         });
