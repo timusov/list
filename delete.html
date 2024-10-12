@@ -12,6 +12,7 @@
         document.addEventListener("DOMContentLoaded", function() {
           const urlParams = new URLSearchParams(window.location.search);
           const ticketID = urlParams.get('ticketID');
+          const uid = urlParams.get('uid');
           const submitButton = document.getElementById('submit');
           const loader = document.getElementById('loader');
           const form = document.getElementById('contactForm');
@@ -21,6 +22,9 @@
             
           if (ticketID) {
             document.getElementById('ticketID').value = ticketID;
+          }
+          if (uid) {
+            document.getElementById('uid').value = uid;
           }
             
             form.addEventListener('submit', function(event) {
