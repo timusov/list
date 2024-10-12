@@ -12,15 +12,24 @@
         document.addEventListener("DOMContentLoaded", function() {
           const urlParams = new URLSearchParams(window.location.search);
           const ticketID = urlParams.get('ticketID');
-
           const submitButton = document.getElementById('submit');
-
-            const h1 = document.querySelector('h1');
-            h1.innerText += ticketID;
+          const loader = document.getElementById('loader');
+            
+          const h1 = document.querySelector('h1');
+          h1.innerText += ticketID;
             
           if (ticketID) {
             document.getElementById('ticketID').value = ticketID;
           }
+            
+          form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            loader.classList.add('show');
+            // Тут обработка отправки формы
+            setTimeout(() => {
+            loader.classList.remove('show');
+            }, 3000); // Пример длительности анимации
+          });
         });
     </script>
     <style>
@@ -123,50 +132,79 @@
                 padding: 0.5em;
             }
         }
-        #loadingAnimation {
-            display: none;
+        #loader {
             position: fixed;
-            z-index: 1000;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            text-align: center;
-            color: white;
+            right: 0;
+            bottom: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(255, 255, 255, 0.8);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease-in-out, visibility 0s linear 0.3s;
         }
         
-        .loading-spinner {
-            animation: loading-spinner 1s linear infinite;
-            width: 64px;
-            height: 64px;
-            border: 8px solid rgba(255, 255, 255, 0.5);
-            border-top-color: white;
+        #loader.show {
+            opacity: 1;
+            visibility: visible;
+            transition-delay: 0s;
+        }
+        
+        .loader div {
+            width: 1em;
+            height: 1em;
+            background-color: #333;
             border-radius: 50%;
-            margin: 100px auto;
+            display: inline-block;
+            animation: lds-ellipsis 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;
         }
         
-        @keyframes loading-spinner {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .loader div:nth-child(1) {
+            animation-delay: -0.45s;
+        }
+        
+        .loader div:nth-child(2) {
+            animation-delay: -0.3s;
+        }
+        
+        .loader div:nth-child(3) {
+            animation-delay: -0.15s;
+        }
+        
+        @keyframes lds-ellipsis {
+            0% {
+                transform: scale(0);
+            }
+            100% {
+                transform: scale(1);
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Удалить заявку № </h1>
-        <form id="contactForm" action="https://script.google.com/macros/s/AKfycbzuAp_OUaUjiurSYi1RUyA89Ufq9CzkHXVLli0EN3fW732XJ0I-0T1bC7yZBSGTd1wK/exec" method="GET" onsubmit="this.submitButton.classList.add('hidden'); this.appendChild(document.createTextNode('Пожалуйста, подождите...')); document.getElementById('loadingAnimation').style.display = 'block'; return true;">
+        <form id="contactForm" action="https://script.google.com/macros/s/AKfycbzuAp_OUaUjiurSYi1RUyA89Ufq9CzkHXVLli0EN3fW732XJ0I-0T1bC7yZBSGTd1wK/exec" method="GET">
             <input type="hidden" name="uid" id="uid" required/>
             <input type="hidden" name="ticketID" id="ticketID" required/>
-            <br><label for="problemDescription">Опишите причину</label>
+            <label for="problemDescription">Опишите причину</label>
             <textarea name="problemDescription" id="problemDescription" cols="30" rows="5" style="resize: vertical;" placeholder="Причина удаления заявки..." required></textarea>
             <div class="buttons">
                 <button type="submit" id="submit" class="wide-button">Отправить заявку в удалённые</button>
                 <button type="delete" id="delete" class="small-button red-button clear-field" onclick="deleteInput()">Очистить поле</button>
             </div>
-            <div id="loadingAnimation" class="loading">
-                <div class="loading-spinner"></div>
-                <span>Пожалуйста, подождите...</span>
+            <div id="loader" class="loader">
+                <div class="lds-ellipsis">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+                <p>Пожалуйста, подождите...</p>
             </div>
         </form>
 </body>
