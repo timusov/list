@@ -23,14 +23,16 @@
             document.getElementById('ticketID').value = ticketID;
           }
             
-          form.addEventListener('submit', function(event) {
-            event.preventDefault();
-            loader.classList.add('show');
-            // Тут обработка отправки формы
-            setTimeout(() => {
-            loader.classList.remove('show');
-            }, 3000); // Пример длительности анимации
-          });
+            form.addEventListener('submit', function(event) {
+                event.preventDefault();
+        
+                loader.classList.add('show');
+        
+                // Тут обработка отправки формы
+                setTimeout(() => {
+                    loader.classList.remove('show');
+                }, 3000); // Пример длительности анимации
+            });
         });
     </script>
     <style>
@@ -134,8 +136,12 @@
             }
         }
         #loader {
-            position: relative;
-            margin: 1em auto;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 1000;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -179,17 +185,6 @@
             100% {
                 transform: scale(1);
             }
-        }
-        
-        /* Дополнительные стили */
-        .lds-ellipsis {
-            transform: rotate(-90deg); /* Поворачиваем эллипсы */
-            display: flex;
-            align-items: flex-end;
-        }
-        
-        .lds-ellipsis p {
-            margin-left: 1em; /* Отступ от эллипсов */
         }
     </style>
 </head>
