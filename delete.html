@@ -8,16 +8,7 @@
         function deleteInput() {
             const mainInput = document.getElementById('problemDescription');
             mainInput.value = '';
-        }
-
-        function onsubmit() {
-            //this.uid.value = window.Telegram.WebApp.initDataUnsafe.user.id;
-            this.submitButton.classList.add('hidden');
-            this.appendChild(document.createTextNode('Пожалуйста, подождите...'));
-            document.getElementById('loadingAnimation').style.display = 'block';
-            return true;
-        }
-        
+        } 
         document.addEventListener("DOMContentLoaded", function() {
           const urlParams = new URLSearchParams(window.location.search);
           const ticketID = urlParams.get('ticketID');
@@ -164,7 +155,7 @@
 <body>
     <div class="container">
         <h1>Удалить заявку № </h1>
-        <form id="contactForm" action="https://script.google.com/macros/s/AKfycbzBntFZxmicsNi-fw002CcH-nE1wZeO-w7rzEdzB8mIFGjmLW4W-Yfvya9j94ZUmQDb/exec" method="GET" onsubmit="onsubmit()">
+        <form id="contactForm" action="https://script.google.com/macros/s/AKfycbzuAp_OUaUjiurSYi1RUyA89Ufq9CzkHXVLli0EN3fW732XJ0I-0T1bC7yZBSGTd1wK/exec" method="GET" onsubmit="this.submitButton.classList.add('hidden'); this.appendChild(document.createTextNode('Пожалуйста, подождите...')); document.getElementById('loadingAnimation').style.display = 'block'; return true;">
             <input type="hidden" name="uid" id="uid" required/>
             <input type="hidden" name="ticketID" id="ticketID" required/>
             <br><label for="problemDescription">Опишите причину</label>
