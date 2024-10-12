@@ -17,7 +17,7 @@
           const form = document.getElementById('contactForm');
             
           const h1 = document.querySelector('h1');
-          h1.innerText += ticketID;
+          h1.innerText += " "+ticketID;
             
           if (ticketID) {
             document.getElementById('ticketID').value = ticketID;
@@ -163,7 +163,7 @@
             background-color: #333;
             border-radius: 50%;
             display: inline-block;
-            animation: lds-ellipsis 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;
+            animation: lds-ellipsis 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite reverse;
         }
         
         .loader div:nth-child(1) {
@@ -180,10 +180,13 @@
         
         @keyframes lds-ellipsis {
             0% {
-                transform: scale(0);
+                transform: translateY(-1em) scale(0);
+            }
+            50% {
+                transform: translateY(1em) scale(0.75);
             }
             100% {
-                transform: scale(1);
+                transform: translateY(-1em) scale(1);
             }
         }
     </style>
