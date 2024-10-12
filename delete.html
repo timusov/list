@@ -133,6 +133,12 @@
                 padding: 0.5em;
             }
         }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+        
         #loader {
             position: fixed;
             top: 0;
@@ -170,7 +176,8 @@
             </div>
         </form>
         <div id="loader" class="loader">
-            <p>\ud83d\ude9b Пожалуйста, подождите...</p>
+            <img src="loading.gif" alt="GIF image">
+            <br><p>\ud83d\ude9b Пожалуйста, подождите...</p>
         </div>
 </body>
 </html>
