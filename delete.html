@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Удалить заявку</title>
     <script>
+        function deleteInput() {
+            const mainInput = document.getElementById('problemDescription');
+            mainInput.value = '';
+        }
+        
         document.addEventListener("DOMContentLoaded", function() {
           const urlParams = new URLSearchParams(window.location.search);
           const ticketID = urlParams.get('ticketID');
@@ -122,11 +127,11 @@
         <form id="contactForm" action="https://script.google.com/macros/s/AKfycbzBntFZxmicsNi-fw002CcH-nE1wZeO-w7rzEdzB8mIFGjmLW4W-Yfvya9j94ZUmQDb/exec" method="GET" onsubmit="onsubmit()">
             <input type="hidden" name="uid" id="uid" required/>
             <input name="ticketID" id="ticketID" required/>
-            <br><br><label for="problemDescription">Опишите причину</label>
+            <br><label for="problemDescription">Опишите причину</label>
             <textarea name="problemDescription" id="problemDescription" cols="30" rows="5" style="resize: vertical;" placeholder="Причина удаления заявки..." required></textarea>
             <div class="buttons">
                 <button type="submit" id="submit" class="wide-button">Отправить заявку в удалённые</button>
-                <button type="reset" id="reset" class="small-button red-button clear-field">Очистить поле</button>
+                <button type="delete" id="delete" class="small-button red-button clear-field" onclick="deleteInput()">Очистить поле</button>
             </div>
         </form>
 </body>
