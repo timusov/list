@@ -65,8 +65,9 @@
 			var action = "102662361";
 			var answerUserID = "&id-question-53071577=";
 		}
-		else if (startParam[0] == "other") {
-			var action = "103406632";
+		else if (startParam[0] == "del") {
+			window.location.replace("https://timusov.github.io/list/delete.html?uid"+window.Telegram.WebApp.initDataUnsafe.user.id+"&ticketID="+encodeURIComponent(startParam[1] +"/"+ startParam[2]));
+			return
 		}
 		else {
 			var action = "102662277";
