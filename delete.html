@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Удалить заявку</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
         function deleteInput() {
             const mainInput = document.getElementById('problemDescription');
@@ -21,7 +22,7 @@
           h1.innerText += " "+ticketID;
             
           if (ticketID) {
-            document.getElementById('ticketID').value = ticketID;
+            document.getElementById('ticketID').value = decodeURIComponent(ticketID);
           }
           if (uid) {
             document.getElementById('uid').value = uid;
@@ -31,11 +32,16 @@
                 event.preventDefault();
         
                 loader.classList.add('show');
-        
-                // Тут обработка отправки формы
-                setTimeout(() => {
+                const API_URL = "https://script.google.com/macros/s/AKfycbzuAp_OUaUjiurSYi1RUyA89Ufq9CzkHXVLli0EN3fW732XJ0I-0T1bC7yZBSGTd1wK/exec?uid="+uid+"&ticketID="+ticketID+"&reason="+encodeURIComponent(document.getElementById('problemDescription').value);
+                try {
+                    const response = await fetch(API_URL);
+                } catch (error) {
                     loader.classList.remove('show');
-                }, 3000); // Пример длительности анимации
+                    console.error('Ошибка при получении данных:', error);
+                } finally {
+                    loader.classList.remove('show');
+                    window.close();
+                }
             });
         });
     </script>
@@ -169,7 +175,7 @@
 <body>
     <div class="container">
         <h1>Удалить заявку № </h1>
-        <form id="contactForm" action="https://script.google.com/macros/s/AKfycbzuAp_OUaUjiurSYi1RUyA89Ufq9CzkHXVLli0EN3fW732XJ0I-0T1bC7yZBSGTd1wK/exec" method="GET">
+        <form id="contactForm" action="" method="GET">
             <input type="hidden" name="uid" id="uid" required/>
             <input type="hidden" name="ticketID" id="ticketID" required/>
             <label for="problemDescription">Опишите причину</label>
