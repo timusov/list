@@ -165,7 +165,7 @@
         }
         
         .lds-ball div {
-            animation: lds-ball 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;
+            animation: lds-ball 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite alternate;
             transform-origin: 32px 32px;
         }
         
@@ -207,10 +207,10 @@
         }
         
         @keyframes lds-ball {
-            0% {
-                transform: scale(0);
+            0%, 100% {
+                transform: scale(0.5);
             }
-            100% {
+            50% {
                 transform: scale(1);
             }
         }
