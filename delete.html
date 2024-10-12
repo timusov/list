@@ -9,10 +9,20 @@
             const mainInput = document.getElementById('problemDescription');
             mainInput.value = '';
         }
+
+        function onsubmit() {
+            //this.uid.value = window.Telegram.WebApp.initDataUnsafe.user.id;
+            this.submitButton.classList.add('hidden');
+            this.appendChild(document.createTextNode('Пожалуйста, подождите...'));
+            document.getElementById('loadingAnimation').style.display = 'block';
+            return true;
+        }
         
         document.addEventListener("DOMContentLoaded", function() {
           const urlParams = new URLSearchParams(window.location.search);
           const ticketID = urlParams.get('ticketID');
+
+          const submitButton = document.getElementById('submit');
 
             const h1 = document.querySelector('h1');
             h1.innerText += ticketID;
@@ -122,6 +132,33 @@
                 padding: 0.5em;
             }
         }
+        #loadingAnimation {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            text-align: center;
+            color: white;
+        }
+        
+        .loading-spinner {
+            animation: loading-spinner 1s linear infinite;
+            width: 64px;
+            height: 64px;
+            border: 8px solid rgba(255, 255, 255, 0.5);
+            border-top-color: white;
+            border-radius: 50%;
+            margin: 100px auto;
+        }
+        
+        @keyframes loading-spinner {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
@@ -135,6 +172,10 @@
             <div class="buttons">
                 <button type="submit" id="submit" class="wide-button">Отправить заявку в удалённые</button>
                 <button type="delete" id="delete" class="small-button red-button clear-field" onclick="deleteInput()">Очистить поле</button>
+            </div>
+            <div id="loadingAnimation" class="loading">
+                <div class="loading-spinner"></div>
+                <span>Пожалуйста, подождите...</span>
             </div>
         </form>
 </body>
