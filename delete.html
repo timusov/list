@@ -13,7 +13,10 @@
         document.addEventListener("DOMContentLoaded", function() {
           const urlParams = new URLSearchParams(window.location.search);
           const ticketID = urlParams.get('ticketID');
-    
+
+            const h1 = document.querySelector('h1');
+            h1.innerText += ticketID;
+            
           if (ticketID) {
             document.getElementById('ticketID').value = ticketID;
           }
@@ -126,7 +129,7 @@
         <h1>Удалить заявку № </h1>
         <form id="contactForm" action="https://script.google.com/macros/s/AKfycbzBntFZxmicsNi-fw002CcH-nE1wZeO-w7rzEdzB8mIFGjmLW4W-Yfvya9j94ZUmQDb/exec" method="GET" onsubmit="onsubmit()">
             <input type="hidden" name="uid" id="uid" required/>
-            <input name="ticketID" id="ticketID" required/>
+            <input type="hidden" name="ticketID" id="ticketID" required/>
             <br><label for="problemDescription">Опишите причину</label>
             <textarea name="problemDescription" id="problemDescription" cols="30" rows="5" style="resize: vertical;" placeholder="Причина удаления заявки..." required></textarea>
             <div class="buttons">
