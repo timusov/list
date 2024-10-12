@@ -157,36 +157,61 @@
             transition-delay: 0s;
         }
         
-        .loader div {
-            width: 1em;
-            height: 1em;
-            background-color: #333;
-            border-radius: 50%;
+        .lds-ball {
             display: inline-block;
-            animation: lds-ellipsis 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite reverse;
+            position: relative;
+            width: 64px;
+            height: 64px;
         }
         
-        .loader div:nth-child(1) {
+        .lds-ball div {
+            animation: lds-ball 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;
+            transform-origin: 32px 32px;
+        }
+        
+        .lds-ball div:after {
+            content: " ";
+            display: block;
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #333;
+        }
+        
+        .lds-ball div:nth-child(1) {
             animation-delay: -0.45s;
         }
         
-        .loader div:nth-child(2) {
+        .lds-ball div:nth-child(1):after {
+            top: 50px;
+            left: 50px;
+        }
+        
+        .lds-ball div:nth-child(2) {
             animation-delay: -0.3s;
         }
         
-        .loader div:nth-child(3) {
+        .lds-ball div:nth-child(2):after {
+            top: 54px;
+            left: 45px;
+        }
+        
+        .lds-ball div:nth-child(3) {
             animation-delay: -0.15s;
         }
         
-        @keyframes lds-ellipsis {
+        .lds-ball div:nth-child(3):after {
+            top: 57px;
+            left: 39px;
+        }
+        
+        @keyframes lds-ball {
             0% {
-                transform: translateY(-1em) scale(0);
-            }
-            50% {
-                transform: translateY(1em) scale(0.75);
+                transform: scale(0);
             }
             100% {
-                transform: translateY(-1em) scale(1);
+                transform: scale(1);
             }
         }
     </style>
@@ -205,10 +230,7 @@
             </div>
         </form>
         <div id="loader" class="loader">
-            <div class="lds-ellipsis">
-                <div></div>
-                <div></div>
-                <div></div>
+            <div class="lds-ball">
                 <div></div>
             </div>
             <p>Пожалуйста, подождите...</p>
