@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Удалить заявку</title>
+    <script>
+      const urlParams = new URLSearchParams(window.location.search);
+      const ticketID = urlParams.get('ticketID');
+
+      if (ticketID) {
+        document.getElementById('ticketID').value = ticketID;
+      }
+    </script>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fff;
+            color: #333;
+        }
+        #warning {
+            display: none !important;
+        }
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 1em;
+            border: 1px solid #ccc;
+            box-shadow: 0 0 10px rgba(0, 0, 0, .1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: .5rem;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: .5rem;
+            border: 1px solid #ddd;
+            outline: none;
+        }
+
+        textarea {
+            min-height: 50px;
+            max-height: 200px;
+            overflow: auto;
+        }
+        
+        .hidden {
+            display: none;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .wide-button {
+            width: 100%;
+            padding: 0.5em 1em;
+            cursor: pointer;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #eee;
+            transition: all 0.2s ease-in-out;
+        }
+        
+        .wide-button:hover {
+            background-color: #ddd;
+        }
+        
+        .small-button {
+            padding: 0.5em 1em;
+            cursor: pointer;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+            transition: all 0.2s ease-in-out;
+        }
+        
+        .small-button:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .red-button {
+            color: white;
+            background-color: #ff3333;
+        }
+        
+        .red-button svg {
+            fill: currentColor;
+            vertical-align: middle;
+            margin-right: 0.5em;
+        }
+        
+        .clear-field {
+            color: white;
+            background-color: #ff3333;
+        }
+        
+        .clear-field:hover {
+            background-color: #cc0000;
+        }
+        
+        @media (max-width: 400px) {
+            form {
+                padding: 0.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Удалить заявку № </h1>
+        <form id="contactForm" action="https://script.google.com/macros/s/AKfycbzBntFZxmicsNi-fw002CcH-nE1wZeO-w7rzEdzB8mIFGjmLW4W-Yfvya9j94ZUmQDb/exec" method="GET" onsubmit="onsubmit()">
+            <input type="hidden" name="uid" id="uid" required/>
+            <input name="ticketID" id="ticketID" required/>
+            <br><br><label for="problemDescription">Опишите причину</label>
+            <textarea name="problemDescription" id="problemDescription" cols="30" rows="5" style="resize: vertical;" placeholder="Причина удаления заявки..." required></textarea>
+            <div class="buttons">
+                <button type="submit" id="submit" class="wide-button">Отправить заявку в удалённые</button>
+                <button type="reset" id="reset" class="small-button red-button clear-field">Очистить поле</button>
+            </div>
+        </form>
+</body>
+</html>
