@@ -5,12 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Удалить заявку</title>
     <script>
-      const urlParams = new URLSearchParams(window.location.search);
-      const ticketID = urlParams.get('ticketID');
-
-      if (ticketID) {
-        document.getElementById('ticketID').value = ticketID;
-      }
+        document.addEventListener("DOMContentLoaded", function() {
+          const urlParams = new URLSearchParams(window.location.search);
+          const ticketID = urlParams.get('ticketID');
+    
+          if (ticketID) {
+            document.getElementById('ticketID').value = ticketID;
+          }
+        });
     </script>
     <style>
         * {
