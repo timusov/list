@@ -28,20 +28,17 @@
             document.getElementById('uid').value = uid;
           }
             
-            form.addEventListener('submit', function(event) {
-                event.preventDefault();
-        
-                loader.classList.add('show');
-                const API_URL = "https://script.google.com/macros/s/AKfycbzuAp_OUaUjiurSYi1RUyA89Ufq9CzkHXVLli0EN3fW732XJ0I-0T1bC7yZBSGTd1wK/exec?uid="+uid+"&ticketID="+ticketID+"&reason="+encodeURIComponent(document.getElementById('problemDescription').value);
-                try {
-                    const response = await fetch(API_URL);
-                } catch (error) {
-                    loader.classList.remove('show');
-                    console.error('Ошибка при получении данных:', error);
-                } finally {
+          form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            loader.classList.add('show');
+            fetch("https://script.google.com/macros/s/AKfycbzuAp_OUaUjiurSYi1RUyA89Ufq9CzkHXVLli0EN3fW732XJ0I-0T1bC7yZBSGTd1wK/exec?uid="+uid+"&ticketID="+ticketID+"&reason="+encodeURIComponent(document.getElementById('problemDescription').value))
+                .then(() => {
                     loader.classList.remove('show');
                     window.close();
-                }
+                })
+                .catch(() => {
+                    loader.classList.remove('show');
+                });
             });
         });
     </script>
