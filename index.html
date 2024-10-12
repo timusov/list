@@ -65,8 +65,12 @@
 			var action = "102662361";
 			var answerUserID = "&id-question-53071577=";
 		}
-		else if (startParam[0] == "other") {
-			var action = "103406632";
+		else if (startParam[0] == "del") {
+			const num = (startParam[1] == undefined) ? "00" : startParam[1];
+			const year = (startParam[2] == undefined) ? "00" : startParam[2];
+			const ticketID = url.toString(num +"/"+ year);
+			location.assign("https://script.google.com/macros/s/AKfycbzuAp_OUaUjiurSYi1RUyA89Ufq9CzkHXVLli0EN3fW732XJ0I-0T1bC7yZBSGTd1wK/exec?ticketID="+ticketID);
+			return true;
 		}
 		else {
 			var action = "102662277";
