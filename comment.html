@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Удалить заявку</title>
+    <title>Комментировать заявку</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
         function deleteInput() {
@@ -17,12 +17,6 @@
           const submitButton = document.getElementById('submit');
           const loader = document.getElementById('loader');
           const form = document.getElementById('contactForm');
-          const uploadForm = document.getElementById('contactForm');
-          const fileUpload = document.getElementById('fileUpload');
-          const cameraButton = document.getElementById('cameraButton');
-          const progressBar = document.getElementById('progressBar');
-          const message = document.getElementById('message');
-          const errorMessage = document.getElementById('errorMessage');
             
           const h1 = document.querySelector('h1');
           h1.innerText += " "+ticketID;
@@ -37,79 +31,28 @@
           form.addEventListener('submit', function(event) {
             event.preventDefault();
             loader.classList.add('show');
-            fetch("https://script.google.com/macros/s/AKfycbzuAp_OUaUjiurSYi1RUyA89Ufq9CzkHXVLli0EN3fW732XJ0I-0T1bC7yZBSGTd1wK/exec?doit=del&uid="+uid+"&ticketID="+ticketID+"&reason="+encodeURIComponent(document.getElementById('problemDescription').value))
-                .then(() => {
-                    loader.classList.remove('show');
-                    window.close();
-                })
-                .catch(() => {
-                    loader.classList.remove('show');
-                    window.close();
+            var fileUpload = document.getElementById('fileUpload');
+            
+            // Проверка наличия файла
+            if (!fileUpload.files || !fileUpload.files[0] || fileUpload.files[0].size < 9000000) {
+                fetch("https://script.google.com/macros/s/AKfycbzuAp_OUaUjiurSYi1RUyA89Ufq9CzkHXVLli0EN3fW732XJ0I-0T1bC7yZBSGTd1wK/exec?doit=comm&uid="+uid+"&ticketID="+ticketID+"&reason="+encodeURIComponent(document.getElementById('problemDescription').value))
+                    .then(() => {
+                        loader.classList.remove('show');
+                        window.close();
+                    })
+                    .catch(() => {
+                        loader.classList.remove('show');
+                        window.close();
+                    });
                 });
-            });
+            }
 
-          // Обработчик события выбора файла
-          fileUpload.addEventListener('change', function() {
-              const file = this.files[0];
-              if (file) {
-                  validateFileSize(file);
-              }
-          });
-      
-          // Обработчик кнопки загрузки с камеры
-          cameraButton.addEventListener('click', function() {
-              if (navigator.mediaDevices.getUserMedia) {
-                  navigator.mediaDevices.getUserMedia({ video: true }).then(stream => {
-                      const capture = new ImageCapture(stream.getVideoTracks()[0]);
-                      capture.takePhoto().then(blob => {
-                          const file = new File([blob], 'photo.jpg', { type: blob.type });
-                          validateFileSize(file);
-                      });
-                  });
-              }
-          });
-      
-          // Функция для проверки размера файла
-          function validateFileSize(file) {
-              if (file.size <= 9 * 1024 * 1024) {
-                  startUpload(file);
-              } else {
-                  showErrorMessage('Файл слишком большой. Максимальный размер - 9 МБ.');
-              }
-          }
-      
-          // Функция для начала загрузки файла
-          function startUpload(file) {
-              const xhr = new XMLHttpRequest();
-              xhr.open('POST', '/upload', true);
-              xhr.onload = function() {
-                  if (xhr.status === 200) {
-                      showSuccessMessage();
-                  } else {
-                      showErrorMessage('Возникла ошибка при загрузке файла.');
-                  }
-              };
-              xhr.upload.onprogress = function(e) {
-                  if (e.lengthComputable) {
-                      progressBar.style.display = 'block';
-                      progressBar.value = parseInt((e.loaded / e.total) * 100);
-                  }
-              };
-              xhr.send(file);
-          }
-      
-          // Функция для отображения сообщения об успешной загрузке
-          function showSuccessMessage() {
-              message.classList.remove('hidden');
-              progressBar.style.display = 'none';
-          }
-      
-          // Функция для отображения сообщения об ошибке
-          function showErrorMessage(msg) {
-              errorMessage.innerText = msg;
-              errorMessage.classList.remove('hidden');
-              progressBar.style.display = 'none';
-          }
+            // Проверка ограничения размера файла
+            if (fileUpload.files[0].size > 9000000) {
+                alert("Размер файла превышает допустимый предел (9 МБ).");
+                event.preventDefault();
+                return;
+            }
         });
     </script>
     <style>
@@ -132,52 +75,23 @@
         }
 
         label {
-          padding: 0.5em 1em;
-          cursor: pointer;
-          border: 1px solid #ccc;
-          border-radius: 5px;
-          background-color: #eee;
-          transition: all 0.2s ease-in-out;
+            display: block;
+            margin-bottom: .5rem;
         }
-      
-        label:hover {
-            background-color: #ddd;
-        }
-      
+
         input, select, textarea {
             width: 100%;
             padding: .5rem;
             border: 1px solid #ddd;
             outline: none;
         }
-      
-        .input-group {
-            display: flex;
-            align-items: center;
-        }
-        
-        input[type="file"] {
-            display: none;
-        }
-      
+
         textarea {
             min-height: 50px;
             max-height: 200px;
             overflow: auto;
         }
-      
-        button {
-            padding: 0.5em 1em;
-            cursor: pointer;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            background-color: #eee;
-            transition: all 0.2s ease-in-out;
-        }
         
-        button:hover {
-            background-color: #ddd;
-        }
         .hidden {
             display: none;
         }
@@ -245,21 +159,6 @@
             display: block;
         }
         
-        #progressBar {
-            width: 100%;
-            height: 1em;
-            margin: 0.5em 0;
-            background-color: lightgray;
-            border-radius: 5px;
-        }
-        
-        #message,
-        #errorMessage {
-            padding: 1em;
-            background-color: #dfd;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
         #loader {
             position: fixed;
             top: 0;
@@ -285,27 +184,17 @@
 </head>
 <body>
     <div class="container">
-        <h1>Удалить заявку № </h1>
-        <form id="contactForm" action="" method="GET" enctype="multipart/form-data">
+        <h1>Оставить комментарий к заявке № </h1>
+        <form id="contactForm" action="" method="GET">
             <input type="hidden" name="uid" id="uid" required/>
             <input type="hidden" name="ticketID" id="ticketID" required/>
-            <label for="problemDescription">Опишите причину</label>
+            <label for="problemDescription">Тело сообщения</label>
             <textarea name="problemDescription" id="problemDescription" cols="30" rows="5" style="resize: vertical;" placeholder="Причина удаления заявки..." required></textarea>
-            <div class="input-group">
-                <input type="file" accept="image/*" id="fileUpload" />
-                <label for="fileUpload">Выберите файл</label>
-                <button type="button" id="cameraButton">Загрузить с камеры</button>
-            </div>
-            <progress id="progressBar" value="0" max="100" style="display: none;"></progress>
-            <div id="message" class="hidden">
-                <p>Ваш файл успешно загружен!</p>
-            </div>
-            <div id="errorMessage" class="hidden">
-                <p>Возникла ошибка при загрузке файла.</p>
-            </div>
+            <label for="fileUpload">Выберите файл</label><br>
+            <input type="file" name="fileUpload" id="fileUpload" accept=".jpg,.png,.jpeg" max="9000000"><br>
             <div class="buttons">
-                <button type="submit" id="submit" class="wide-button">Отправить заявку в удалённые</button>
-                <button type="delete" id="delete" class="small-button red-button clear-field" onclick="deleteInput()">Очистить поле</button>
+                <button type="submit" id="submit" class="wide-button">Отправить форму</button>
+                <button type="delete" id="delete" class="small-button red-button clear-field" onclick="deleteInput()">Очистить</button>
             </div>
         </form>
         <div id="loader" class="loader">
