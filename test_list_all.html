@@ -1,170 +1,209 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Таблица заявок</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         body {
+            margin: 0;
             font-family: Arial, sans-serif;
         }
         
-        header, footer {
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100vh;
+        }
+        
+        .filter-buttons {
+            position: sticky;
+            bottom: 0;
+            background-color: #f4f4f4;
             padding: 10px;
-            background-color: #ddd;
-            text-align: center;
+            border-top: 1px solid lightgray;
         }
         
-        nav ul {
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
+        .filter-buttons button {
+            margin-right: 10px;
+            cursor: pointer;
+            padding: 6px 12px;
+            background-color: #fff;
+            border: none;
+            outline: none;
         }
         
-        nav li {
-            display: inline-block;
-            margin: 0 10px;
+        .filter-buttons button:hover {
+            background-color: #e9ecef;
         }
         
-        nav a {
-            text-decoration: none;
-            color: black;
-            transition: all 0.2s ease;
-        }
-        
-        nav a:hover {
-            color: blue;
-        }
-        
-        #table-container {
-            overflow-y: auto;
-            max-height: 500px;
-            margin-top: 20px;
-        }
-        
-        /* Style for the table */
-        table {
-            border-collapse: collapse;
+        .table {
             width: 100%;
+            border-collapse: collapse;
         }
         
-        th, td {
-            text-align: left;
-            padding: 8px;
+        .table th, .table td {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
         }
         
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
+        .table thead tr {
+            background-color: #f4f4f4;
         }
         
-        th {
-            background-color: #4CAF50;
-            color: white;
+        .table tbody tr:nth-child(even) {
+            background-color: #fafafa;
+        }
+        
+        .table tbody tr:hover {
+            background-color: #f0f0f0;
         }
     </style>
-    <body>
-        <header>
-            <h1>Заявки</h1>
-        </header>
-        <main>
-            <nav>
-                <ul id="tabs">
-                    <li><a href="#open" data-tab="open">Открытые</a></li>
-                    <li><a href="#inprogress" data-tab="inprogress">В работе</a></li>
-                    <li><a href="#closed" data-tab="closed">Закрытые</a></li>
-                    <li><a href="#cancelled" data-tab="cancelled">Отмененные</a></li>
-                </ul>
-            </nav>
-            <section id="table-container"></section>
-        </main>
-        <footer>
-            <button id="load-data">Загрузить данные</button>
-        </footer>
+</head>
+        <body>
+        <div class="app-container">
+            <!-- Кнопки для фильтрации заявок -->
+            <div class="filter-buttons">
+                <button id="openedButton">Открытые</button>
+                <button id="inProgressButton">В работе</button>
+                <button id="closedButton">Закрытые</button>
+                <button id="canceledButton">Отмененные</button>
+            </div>
+    
+            <!-- Таблица заявок -->
+            <table id="issuesTable" class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">№ заявки</th>
+                        <th scope="col">Дата</th>
+                        <th scope="col">Автор</th>
+                        <th scope="col">Объект</th>
+                        <th scope="col">Проблема</th>
+                        <th scope="col">Действия</th>
+                    </tr>
+                </thead>
+                <tbody id="issueRows"></tbody>
+            </table>
+        </div>
     <script>
-            document.addEventListener('DOMContentLoaded', () => {
-            const tabs = document.querySelectorAll('#tabs a');
-            const tabContainer = document.getElementById('table-container');
-            const loadDataButton = document.getElementById('load-data');
+        // Подключение фреймворка для работы с AJAX
+        var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
         
-            // Обработка событий кликов по вкладкам
-            tabs.forEach((tab) => {
-                tab.addEventListener('click', (event) => {
-                    event.preventDefault();
-                    updateTable(tab.dataset.tab);
-                });
-            });
-        
-            // Загрузка данных
-            loadDataButton.addEventListener('click', async () => {
-                try {
-                    const response = await fetch('your_api_endpoint_here');
-                    const data = await response.json();
-                    showData(data);
-                } catch (error) {
-                    console.log('Error loading data: ', error);
+        // Функция для получения данных
+        function getData() {
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', 'data.json');
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    processData(JSON.parse(xhr.responseText));
+                } else {
+                    console.error(`Ошибка при получении данных: ${xhr.status}`);
                 }
-            });
+            };
+            xhr.send();
+        }
         
-            // Функция обновления таблицы
-            function updateTable(activeTab) {
-                const activeClass = 'selected';
-                tabs.forEach((tab) => {
-                    tab.classList.remove(activeClass);
-                });
-                document.querySelector(`[href="#${activeTab}"]`).classList.add(activeClass);
+        // Процессинг данных
+        function processData(data) {
+            let issueRows = document.getElementById('issueRows');
+            
+            // Очистка таблицы перед заполнением
+            while (issueRows.firstChild) {
+                issueRows.removeChild(issueRows.lastChild);
+            }
         
-                let rows = '';
-                switch (activeTab) {
-                    case 'open':
-                        rows = generateOpenRows();
-                        break;
-                    case 'inprogress':
-                        rows = generateInProgressRows();
-                        break;
-                    case 'closed':
-                        rows = generateClosedRows();
-                        break;
-                    case 'cancelled':
-                        rows = generateCancelledRows();
-                        break;
-                }
-                tabContainer.innerHTML = `
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>№ заявки</th>
-                                <th>Дата</th>
-                                <th>Автор</th>
-                                <th>Объект</th>
-                                <th>Описание проблемы</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${rows}
-                        </tbody>
-                    </table>
+            data.forEach((item) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.id}</td>
+                    <td>${item.date}</td>
+                    <td>${item.author}</td>
+                    <td>${item.object}</td>
+                    <td>${item.problem}</td>
+                    <td>
+                        <a href="#" onclick="toggleAction('${item.id}')">В работу</a> |
+                        <a href="#" onclick="toggleComment('${item.id}')">Комментарий</a> |
+                        <a href="#" onclick="closeIssue('${item.id}')">Закрыть</a>
+                    </td>
                 `;
+                issueRows.appendChild(row);
+            });
+        }
+        
+        // Обработка действий с заявками
+        function toggleAction(id) {
+            console.log(`Выбранная заявка: ${id}`);
+        }
+        
+        function toggleComment(id) {
+            console.log(`Добавление комментария к заявке: ${id}`);
+        }
+        
+        function closeIssue(id) {
+            console.log(`Закрытие заявки: ${id}`);
+        }
+        
+        // Функция для фильтрации
+        function filterIssues(buttonId) {
+            const openedButton = document.getElementById('openedButton');
+            const inProgressButton = document.getElementById('inProgressButton');
+            const closedButton = document.getElementById('closedButton');
+            const canceledButton = document.getElementById('canceledButton');
+        
+            switch (buttonId) {
+                case 'openedButton':
+                    openedButton.classList.add('selected');
+                    inProgressButton.classList.remove('selected');
+                    closedButton.classList.remove('selected');
+                    canceledButton.classList.remove('selected');
+                    break;
+                case 'inProgressButton':
+                    openedButton.classList.remove('selected');
+                    inProgressButton.classList.add('selected');
+                    closedButton.classList.remove('selected');
+                    canceledButton.classList.remove('selected');
+                    break;
+                case 'closedButton':
+                    openedButton.classList.remove('selected');
+                    inProgressButton.classList.remove('selected');
+                    closedButton.classList.add('selected');
+                    canceledButton.classList.remove('selected');
+                    break;
+                case 'canceledButton':
+                    openedButton.classList.remove('selected');
+                    inProgressButton.classList.remove('selected');
+                    closedButton.classList.remove('selected');
+                    canceledButton.classList.add('selected');
+                    break;
             }
         
-            // Функции генерации строк таблицы для разных вкладок
-            function generateOpenRows() {
-                return '<tr><td>№ заявки</td><td>Дата</td><td>Автор</td><td>Объект</td><td>Описание проблемы</td></tr>';
+            const issuesToShow = document.querySelectorAll('.table tbody tr');
+            for (const item of issuesToShow) {
+                const status = item.children[0].textContent;
+                if (!document.getElementById(buttonId).classList.contains('selected')) continue;
+                if ((status == 'open' && buttonId != 'openedButton') ||
+                    (status == 'in progress' && buttonId != 'inProgressButton') ||
+                    (status == 'closed' && buttonId != 'closedButton') ||
+                    (status == 'canceled' && buttonId != 'canceledButton')) {
+                        item.style.display = 'none';
+                } else {
+                    item.style.display = '';
+                }
             }
+        }
         
-            function generateInProgressRows() {
-                return '<tr><td>№ заявки</td><td>Дата</td><td>Автор</td><td>Объект</td><td>Описание проблемы</td></tr>';
-            }
-        
-            function generateClosedRows() {
-                return '<tr><td>№ заявки</td><td>Дата</td><td>Автор</td><td>Объект</td><td>Описание проблемы</td></tr>';
-            }
-        
-            function generateCancelledRows() {
-                return '<tr><td>№ заявки</td><td>Дата</td><td>Автор</td><td>Объект</td><td>Описание проблемы</td></tr>';
-            }
+        // Загрузка данных и установка фильтров
+        getData();
+        document.addEventListener('DOMContentLoaded', function () {
+            const buttons = document.querySelectorAll('.filter-buttons button');
+            buttons.forEach(button => {
+                button.addEventListener('click', function () {
+                    filterIssues(this.id);
+                });
+            });
         });
     </script>
-</body>
+    </body>
 </html>
