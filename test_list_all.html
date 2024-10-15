@@ -3,207 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Таблица заявок</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-        }
-        
-        .app-container {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            height: 100vh;
-        }
-        
-        .filter-buttons {
-            position: sticky;
-            bottom: 0;
-            background-color: #f4f4f4;
-            padding: 10px;
-            border-top: 1px solid lightgray;
-        }
-        
-        .filter-buttons button {
-            margin-right: 10px;
-            cursor: pointer;
-            padding: 6px 12px;
-            background-color: #fff;
-            border: none;
-            outline: none;
-        }
-        
-        .filter-buttons button:hover {
-            background-color: #e9ecef;
-        }
-        
-        .table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        
-        .table th, .table td {
-            padding: 8px 12px;
-            border: 1px solid #ddd;
-        }
-        
-        .table thead tr {
-            background-color: #f4f4f4;
-        }
-        
-        .table tbody tr:nth-child(even) {
-            background-color: #fafafa;
-        }
-        
-        .table tbody tr:hover {
-            background-color: #f0f0f0;
-        }
-    </style>
+    <title>Tabs Example</title>
+    <!-- CSS и JavaScript файлы Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 </head>
-        <body>
-        <div class="app-container">
-            <!-- Кнопки для фильтрации заявок -->
-            <div class="filter-buttons">
-                <button id="openedButton">Открытые</button>
-                <button id="inProgressButton">В работе</button>
-                <button id="closedButton">Закрытые</button>
-                <button id="canceledButton">Отмененные</button>
+<body>
+    <div class="container my-3">
+        <ul class="nav nav-tabs justify-content-end bg-light border-bottom pb-3 mb-3">
+            <li class="nav-item">
+                <a class="nav-link active" data-bs-toggle="tab" href="#opened">Открытые</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="tab" href="#inprogress">В работе</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="tab" href="#closed">Закрытые</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="tab" href="#canceled">Отмененные</a>
+            </li>
+        </ul>
+
+        <div class="tab-content">
+            <div id="opened" class="tab-pane fade show active">
+                Таблица открытых задач...
             </div>
-    
-            <!-- Таблица заявок -->
-            <table id="issuesTable" class="table">
-                <thead>
-                    <tr>
-                        <th scope="col">№ заявки</th>
-                        <th scope="col">Дата</th>
-                        <th scope="col">Автор</th>
-                        <th scope="col">Объект</th>
-                        <th scope="col">Проблема</th>
-                        <th scope="col">Действия</th>
-                    </tr>
-                </thead>
-                <tbody id="issueRows"></tbody>
-            </table>
+            <div id="inprogress" class="tab-pane fade">
+                Таблица задач в работе...
+            </div>
+            <div id="closed" class="tab-pane fade">
+                Таблица закрытых задач...
+            </div>
+            <div id="canceled" class="tab-pane fade">
+                Таблица отмененных задач...
+            </div>
         </div>
+    </div>
+
+    <!-- Подключение скрипта для переключения вкладок -->
     <script>
-        // Подключение фреймворка для работы с AJAX
-        var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
-        
-        // Функция для получения данных
-        function getData() {
-            const xhr = new XMLHttpRequest();
-            xhr.open('GET', 'data.json');
-            xhr.onload = function () {
-                if (xhr.status === 200) {
-                    processData(JSON.parse(xhr.responseText));
-                } else {
-                    console.error(`Ошибка при получении данных: ${xhr.status}`);
-                }
-            };
-            xhr.send();
-        }
-        
-        // Процессинг данных
-        function processData(data) {
-            let issueRows = document.getElementById('issueRows');
-            
-            // Очистка таблицы перед заполнением
-            while (issueRows.firstChild) {
-                issueRows.removeChild(issueRows.lastChild);
-            }
-        
-            data.forEach((item) => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${item.id}</td>
-                    <td>${item.date}</td>
-                    <td>${item.author}</td>
-                    <td>${item.object}</td>
-                    <td>${item.problem}</td>
-                    <td>
-                        <a href="#" onclick="toggleAction('${item.id}')">В работу</a> |
-                        <a href="#" onclick="toggleComment('${item.id}')">Комментарий</a> |
-                        <a href="#" onclick="closeIssue('${item.id}')">Закрыть</a>
-                    </td>
-                `;
-                issueRows.appendChild(row);
-            });
-        }
-        
-        // Обработка действий с заявками
-        function toggleAction(id) {
-            console.log(`Выбранная заявка: ${id}`);
-        }
-        
-        function toggleComment(id) {
-            console.log(`Добавление комментария к заявке: ${id}`);
-        }
-        
-        function closeIssue(id) {
-            console.log(`Закрытие заявки: ${id}`);
-        }
-        
-        // Функция для фильтрации
-        function filterIssues(buttonId) {
-            const openedButton = document.getElementById('openedButton');
-            const inProgressButton = document.getElementById('inProgressButton');
-            const closedButton = document.getElementById('closedButton');
-            const canceledButton = document.getElementById('canceledButton');
-        
-            switch (buttonId) {
-                case 'openedButton':
-                    openedButton.classList.add('selected');
-                    inProgressButton.classList.remove('selected');
-                    closedButton.classList.remove('selected');
-                    canceledButton.classList.remove('selected');
-                    break;
-                case 'inProgressButton':
-                    openedButton.classList.remove('selected');
-                    inProgressButton.classList.add('selected');
-                    closedButton.classList.remove('selected');
-                    canceledButton.classList.remove('selected');
-                    break;
-                case 'closedButton':
-                    openedButton.classList.remove('selected');
-                    inProgressButton.classList.remove('selected');
-                    closedButton.classList.add('selected');
-                    canceledButton.classList.remove('selected');
-                    break;
-                case 'canceledButton':
-                    openedButton.classList.remove('selected');
-                    inProgressButton.classList.remove('selected');
-                    closedButton.classList.remove('selected');
-                    canceledButton.classList.add('selected');
-                    break;
-            }
-        
-            const issuesToShow = document.querySelectorAll('.table tbody tr');
-            for (const item of issuesToShow) {
-                const status = item.children[0].textContent;
-                if (!document.getElementById(buttonId).classList.contains('selected')) continue;
-                if ((status == 'open' && buttonId != 'openedButton') ||
-                    (status == 'in progress' && buttonId != 'inProgressButton') ||
-                    (status == 'closed' && buttonId != 'closedButton') ||
-                    (status == 'canceled' && buttonId != 'canceledButton')) {
-                        item.style.display = 'none';
-                } else {
-                    item.style.display = '';
-                }
-            }
-        }
-        
-        // Загрузка данных и установка фильтров
-        getData();
-        document.addEventListener('DOMContentLoaded', function () {
-            const buttons = document.querySelectorAll('.filter-buttons button');
-            buttons.forEach(button => {
-                button.addEventListener('click', function () {
-                    filterIssues(this.id);
-                });
-            });
+        document.addEventListener('DOMContentLoaded', () => {
+            new bootstrap.Tab.getInstance(document.querySelector('.nav-link.active'))?.show();
         });
     </script>
-    </body>
+</body>
 </html>
