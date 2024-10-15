@@ -1,209 +1,169 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
+    <head>
     <meta charset="UTF-8">
-    <title>Заявки</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Таблица заявок</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
-            line-height: 1.5;
-            background-color: #ffffff;
-            color: #333;
         }
         
-        .tabs {
-            display: flex;
-            justify-content: space-around;
-            list-style: none;
-            padding: 0;
-        }
-        
-        .tabs input[type="radio"] {
-            display: none;
-        }
-        
-        .tabs label {
-            padding: 10px 20px;
-            background-color: #eee;
-            cursor: pointer;
-        }
-        
-        .tabs label:hover {
+        header, footer {
+            padding: 10px;
             background-color: #ddd;
-        }
-        
-        .tabs input[type="radio"]:checked + label {
-            background-color: #fff;
-            border-bottom: 2px solid #000;
-        }
-        
-        #loadingAnimation {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
             text-align: center;
+        }
+        
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        nav li {
+            display: inline-block;
+            margin: 0 10px;
+        }
+        
+        nav a {
+            text-decoration: none;
+            color: black;
+            transition: all 0.2s ease;
+        }
+        
+        nav a:hover {
+            color: blue;
+        }
+        
+        #table-container {
+            overflow-y: auto;
+            max-height: 500px;
+            margin-top: 20px;
+        }
+        
+        /* Style for the table */
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        
+        th, td {
+            text-align: left;
+            padding: 8px;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+        th {
+            background-color: #4CAF50;
             color: white;
         }
-        
-        .loading-spinner {
-            animation: loading-spinner 1s linear infinite;
-            width: 64px;
-            height: 64px;
-            border: 8px solid rgba(255, 255, 255, 0.5);
-            border-top-color: white;
-            border-radius: 50%;
-            margin: 100px auto;
-        }
-        
-        @keyframes loading-spinner {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        #issueTable {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        
-        #issueTable th,
-        #issueTable td {
-            padding: 10px;
-            text-align: left;
-        }
-        
-        #issueTable thead th {
-            background-color: #eee;
-        }
-        
-        #issueTable tbody tr:nth-child(even) {
-            background-color: #fafafa;
-        }
-        
-        #issueTable tbody tr:hover {
-            background-color: #f5f5f5;
-        }
-        
-        #issueTable tfoot td {
-            text-align: center;
-        }
     </style>
-</head>
-<body>
-    <div class="tabs">
-        <input type="radio" id="opened" name="tabGroup">
-        <label for="opened">Открытые</label>
-        <input type="radio" id="inProgress" name="tabGroup">
-        <label for="inProgress">В работе</label>
-        <input type="radio" id="closed" name="tabGroup">
-        <label for="closed">Закрытые</label>
-    </div>
-    <div id="loadingAnimation" class="loading">
-        <div class="loading-spinner"></div>
-        <span>Пожалуйста, подождите...</span>
-    </div>
-    <table id="issueTable"></table>
+    <body>
+        <header>
+            <h1>Заявки</h1>
+        </header>
+        <main>
+            <nav>
+                <ul id="tabs">
+                    <li><a href="#open" data-tab="open">Открытые</a></li>
+                    <li><a href="#inprogress" data-tab="inprogress">В работе</a></li>
+                    <li><a href="#closed" data-tab="closed">Закрытые</a></li>
+                    <li><a href="#cancelled" data-tab="cancelled">Отмененные</a></li>
+                </ul>
+            </nav>
+            <section id="table-container"></section>
+        </main>
+        <footer>
+            <button id="load-data">Загрузить данные</button>
+        </footer>
     <script>
-        const API_URL = 'https://script.google.com/macros/s/AKfycbwRXVLd8j-F-X9PC6EXNaHMAKcElipLBgPz1poNd5LDmk65z4W3oGSKa-o1f2Io4MTIcw/exec?uid='+window.Telegram.WebApp.initDataUnsafe.user.id;
-                
-        // Конфигурация таблицы
-        const TABLE_COLUMNS = [
-            { title: '№ заявки', field: 'id' },
-            { title: 'Отправил', field: 'sender' },
-            { title: 'Объект', field: 'object' },
-            { title: 'Описание проблемы', field: 'problem' },
-            { title: 'Действия', field: 'actions' }
-        ];
+            document.addEventListener('DOMContentLoaded', () => {
+            const tabs = document.querySelectorAll('#tabs a');
+            const tabContainer = document.getElementById('table-container');
+            const loadDataButton = document.getElementById('load-data');
         
-        // Функция для создания HTML строки таблицы
-        function generateTableRows(issues) {
-            let rowsHtml = '';
-            issues.forEach((issue, index) => {
-                rowsHtml += `<tr>`;
-                TABLE_COLUMNS.forEach(column => {
-                    switch (column.field) {
-                        case 'id':
-                            rowsHtml += `<td>${issue.id}</td>`;
-                            break;
-                        case 'sender':
-                            rowsHtml += `<td>${issue.sender}</td>`;
-                            break;
-                        case 'object':
-                            rowsHtml += `<td>${issue.object}</td>`;
-                            break;
-                        case 'problem':
-                            rowsHtml += `<td>${issue.problem}</td>`;
-                            break;
-                        case 'actions':
-                            rowsHtml += `<td><a href="#">Закрыть</a> | <a href="#">В работу</a> | <a href="#">Комментировать</a></td>`;
-                            break;
-                    }
+            // Обработка событий кликов по вкладкам
+            tabs.forEach((tab) => {
+                tab.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    updateTable(tab.dataset.tab);
                 });
-                rowsHtml += `</tr>`;
             });
-            return rowsHtml;
-        }
         
-        // Функция для сортировки и фильтрации данных
-        async function fetchAndDisplayIssues(selectedStatus) {
-            try {
-                const response = await fetch(API_URL);
-                const issues = await response.json();
-        
-                // Фильтрация по статусу
-                const filteredIssues = issues.filter(issue => issue.status === selectedStatus);
-        
-                // Сортировка по id
-                filteredIssues.sort((a, b) => a.id - b.id);
-        
-                // Создание таблицы
-                const existingTbody = table.querySelector('tbody');
-                if (existingTbody) {
-                    // Очистка существующего tbody
-                    const oldRows = existingTbody.querySelectorAll('tr');
-                    Array.from(oldRows).forEach(row => row.remove());
+            // Загрузка данных
+            loadDataButton.addEventListener('click', async () => {
+                try {
+                    const response = await fetch('your_api_endpoint_here');
+                    const data = await response.json();
+                    showData(data);
+                } catch (error) {
+                    console.log('Error loading data: ', error);
                 }
-                const tableBody = document.createElement('tbody');
-                tableBody.innerHTML = generateTableRows(filteredIssues);
-                document.getElementById('issueTable').appendChild(tableBody);
-                
-                // Проверка наличия tbody внутри таблицы
-                const tableBody = document.createElement('tbody');
-                let table = document.querySelector('table');
-                const existingTbody = table.querySelector('tbody');
-                if (existingTbody) {
-                    // Очистка существующего tbody
-                    const oldRows = existingTbody.querySelectorAll('tr');
-                    Array.from(oldRows).forEach(row => row.remove());
-                } else {
-                    // Создание нового tbody и добавление его в таблицу
-                    table.appendChild(tableBody);
+            });
+        
+            // Функция обновления таблицы
+            function updateTable(activeTab) {
+                const activeClass = 'selected';
+                tabs.forEach((tab) => {
+                    tab.classList.remove(activeClass);
+                });
+                document.querySelector(`[href="#${activeTab}"]`).classList.add(activeClass);
+        
+                let rows = '';
+                switch (activeTab) {
+                    case 'open':
+                        rows = generateOpenRows();
+                        break;
+                    case 'inprogress':
+                        rows = generateInProgressRows();
+                        break;
+                    case 'closed':
+                        rows = generateClosedRows();
+                        break;
+                    case 'cancelled':
+                        rows = generateCancelledRows();
+                        break;
                 }
-                
-                // Добавление новых строк в tbody
-                tableBody.appendChild(generateTableRows(filteredIssues));
-                
-            } catch (error) {
-                console.error('Ошибка при получении данных:', error);
-            } finally {
-                document.getElementById('loadingAnimation').style.display = 'none';
+                tabContainer.innerHTML = `
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>№ заявки</th>
+                                <th>Дата</th>
+                                <th>Автор</th>
+                                <th>Объект</th>
+                                <th>Описание проблемы</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${rows}
+                        </tbody>
+                    </table>
+                `;
             }
-        }
         
-        // Обработка событий выбора вкладки
-        document.addEventListener('DOMContentLoaded', () => {
-            const tabButtons = document.querySelectorAll('label');
-            tabButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                        document.getElementById('loadingAnimation').style.display = 'block';
-                        fetchAndDisplayIssues(button.id);
-                });
-            });
+            // Функции генерации строк таблицы для разных вкладок
+            function generateOpenRows() {
+                return '<tr><td>№ заявки</td><td>Дата</td><td>Автор</td><td>Объект</td><td>Описание проблемы</td></tr>';
+            }
+        
+            function generateInProgressRows() {
+                return '<tr><td>№ заявки</td><td>Дата</td><td>Автор</td><td>Объект</td><td>Описание проблемы</td></tr>';
+            }
+        
+            function generateClosedRows() {
+                return '<tr><td>№ заявки</td><td>Дата</td><td>Автор</td><td>Объект</td><td>Описание проблемы</td></tr>';
+            }
+        
+            function generateCancelledRows() {
+                return '<tr><td>№ заявки</td><td>Дата</td><td>Автор</td><td>Объект</td><td>Описание проблемы</td></tr>';
+            }
         });
     </script>
 </body>
