@@ -61,16 +61,16 @@
     <div class="container my-3">
         <ul class="nav nav-tabs nav-fill">
             <li class="nav-item">
-                <a class="nav-link active" data-bs-toggle="tab" href="#opened">Открытые</a>
+                <a class="nav-link active" data-bs-toggle="tab" href="#opened">Откр.</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" data-bs-toggle="tab" href="#inwork">В работе</a>
+                <a class="nav-link" data-bs-toggle="tab" href="#inwork">В раб.</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" data-bs-toggle="tab" href="#closed">Закрытые</a>
+                <a class="nav-link" data-bs-toggle="tab" href="#closed">Закр.</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" data-bs-toggle="tab" href="#deleted">Отмененные</a>
+                <a class="nav-link" data-bs-toggle="tab" href="#deleted">Отмен.</a>
             </li>
         </ul>
 
@@ -164,17 +164,14 @@
                 currentTable.innerHTML = '';
                 data.forEach(row => {
                     const rowEl = document.createElement('tr');
-                    const colspan = document.createElement('td colspan="4"');
                     const col1 = document.createElement('td');
                     const col2 = document.createElement('td');
                     const col3 = document.createElement('td');
                     const col4 = document.createElement('td');
-                    colspan.textContent = row['object'];
                     col1.textContent = row['id'];
                     col2.textContent = row['sender'];
-                    col3.textContent = row['problem'];
+                    col3.textContent = row['object']+': '+row['problem'];
                     col4.textContent = 'Закрыть Отменить В работу Сообщение';
-                    rowEl.appendChild(colspan);
                     rowEl.appendChild(col1);
                     rowEl.appendChild(col2);
                     rowEl.appendChild(col3);
