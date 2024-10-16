@@ -170,8 +170,15 @@
                     const col4 = document.createElement('td');
                     col1.textContent = row['id'];
                     col2.textContent = row['sender'];
-                    col3.textContent = row['object']+': '+row['problem'];
-                    col4.textContent = 'Закрыть Отменить В работу Сообщение';
+                    col3.textContent = `${row['object_name']} ${row['created_date']}`;
+                    col4.textContent = '<button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown">Действия</button>';
+                    const actionsMenu = document.createElement('div');
+                    actionsMenu.className = 'dropdown-menu';
+                    actionsMenu.setAttribute('aria-labelledby', 'actionsDropdown');
+                    actionsMenu.append(createActionLink('Подтвердить', '#confirm/' + row['id']));
+                    actionsMenu.append(createActionLink('Отклонить', '#reject/' + row['id']));
+                    actionsMenu.append(createActionLink('Перенести', '#move/' + row['id']));
+                    col4.appendChild(actionsMenu);
                     rowEl.appendChild(col1);
                     rowEl.appendChild(col2);
                     rowEl.appendChild(col3);
@@ -184,6 +191,14 @@
                 });
         }
 
+        function createActionLink(actionText, actionUrl) {
+            const link = document.createElement('a');
+            link.className = 'dropdown-item';
+            link.textContent = actionText;
+            link.href = actionUrl;
+            return link;
+        }
+        
         // Инициализация активной вкладки
         new bootstrap.Tab.getInstance(document.querySelector('.nav-link.active'))?.show();
         updateTable(document.querySelector('.nav-link.active'));
