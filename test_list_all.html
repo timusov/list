@@ -138,11 +138,11 @@
     <script>
         const tabElements = document.querySelectorAll('.nav-link');
         const tables = document.querySelectorAll('tbody');
-
+        const loader = document.getElementById('loader');
+        
         // Переключаем вкладки
         for (let i = 0; i < tabElements.length; ++i) {
             tabElements[i].addEventListener('click', (event) => {
-                loader.classList.add('show');
                 updateTable(event.target);
                 event.preventDefault();
     
@@ -157,7 +157,8 @@
         }
 
         function updateTable(tab) {
-            const url = `https://script.google.com/macros/s/AKfycbwRXVLd8j-F-X9PC6EXNaHMAKcElipLBgPz1poNd5LDmk65z4W3oGSKa-o1f2Io4MTIcw/exec?uid=${window.Telegram.WebApp.initDataUnsafe.user.id}&status=#${tab.getAttribute('href').substring(1)}`;
+            loader.classList.add('show');
+            const url = `https://script.google.com/macros/s/AKfycbwRXVLd8j-F-X9PC6EXNaHMAKcElipLBgPz1poNd5LDmk65z4W3oGSKa-o1f2Io4MTIcw/exec?uid=${window.Telegram.WebApp.initDataUnsafe.user.id}&status=${tab.getAttribute('href').substring(1)}`;
             fetch(url).then(response => response.json()).then(data => {
                 const currentTable = document.getElementById(`${tab.getAttribute('href').substring(1)}-list`);
                 currentTable.innerHTML = '';
@@ -176,9 +177,9 @@
                     rowEl.appendChild(col3);
                     rowEl.appendChild(col4);
                     currentTable.appendChild(rowEl);
-                    loader.classList.remove('show');
                 });
             }).catch(error => console.log(error));
+            loader.classList.remove('show');
         }
 
         // Инициализация активной вкладки
