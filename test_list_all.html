@@ -164,13 +164,15 @@
                 currentTable.innerHTML = '';
                 data.forEach(row => {
                     const rowEl = document.createElement('tr');
+                    const colspan = document.createElement('tr colspan=4');
                     const col1 = document.createElement('td');
                     const col2 = document.createElement('td');
                     const col3 = document.createElement('td');
                     const col4 = document.createElement('td');
+                    colspan.textContent = row['object'];
                     col1.textContent = row['id'];
                     col2.textContent = row['sender'];
-                    col3.textContent = `${row['object']}: ${row['problem']}`;
+                    col3.textContent = row['problem'];
                     col4.textContent = 'Закрыть Отменить В работу Сообщение';
                     rowEl.appendChild(col1);
                     rowEl.appendChild(col2);
