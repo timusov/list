@@ -142,7 +142,8 @@
         // Переключаем вкладки
         for (let i = 0; i < tabElements.length; ++i) {
             tabElements[i].addEventListener('click', (event) => {
-                
+                loader.classList.add('show');
+                updateTable(event.target);
                 event.preventDefault();
     
                 let targetElement = document.getElementById(event.target.getAttribute('href').substring(1));
@@ -152,9 +153,6 @@
     
                 tabElements.forEach((el) => el.classList.remove('active'));
                 event.target.classList.add('active');
-                loader.classList.add('show');
-                updateTable(event.target);
-                loader.classList.remove('show');
             });
         }
 
@@ -178,6 +176,7 @@
                     rowEl.appendChild(col3);
                     rowEl.appendChild(col4);
                     currentTable.appendChild(rowEl);
+                    loader.classList.remove('show');
                 });
             }).catch(error => console.log(error));
         }
