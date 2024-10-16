@@ -48,7 +48,7 @@
                 <a class="nav-link" data-bs-toggle="tab" href="#closed">Закрытые</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" data-bs-toggle="tab" href="#canceled">Отмененные</a>
+                <a class="nav-link" data-bs-toggle="tab" href="#deleted">Отмененные</a>
             </li>
         </ul>
 
@@ -131,7 +131,7 @@
         }
 
         function updateTable(tab) {
-            const url = `/api/requests?status=${tab.getAttribute('href').substring(1)}`;
+            const url = `https://script.google.com/macros/s/AKfycbwRXVLd8j-F-X9PC6EXNaHMAKcElipLBgPz1poNd5LDmk65z4W3oGSKa-o1f2Io4MTIcw/exec?status=${tab.getAttribute('href').substring(1)}`;
             fetch(url).then(response => response.json()).then(data => {
                 const currentTable = document.getElementById(`${tab.getAttribute('href').substring(1)}-list`);
                 currentTable.innerHTML = '';
@@ -142,9 +142,9 @@
                     const col3 = document.createElement('td');
                     const col4 = document.createElement('td');
                     col1.textContent = row['id'];
-                    col2.textContent = row['author'];
-                    col3.textContent = `${row['object_name']} ${row['created_date']}`;
-                    col4.textContent = 'Действие';
+                    col2.textContent = row['sender'];
+                    col3.textContent = `${row['object']}: ${row['problem']}`;
+                    col4.textContent = 'Закрыть Отменить В работу Сообщение';
                     rowEl.appendChild(col1);
                     rowEl.appendChild(col2);
                     rowEl.appendChild(col3);
