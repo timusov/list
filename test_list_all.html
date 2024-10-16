@@ -34,6 +34,27 @@
             text-align: left;
             font-size: 0.75rem;
         }
+        #loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(255, 255, 255, 0.8);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease-in-out, visibility 0s linear 0.3s;
+        }
+        
+        #loader.show {
+            opacity: 1;
+            visibility: visible;
+            transition-delay: 0s;
+        }
     </style>
 </head>
 <body>
@@ -108,6 +129,10 @@
             </div>
         </div>
     </div>
+    <div id="loader" class="loader">
+        <img src="loading.gif" alt="GIF image">
+         <br><p>Пожалуйста, подождите...</p>
+    </div>
 
     <!-- Подключение скрипта для переключения вкладок -->
     <script>
@@ -117,6 +142,7 @@
         // Переключаем вкладки
         for (let i = 0; i < tabElements.length; ++i) {
             tabElements[i].addEventListener('click', (event) => {
+                loader.classList.add('show');
                 event.preventDefault();
     
                 let targetElement = document.getElementById(event.target.getAttribute('href').substring(1));
@@ -132,6 +158,7 @@
         }
 
         function updateTable(tab) {
+            
             const url = `https://script.google.com/macros/s/AKfycbwRXVLd8j-F-X9PC6EXNaHMAKcElipLBgPz1poNd5LDmk65z4W3oGSKa-o1f2Io4MTIcw/exec?uid=${window.Telegram.WebApp.initDataUnsafe.user.id}&status=#${tab.getAttribute('href').substring(1)}`;
             fetch(url).then(response => response.json()).then(data => {
                 const currentTable = document.getElementById(`${tab.getAttribute('href').substring(1)}-list`);
@@ -153,6 +180,7 @@
                     currentTable.appendChild(rowEl);
                 });
             }).catch(error => console.log(error));
+            loader.classList.remove('show');
         }
 
         // Инициализация активной вкладки
