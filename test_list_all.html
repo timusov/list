@@ -59,7 +59,7 @@
 </head>
 <body>
     <div class="container my-3">
-        <ul class="nav nav-tabs nav-fill justify-content-center bg-light border-bottom pb-1 mb-1">
+        <ul class="nav nav-tabs nav-fill justify-content-center bg-light border-bottom pb-2 mb-2">
             <li class="nav-item">
                 <a class="nav-link active" data-bs-toggle="tab" href="#opened">Открытые</a>
             </li>
@@ -88,7 +88,7 @@
                     <tbody id="opened-list"></tbody>
                 </table>
             </div>
-            <div id="inprogress" class="tab-pane fade">
+            <div id="inwork" class="tab-pane fade">
                 <table class="table table-striped">
                     <thead>
                         <tr>
@@ -98,7 +98,7 @@
                             <th scope="col">Действия</th>
                         </tr>
                     </thead>
-                    <tbody id="inprogress-list"></tbody>
+                    <tbody id="inwork-list"></tbody>
                 </table>
             </div>
             <div id="closed" class="tab-pane fade">
@@ -114,7 +114,7 @@
                     <tbody id="closed-list"></tbody>
                 </table>
             </div>
-            <div id="canceled" class="tab-pane fade">
+            <div id="deleted" class="tab-pane fade">
                 <table class="table table-striped">
                     <thead>
                         <tr>
@@ -124,7 +124,7 @@
                             <th scope="col">Действия</th>
                         </tr>
                     </thead>
-                    <tbody id="canceled-list"></tbody>
+                    <tbody id="deleted-list"></tbody>
                 </table>
             </div>
         </div>
@@ -143,7 +143,6 @@
         // Переключаем вкладки
         for (let i = 0; i < tabElements.length; ++i) {
             tabElements[i].addEventListener('click', (event) => {
-                updateTable(event.target);
                 event.preventDefault();
     
                 let targetElement = document.getElementById(event.target.getAttribute('href').substring(1));
@@ -153,11 +152,12 @@
     
                 tabElements.forEach((el) => el.classList.remove('active'));
                 event.target.classList.add('active');
+                loader.classList.add('show');
+                updateTable(event.target);
             });
         }
 
         function updateTable(tab) {
-            loader.classList.add('show');
             const url = `https://script.google.com/macros/s/AKfycbwRXVLd8j-F-X9PC6EXNaHMAKcElipLBgPz1poNd5LDmk65z4W3oGSKa-o1f2Io4MTIcw/exec?uid=${window.Telegram.WebApp.initDataUnsafe.user.id}&status=${tab.getAttribute('href').substring(1)}`;
             fetch(url).then(response => response.json()).then(data => {
                 const currentTable = document.getElementById(`${tab.getAttribute('href').substring(1)}-list`);
@@ -177,9 +177,11 @@
                     rowEl.appendChild(col3);
                     rowEl.appendChild(col4);
                     currentTable.appendChild(rowEl);
+                    loader.classList.remove('show');
                 });
-            }).catch(error => console.log(error));
-            loader.classList.remove('show');
+                }).catch(error => {
+                    loader.classList.remove('show');
+                });
         }
 
         // Инициализация активной вкладки
