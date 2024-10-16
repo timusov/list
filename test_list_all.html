@@ -173,9 +173,9 @@
                         const col0 = document.createElement('td');
                             col0.colSpan = 4; // Значение colspan указывает, сколько колонок занимает ячейка
                             col0.className = 'table-active';
-                            col0.textContent = row['object'];
+                            col0.textContent = x[object];
                     rowE0.appendChild(col0);
-                    const filteredData = data.filter(x => x.object_name === objectName);
+                    const filteredData = data.filter(x => x.object === objectName);
                     const currentTable = document.getElementById(`${tab.getAttribute('href').substring(1)}-list`);
                     currentTable.innerHTML = '';
                     filteredData.forEach(row => {
