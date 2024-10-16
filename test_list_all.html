@@ -142,7 +142,7 @@
         // Переключаем вкладки
         for (let i = 0; i < tabElements.length; ++i) {
             tabElements[i].addEventListener('click', (event) => {
-                loader.classList.add('show');
+                
                 event.preventDefault();
     
                 let targetElement = document.getElementById(event.target.getAttribute('href').substring(1));
@@ -152,13 +152,13 @@
     
                 tabElements.forEach((el) => el.classList.remove('active'));
                 event.target.classList.add('active');
-    
+                
                 updateTable(event.target);
             });
         }
 
         function updateTable(tab) {
-            
+            loader.classList.add('show');
             const url = `https://script.google.com/macros/s/AKfycbwRXVLd8j-F-X9PC6EXNaHMAKcElipLBgPz1poNd5LDmk65z4W3oGSKa-o1f2Io4MTIcw/exec?uid=${window.Telegram.WebApp.initDataUnsafe.user.id}&status=#${tab.getAttribute('href').substring(1)}`;
             fetch(url).then(response => response.json()).then(data => {
                 const currentTable = document.getElementById(`${tab.getAttribute('href').substring(1)}-list`);
