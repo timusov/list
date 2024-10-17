@@ -225,7 +225,7 @@
                             actionsMenu.className = 'dropdown-menu';
                             actionsMenu.setAttribute('aria-labelledby', 'actionsDropdown');
                             actionsMenu.append(createActionLink('Подтвердить', '#confirm/' + row['id']));
-                            actionsMenu.append(createActionLink('Отклонить', '#reject/' + row['id']));
+                            actionsMenu.append(createActionLink('Отклонить', "https://timusov.github.io/list/delete.html?uid="+window.Telegram.WebApp.initDataUnsafe.user.id+"&ticketID="+encodeURIComponent(row['id'])));
                             actionsMenu.append(createActionLink('Перенести', '#move/' + row['id']));
                     col4.appendChild(button);
                     col4.appendChild(actionsMenu);
