@@ -7,8 +7,8 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
         function checkUser(apiurl, uid) {
-          const checkUrl = `${apiUrl}?doit=check&uid=${uid}`;
-          fetch(url).then(response => response.json()).then(data => {
+          const checkUrl = `${apiurl}?doit=check&uid=${uid}`;
+          fetch(checkUrl).then(response => response.json()).then(data => {
             if (!data.ok) {
               return false;
             } else {
@@ -30,7 +30,7 @@
           const urlParams = new URLSearchParams(window.location.search);
             const ticketID = urlParams.get('ticketID');
             const uid = urlParams.get('uid');
-            if (!checkUser(apiUrl, uid)) {
+            if (!checkUser(apiUrl, uid) && !uid & !tickedID) {
               window.location.replace("https://timusov.github.io/list/denied.html");
             } else {
               const submitButton = document.getElementById('submit');
