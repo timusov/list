@@ -246,11 +246,23 @@
             const link = document.createElement('a');
                 link.className = 'dropdown-item';
                 link.textContent = actionText;
-                link.href = actionUrl;
+                link.href = `#showpopup('${actionUrl}')`;
+                link.onclick = function() {
+                    eval(this.href.substr(1));
+                    return false;
+                };
             
             return link;
         }
 
+        function showpopup(url) {
+            document.getElementById('popupTrigger').addEventListener('click', function() {
+                const link = document.getElementById('popupTrigger').getAttribute('href');
+                document.getElementById('popupFrame').src = url;
+                document.getElementById('popup').style.display = 'flex';
+            });
+        }
+        
         document.getElementById('closeButton').addEventListener('click', function() {
             document.getElementById('popup').style.display = 'none';
         });
