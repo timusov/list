@@ -170,11 +170,11 @@
                     const currentTable = document.getElementById(`${tab.getAttribute('href').substring(1)}-list`);
                     currentTable.innerHTML = '';
                     data.forEach(row => {
-                        const rowE0 = document.createElement('tr');
-                            const col0 = document.createElement('td');
-                                col0.colSpan = 4; // Значение colspan указывает, сколько колонок занимает ячейка
-                                col0.textContent = row['object'];
-                        rowE0.appendChild(col0);
+                        //const rowE0 = document.createElement('tr');
+                        //    const col0 = document.createElement('td');
+                        //        col0.colSpan = 4; // Значение colspan указывает, сколько колонок занимает ячейка
+                        //        col0.textContent = row['object'];
+                        //rowE0.appendChild(col0);
                         const rowE1 = document.createElement('tr');
                             const col1 = document.createElement('td');
                                 col1.textContent = row['id'];
@@ -200,7 +200,7 @@
                         rowEl.appendChild(col2);
                         rowEl.appendChild(col3);
                         rowEl.appendChild(col4);
-                        currentTable.appendChild(rowE0);
+                        //currentTable.appendChild(rowE0);
                         currentTable.appendChild(rowEl);
                         
                         loader.classList.remove('show');
