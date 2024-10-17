@@ -242,15 +242,17 @@
                 });
         }
 
-        function createActionLink(actionText, actionUrl) {
+        function createActionLink(actionText, actionUrl, showPopup) {
             const link = document.createElement('a');
             link.className = 'dropdown-item';
             link.textContent = actionText;
-            link.onclick = goto(actionUrl);
+            link.href = actionUrl;
+            link.addEventListener('click', showPopup(actionUrl));
+            
             return link;
         }
 
-        function goto(actionUrl) {
+        function showPopup(actionUrl) {
             const link = document.getElementById('popupTrigger').getAttribute('href');
             document.getElementById('popupFrame').src = actionUrl;
             document.getElementById('popup').style.display = 'flex';
