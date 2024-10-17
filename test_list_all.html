@@ -246,7 +246,7 @@
             const link = document.createElement('a');
             link.className = 'dropdown-item';
             link.textContent = actionText;
-            link.onclick = `goto(${actionUrl});`;
+            link.onclick = goto(actionUrl);
             return link;
         }
 
