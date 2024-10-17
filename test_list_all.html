@@ -242,12 +242,12 @@
                 });
         }
 
-        function createActionLink(actionText, actionUrl, showPopup) {
+        function createActionLink(actionText, actionUrl, showPopup(Url)) {
             const link = document.createElement('a');
             link.className = 'dropdown-item';
             link.textContent = actionText;
             link.href = actionUrl;
-            link.addEventListener('click', showPopup(actionUrl));
+            link.addEventListener('click', showPopup(Url));
             
             return link;
         }
