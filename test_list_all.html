@@ -224,9 +224,9 @@
                         const actionsMenu = document.createElement('div');
                             actionsMenu.className = 'dropdown-menu';
                             actionsMenu.setAttribute('aria-labelledby', 'actionsDropdown');
-                            actionsMenu.append(createActionLink('Подтвердить', '#confirm/' + row['id']));
-                            actionsMenu.append(createActionLink('Отклонить', '#reject/' + row['id']));
-                            actionsMenu.append(createActionLink('Перенести', '#move/' + row['id']));
+                            actionsMenu.append(createActionLink('Подтвердить', '#confirm/' + row['id'], showPopup('хуй')));
+                            actionsMenu.append(createActionLink('Отклонить', '#reject/' + row['id'], showPopup('хуй')));
+                            actionsMenu.append(createActionLink('Перенести', '#move/' + row['id'], showPopup('хуй')));
                     col4.appendChild(button);
                     col4.appendChild(actionsMenu);
                     rowEl.appendChild(col1);
