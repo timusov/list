@@ -256,11 +256,8 @@
         }
 
         function showpopup(url) {
-            document.getElementById('popupTrigger').addEventListener('click', function() {
-                const link = document.getElementById('popupTrigger').getAttribute('href');
-                document.getElementById('popupFrame').src = url;
-                document.getElementById('popup').style.display = 'flex';
-            });
+            document.getElementById('popupFrame').src = url;
+            document.getElementById('popup').style.display = 'flex';
         }
         
         document.getElementById('closeButton').addEventListener('click', function() {
