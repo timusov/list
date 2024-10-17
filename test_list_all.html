@@ -62,6 +62,36 @@
             visibility: visible;
             transition-delay: 0s;
         }
+
+        #popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        #popupContent {
+            background-color: #fff;
+            width: 600px;
+            height: 400px;
+            border: 1px solid #000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #closeButton {
+            font-size: 2rem;
+            color: #000;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -136,6 +166,14 @@
             </div>
         </div>
     </div>
+
+    <div id="popup">
+        <div id="popupContent">
+            <iframe id="popupFrame" src="" style="border: none;" sandbox="allow-same-origin allow-scripts"></iframe>
+            <button id="closeButton">Закрыть окно</button>
+        </div>
+    </div>
+    
     <div id="loader" class="loader">
         <img src="loading.gif" alt="GIF image">
          <br><p>Пожалуйста, подождите...</p>
@@ -208,9 +246,19 @@
             const link = document.createElement('a');
             link.className = 'dropdown-item';
             link.textContent = actionText;
-            link.href = actionUrl;
+            link.onclick = `goto(${actionUrl});`;
             return link;
         }
+
+        function goto(actionUrl) {
+            const link = document.getElementById('popupTrigger').getAttribute('href');
+            document.getElementById('popupFrame').src = actionUrl;
+            document.getElementById('popup').style.display = 'flex';
+        };
+
+        document.getElementById('closeButton').addEventListener('click', function() {
+            document.getElementById('popup').style.display = 'none';
+        });
         
         // Инициализация активной вкладки
         new bootstrap.Tab.getInstance(document.querySelector('.nav-link.active'))?.show();
