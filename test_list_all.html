@@ -167,7 +167,7 @@
         function updateTable(tab) {
             const url = `https://script.google.com/macros/s/AKfycbwRXVLd8j-F-X9PC6EXNaHMAKcElipLBgPz1poNd5LDmk65z4W3oGSKa-o1f2Io4MTIcw/exec?uid=${window.Telegram.WebApp.initDataUnsafe.user.id}&status=${tab.getAttribute('href').substring(1)}`;
             fetch(url).then(response => response.json()).then(data => {
-                const objects = Array.from(new Set(data.map(x => x[object])));
+                const objects = Array.from(new Set(data.map(x => x.object)));
                 objects.forEach(object => {
                     const filteredData = data.filter(x => x.object === object);
                     const currentTable = document.getElementById(`${tab.getAttribute('href').substring(1)}-list`);
@@ -178,6 +178,7 @@
                                 col0.colSpan = 4; // Значение colspan указывает, сколько колонок занимает ячейка
                                 col0.textContent = object;
                         rowE0.appendChild(col0);
+                            const rowE1 = document.createElement('tr');
                             const col1 = document.createElement('td');
                             const col2 = document.createElement('td');
                             const col3 = document.createElement('td');
