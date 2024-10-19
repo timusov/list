@@ -176,19 +176,20 @@
                 currentTable.innerHTML = '';
                 Object.keys(objects).forEach(object => {
                     const TR_1 = document.createElement('tr');
-                        TR_1.setAttribute('class', 'table-info');
+                        TR_1.setAttribute('class', 'table-dark');
                     const TH = document.createElement('th');
-                        TH.setAttribute('colspan', '3');
+                        TH.setAttribute('colspan', '4');
                         TH.textContent = object;
                     TR_1.appendChild(TH);
-                    for (let i = 0; i < 3; i++) {
-                        const TH_other = document.createElement('th');
-                            TH_other.setAttribute('scope', 'col');
-                        TR_1.appendChild(TH_other);
-                    }
+                    //for (let i = 0; i < 3; i++) {
+                    //    const TH_other = document.createElement('th');
+                    //        TH_other.setAttribute('scope', 'col');
+                    //    TR_1.appendChild(TH_other);
+                    //}
                     currentTable.appendChild(TR_1);
                     objects[object].forEach(request => {
                         const TR_2 = document.createElement('tr');
+                            TR_2.setAttribute('class', 'table-primary');
                         const CL_1 = document.createElement('td');
                             CL_1.textContent = request['id'];
                             TR_2.appendChild(CL_1);
@@ -215,13 +216,14 @@
                         TR_2.appendChild(CL_4);
                         currentTable.appendChild(TR_2);
                         const TR_3 = document.createElement('tr');
-                        for (let i = 0; i < 2; i++) {
-                            const TD_other = document.createElement('td');
-                                TD_other.setAttribute('scope', 'col');
-                            TR_3.appendChild(TD_other);
-                        }
+                            TR_3.setAttribute('class', 'table-secondary');
+                        //for (let i = 0; i < 2; i++) {
+                        //    const TD_other = document.createElement('td');
+                        //        TD_other.setAttribute('scope', 'col');
+                        //    TR_3.appendChild(TD_other);
+                        //}
                         const TD_problem = document.createElement('td');
-                            TD_problem.setAttribute('colspan', '2');
+                            TD_problem.setAttribute('colspan', '4');
                             TD_problem.textContent = request['problem'];
                         TR_3.appendChild(TD_problem);
                         currentTable.appendChild(TR_3);
