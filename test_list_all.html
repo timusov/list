@@ -229,7 +229,7 @@
                                     actionsMenu.className = 'dropdown-menu';
                                     actionsMenu.setAttribute('aria-labelledby', 'actionsDropdown');
                                     tbl[tab.getAttribute('href').substring(1)].forEach(btn => {
-                                            Object.keys(btns[btn]).forEach(key => {
+                                            btns[btn].forEach(key => {
                                                 actionsMenu.append(createActionLink(btns[key].title, btns[key].url + request['id'].replace('/', '_')));
                                             });
                                     });
