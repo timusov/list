@@ -174,7 +174,7 @@
                 
                 const currentTable = document.getElementById(`${tab.getAttribute('href').substring(1)}-list`);
                 currentTable.innerHTML = '';
-                Object.keys(groupedRequests).forEach(object => {
+                Object.keys(objects).forEach(object => {
                     const TR_1 = document.createElement('tr');
                         TR_1.setAttribute('class', 'table-info');
                     const TH = document.createElement('th');
