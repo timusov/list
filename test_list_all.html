@@ -229,9 +229,7 @@
                                     actionsMenu.className = 'dropdown-menu';
                                     actionsMenu.setAttribute('aria-labelledby', 'actionsDropdown');
                                     tbl[tab.getAttribute('href').substring(1)].forEach(b => {
-                                            Object.keys(btns[b]).forEach(k => {
-                                                actionsMenu.append(createActionLink(k, k + request['id'].replace('/', '_')));
-                                            });
+                                        actionsMenu.append(createActionLink(btns[b].title, btns[b].url + request['id'].replace('/', '_')));
                                     });
                                     //actionsMenu.append(createActionLink('Подтвердить', '#confirm/' + request['id']));
                                     //actionsMenu.append(createActionLink('Отклонить', "https://timusov.github.io/list/delete.html?uid="+window.Telegram.WebApp.initDataUnsafe.user.id+"&ticketID="+encodeURIComponent(request['id'])));
