@@ -170,13 +170,13 @@
                     const TR_1 = document.createElement('tr');
                         TR_1.class = "table-info"; 
                     for (let i = 0; i < 3; i++) {
-                        const TH_OTHER = document.createElement('th');
-                        TR_1.appendChild(TH_OTHER);
+                        const CL_OTHER = document.createElement('td');
+                        TR_1.appendChild(TD_OTHER);
                     }
-                    const TH_1 = document.createElement('th');
-                        TH_1.colspan = "3";
-                        TH_1.textContent = row['object'];
-                        TR_1.appendChild(TH_1);
+                    const CL_1 = document.createElement('td');
+                        CL_1.colspan = "4";
+                        CL_1.textContent = row['object'];
+                        TR_1.appendChild(CL_1);
                     currentTable.appendChild(TR_1);
                     const TR_2 = document.createElement('tr');
                     const CL_1 = document.createElement('td');
