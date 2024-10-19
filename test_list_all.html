@@ -176,6 +176,8 @@
                         TH.textContent = row['object'];
                         for (let i = 0; i < 3; i++) {
                             TR_1.children[i].childNodes.forEach(node => TH.appendChild(node));
+                        }
+                        for (let i = 0; i < 3; i++) {
                             TR_1.children[i].remove();
                         }
                         TR_1.appendChild(TH);
