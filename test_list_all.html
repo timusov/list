@@ -179,7 +179,7 @@
                         TR_1.setAttribute('class', 'table-info');
                     const TH = document.createElement('th');
                         TH.setAttribute('colspan', '4');
-                        TH.textContent = objects[name];
+                        TH.textContent = name;
                     TR_1.appendChild(TH);
                     for (let i = 0; i < 3; i++) {
                         const TH_other = document.createElement('th');
@@ -187,7 +187,7 @@
                         TR_1.appendChild(TH_other);
                     }
                     currentTable.appendChild(TR_1);
-                    name.forEach(order => {
+                    objects[name].forEach(order => {
                         const TR_2 = document.createElement('tr');
                         const CL_1 = document.createElement('td');
                             CL_1.textContent = order['id'];
