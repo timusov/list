@@ -168,15 +168,17 @@
                 currentTable.innerHTML = '';
                 data.forEach(row => {
                     const TR_1 = document.createElement('tr');
-                        TR_1.class = "table-info"; 
                     for (let i = 0; i < 3; i++) {
-                        const CL_OTHER = document.createElement('td');
-                        TR_1.appendChild(CL_OTHER);
+                        const TH_other = document.createElement('th');
+                        TR_1.appendChild(TH_other);
                     }
-                    const CL_0 = document.createElement('td');
-                        CL_0.className = 'col-sm-4';
-                        CL_0.textContent = row['object'];
-                        TR_1.appendChild(CL_0);
+                    const TH = document.createElement('th');
+                        TH.textContent = row['object'];
+                        for (let i = 0; i < 3; i++) {
+                            TR_1.children[i].childNodes.forEach(node => TH.appendChild(node));
+                            TR_1.children[i].remove();
+                        }
+                        TR_1.appendChild(TH);
                     currentTable.appendChild(TR_1);
                     const TR_2 = document.createElement('tr');
                     const CL_1 = document.createElement('td');
