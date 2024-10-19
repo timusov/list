@@ -169,15 +169,17 @@
                 data.forEach(row => {
                     const TR_1 = document.createElement('tr');
                         TR_1.className = 'class="table-info"';
-                    //for (let i = 0; i < 3; i++) {
-                    //    const td_other = document.createElement('td');
-                    //        td_other.className = 'colspan="3"';
-                    //    TR_1.appendChild(td_other);
-                    //}
                     const TH = document.createElement('th');
                         TH.className = 'scope="row"';
                         TH.textContent = row['object'];
                         TR_1.appendChild(TH);
+                    for (let i = 0; i < 3; i++) {
+                        const td_other = document.createElement('td');
+                        if (i == 2) {
+                            td_other.className = 'colspan="4"';
+                        }
+                        TR_1.appendChild(td_other);
+                    }
                     currentTable.appendChild(TR_1);
                     const TR_2 = document.createElement('tr');
                     const CL_1 = document.createElement('td');
