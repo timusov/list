@@ -168,10 +168,13 @@
                 currentTable.innerHTML = '';
                 data.forEach(row => {
                     const TR_1 = document.createElement('tr');
+                        TR_1.class = "table-info";
+                        TR_1.colspan = "4";
                     const TH_1 = document.createElement('th');
-                        TH_1.colspan = 4;
                         TH_1.textContent = row['object'];
                     TR_1.appendChild(TH_1);
+                    currentTable.appendChild(TR_1);
+                    
                     const TR_2 = document.createElement('tr');
                     const CL_1 = document.createElement('td');
                         CL_1.textContent = row['id'];
@@ -197,7 +200,6 @@
                             actionsMenu.append(createActionLink('Перенести', '#move/' + row['id']));        
                         CL_4.appendChild(actionsMenu);
                         TR_2.appendChild(CL_4);
-                    currentTable.appendChild(TR_1);
                     currentTable.appendChild(TR_2);
                     
                     loader.classList.remove('show');
