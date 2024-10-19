@@ -171,12 +171,13 @@
                         TR_1.setAttribute('class', 'table-info');
                     for (let i = 0; i < 3; i++) {
                         const TH_other = document.createElement('th');
+                            TH_other.setAttribute('scope', 'col');
                         TR_1.appendChild(TH_other);
                     }
                     const TH = document.createElement('th');
-                        TH.setAttribute('colspan', '4');
+                        TH.setAttribute('colspan', '3');
                         TH.textContent = row['object'];
-                        TR_1.appendChild(TH);
+                    TR_1.appendChild(TH);
                     currentTable.appendChild(TR_1);
                     const TR_2 = document.createElement('tr');
                     const CL_1 = document.createElement('td');
