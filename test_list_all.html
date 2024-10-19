@@ -228,9 +228,9 @@
                                 const actionsMenu = document.createElement('div');
                                     actionsMenu.className = 'dropdown-menu';
                                     actionsMenu.setAttribute('aria-labelledby', 'actionsDropdown');
-                                    tbl[tab.getAttribute('href').substring(1)].forEach(btn => {
-                                            btns[btn].forEach(key => {
-                                                actionsMenu.append(createActionLink(btns[key].title, btns[key].url + request['id'].replace('/', '_')));
+                                    tbl[tab.getAttribute('href').substring(1)].forEach(b => {
+                                            Object.keys(btns[b]).forEach(k => {
+                                                actionsMenu.append(createActionLink(btns[k].title, btns[k].url + request['id'].replace('/', '_')));
                                             });
                                     });
                                     //actionsMenu.append(createActionLink('Подтвердить', '#confirm/' + request['id']));
