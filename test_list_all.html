@@ -167,12 +167,14 @@
                 const currentTable = document.getElementById(`${tab.getAttribute('href').substring(1)}-list`);
                 currentTable.innerHTML = '';
                 data.forEach(row => {
-                    const TR_1 = document.createElement('tr class="table-info"');
+                    const TR_1 = document.createElement('tr');
+                        TR_1.setAttribute('class', 'table-info');
                     for (let i = 0; i < 3; i++) {
                         const TH_other = document.createElement('th');
                         TR_1.appendChild(TH_other);
                     }
-                    const TH = document.createElement('th colspan="4"');
+                    const TH = document.createElement('th');
+                        TH.setAttribute('colspan', '4');
                         TH.textContent = row['object'];
                         TR_1.appendChild(TH);
                     currentTable.appendChild(TR_1);
