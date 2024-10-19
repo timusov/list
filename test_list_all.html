@@ -230,7 +230,7 @@
                                     actionsMenu.setAttribute('aria-labelledby', 'actionsDropdown');
                                     tbl[tab.getAttribute('href').substring(1)].forEach(btn => {
                                             Object.keys(btns[btn]).forEach(key => {
-                                                actionsMenu.append(createActionLink(key[title], key[url] + request['id'].replace('/', '_')));
+                                                actionsMenu.append(createActionLink(key['title'], key['url'] + request['id'].replace('/', '_')));
                                             });
                                     });
                                     //actionsMenu.append(createActionLink('Подтвердить', '#confirm/' + request['id']));
