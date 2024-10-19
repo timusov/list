@@ -144,11 +144,11 @@
         const tabElements = document.querySelectorAll('.nav-link');
         const tables = document.querySelectorAll('tbody');
         const loader = document.getElementById('loader');
-        const actionUrl = "https://t.me/Fiveworkbot/doit?startapp=",
+        const actionUrl = "https://t.me/Fiveworkbot/doit?startapp=";
         const tbl = {
             opened: ['inwork', 'del'],
             inwork: ['comm', 'close'],    
-        }
+        };
         const btns = {
             inwork: {
                 url: actionUrl+"work_",
@@ -166,7 +166,7 @@
                 url: actionUrl+"comp_",
                 title: "U+274E закрыть"
             }
-        }
+        };
         
         for (let i = 0; i < tabElements.length; ++i) {
             tabElements[i].addEventListener('click', (event) => {
