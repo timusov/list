@@ -178,7 +178,7 @@
                     const TR_1 = document.createElement('tr');
                         TR_1.setAttribute('class', 'table-info');
                     const TH = document.createElement('th');
-                        TH.setAttribute('colspan', '4');
+                        TH.setAttribute('colspan', '3');
                         TH.textContent = object;
                     TR_1.appendChild(TH);
                     for (let i = 0; i < 3; i++) {
@@ -196,7 +196,7 @@
                             CL_2.textContent = request['sender'];
                             TR_2.appendChild(CL_2);
                         const CL_3 = document.createElement('td');
-                            CL_3.textContent = `${request['object']} ${request['problem']}`;
+                            CL_3.textContent = request['date'];
                             TR_2.appendChild(CL_3);
                         const CL_4 = document.createElement('td');
                             const button = document.createElement('button');
@@ -214,6 +214,17 @@
                         CL_4.appendChild(actionsMenu);
                         TR_2.appendChild(CL_4);
                         currentTable.appendChild(TR_2);
+                        const TR_3 = document.createElement('tr');
+                        for (let i = 0; i < 2; i++) {
+                            const TD_other = document.createElement('td');
+                                TD_other.setAttribute('scope', 'col');
+                            TR_3.appendChild(TD_other);
+                        }
+                        const TD_problem = document.createElement('td');
+                            TD_problem.setAttribute('colspan', '2');
+                            TD_problem.textContent = request['problem'];
+                        TR_3.appendChild(TD_problem);
+                        currentTable.appendChild(TR_3);
                     });
                 });
                 loader.classList.remove('show');
