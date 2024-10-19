@@ -168,14 +168,14 @@
                 currentTable.innerHTML = '';
                 data.forEach(row => {
                     const TR_1 = document.createElement('tr');
-                        TR_1.class = "table-info";
-                    const TH_1 = document.createElement('th'); 
-                    for (let i = 0; i < 4; i++) {
+                        TR_1.class = "table-info"; 
+                    for (let i = 0; i < 3; i++) {
                         const TH_OTHER = document.createElement('th');
                         TR_1.appendChild(TH_OTHER);
                     }
+                    const TH_1 = document.createElement('th');
                         TH_1.textContent = row['object'];
-                        TH_1.colspan = "4";
+                        TH_1.colspan = 4;
                         TR_1.appendChild(TH_1);
                     currentTable.appendChild(TR_1);
                     const TR_2 = document.createElement('tr');
