@@ -174,12 +174,12 @@
                 
                 const currentTable = document.getElementById(`${tab.getAttribute('href').substring(1)}-list`);
                 currentTable.innerHTML = '';
-                objects.forEach(row => {
+                Object.keys(groupedRequests).forEach(object => {
                     const TR_1 = document.createElement('tr');
                         TR_1.setAttribute('class', 'table-info');
                     const TH = document.createElement('th');
                         TH.setAttribute('colspan', '4');
-                        TH.textContent = row['object'];
+                        TH.textContent = object;
                     TR_1.appendChild(TH);
                     for (let i = 0; i < 3; i++) {
                         const TH_other = document.createElement('th');
@@ -187,38 +187,39 @@
                         TR_1.appendChild(TH_other);
                     }
                     currentTable.appendChild(TR_1);
-                    const TR_2 = document.createElement('tr');
-                    const CL_1 = document.createElement('td');
-                        CL_1.textContent = row['id'];
-                        TR_2.appendChild(CL_1);
-                    const CL_2 = document.createElement('td');
-                        CL_2.textContent = row['sender'];
-                        TR_2.appendChild(CL_2);
-                    const CL_3 = document.createElement('td');
-                        CL_3.textContent = `${row['object']} ${row['problem']}`;
-                        TR_2.appendChild(CL_3);
-                    const CL_4 = document.createElement('td');
-                        const button = document.createElement('button');
-                            button.type = 'button';
-                            button.className = 'btn btn-outline-primary dropdown-toggle';
-                            button.dataset.bsToggle = 'dropdown';
-                            button.innerText = 'Действия';
-                        CL_4.appendChild(button);
-                        const actionsMenu = document.createElement('div');
-                            actionsMenu.className = 'dropdown-menu';
-                            actionsMenu.setAttribute('aria-labelledby', 'actionsDropdown');
-                            actionsMenu.append(createActionLink('Подтвердить', '#confirm/' + row['id']));
-                            actionsMenu.append(createActionLink('Отклонить', "https://timusov.github.io/list/delete.html?uid="+window.Telegram.WebApp.initDataUnsafe.user.id+"&ticketID="+encodeURIComponent(row['id'])));
-                            actionsMenu.append(createActionLink('Перенести', '#move/' + row['id']));        
+                    groupedRequests[object].forEach(request => {
+                        const TR_2 = document.createElement('tr');
+                        const CL_1 = document.createElement('td');
+                            CL_1.textContent = request['id'];
+                            TR_2.appendChild(CL_1);
+                        const CL_2 = document.createElement('td');
+                            CL_2.textContent = request['sender'];
+                            TR_2.appendChild(CL_2);
+                        const CL_3 = document.createElement('td');
+                            CL_3.textContent = `${request['object']} ${request['problem']}`;
+                            TR_2.appendChild(CL_3);
+                        const CL_4 = document.createElement('td');
+                            const button = document.createElement('button');
+                                button.type = 'button';
+                                button.className = 'btn btn-outline-primary dropdown-toggle';
+                                button.dataset.bsToggle = 'dropdown';
+                                button.innerText = 'Действия';
+                            CL_4.appendChild(button);
+                            const actionsMenu = document.createElement('div');
+                                actionsMenu.className = 'dropdown-menu';
+                                actionsMenu.setAttribute('aria-labelledby', 'actionsDropdown');
+                                actionsMenu.append(createActionLink('Подтвердить', '#confirm/' + request['id']));
+                                actionsMenu.append(createActionLink('Отклонить', "https://timusov.github.io/list/delete.html?uid="+window.Telegram.WebApp.initDataUnsafe.user.id+"&ticketID="+encodeURIComponent(request['id'])));
+                                actionsMenu.append(createActionLink('Перенести', '#move/' + request['id']));        
                         CL_4.appendChild(actionsMenu);
                         TR_2.appendChild(CL_4);
-                    currentTable.appendChild(TR_2);
-                    
-                    loader.classList.remove('show');
+                        currentTable.appendChild(TR_2);
+                    });
                 });
-                }).catch(error => {
-                    loader.classList.remove('show');
-                });
+                loader.classList.remove('show');
+            }).catch(error => {
+                loader.classList.remove('show');
+            });
         }
 
         function createActionLink(actionText, actionUrl) {
