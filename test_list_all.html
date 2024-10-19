@@ -171,11 +171,11 @@
                         TR_1.className = 'class="table-info"';
                     for (let i = 0; i < 3; i++) {
                         const TH_other = document.createElement('th');
-                            TH_other.className = scope="col";
+                            TH_other.className = 'scope="col"';
                         TR_1.appendChild(TH_other);
                     }
                     const TH = document.createElement('th');
-                        TH.className = 'scope="col" colspan="3"';
+                        TH.className = 'colspan="3"';
                         TH.textContent = row['object'];
                         TR_1.appendChild(TH);
                     currentTable.appendChild(TR_1);
