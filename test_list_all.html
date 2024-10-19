@@ -166,10 +166,10 @@
             fetch(url).then(response => response.json()).then(data => {
                 const objects = {};
                 data.forEach(order => {
-                    if (!objects[order.object]) {
-                        objects[order.object] = [];
+                    if (!objects[order[object]]) {
+                        objects[order[object]] = [];
                     }
-                    objects[order.object].push(order);
+                    objects[order[object]].push(order);
                 });
                 
                 const currentTable = document.getElementById(`${tab.getAttribute('href').substring(1)}-list`);
