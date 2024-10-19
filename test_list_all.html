@@ -14,7 +14,7 @@
         }
 
         .dropdown-menu {
-            font-size: 0.7rem;
+            font-size: 0.9rem;
         }
         
         .nav-tabs {
@@ -230,16 +230,13 @@
                                     actionsMenu.setAttribute('aria-labelledby', 'actionsDropdown');
                                     tbl[tab.getAttribute('href').substring(1)].forEach(b => {
                                         actionsMenu.append(createActionLink(btns[b].title, btns[b].url + request['id'].replace('/', '_')));
-                                    });
-                                    //actionsMenu.append(createActionLink('Подтвердить', '#confirm/' + request['id']));
-                                    //actionsMenu.append(createActionLink('Отклонить', "https://timusov.github.io/list/delete.html?uid="+window.Telegram.WebApp.initDataUnsafe.user.id+"&ticketID="+encodeURIComponent(request['id'])));
-                                    //actionsMenu.append(createActionLink('Перенести', '#move/' + request['id']));        
+                                    });     
                                 CL_4.appendChild(actionsMenu);
                             }
                         TR_2.appendChild(CL_4);
                         currentTable.appendChild(TR_2);
                         const TR_3 = document.createElement('tr');
-                            TR_3.setAttribute('class', 'table-secondary');
+                            TR_3.setAttribute('class', 'table-info');
                         const TD_problem = document.createElement('td');
                             TD_problem.setAttribute('colspan', '4');
                             TD_problem.textContent = `Описание проблемы: ${request['problem']}`;
