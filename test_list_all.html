@@ -66,7 +66,7 @@
 </head>
 <body>
     <div class="container my-3">
-        <ul class="nav nav-tabs nav-fill">
+        <ul class="nav nav-tabs nav-fill nav-condensed">
             <li class="nav-item">
                 <a class="nav-link active" data-bs-toggle="tab" href="#opened">Откр.</a>
             </li>
@@ -82,7 +82,7 @@
         </ul>
 
         <div class="tab-content">
-            <div id="opened" class="tab-pane fade show active">
+            <div id="opened" class="tab-pane tab-condensed fade show active">
                 <table class="table table-striped">
                     <thead>
                         <tr>
@@ -95,7 +95,7 @@
                     <tbody id="opened-list"></tbody>
                 </table>
             </div>
-            <div id="inwork" class="tab-pane fade">
+            <div id="inwork" class="tab-pane tab-condensed fade">
                 <table class="table table-striped">
                     <thead>
                         <tr>
@@ -108,7 +108,7 @@
                     <tbody id="inwork-list"></tbody>
                 </table>
             </div>
-            <div id="closed" class="tab-pane fade">
+            <div id="closed" class="tab-pane tab-condensed fade">
                 <table class="table table-striped">
                     <thead>
                         <tr>
@@ -121,7 +121,7 @@
                     <tbody id="closed-list"></tbody>
                 </table>
             </div>
-            <div id="deleted" class="tab-pane fade">
+            <div id="deleted" class="tab-pane tab-condensed fade">
                 <table class="table table-striped">
                     <thead>
                         <tr>
@@ -169,33 +169,33 @@
                 data.forEach(row => {
                     const row = document.createElement('tr');
                     const thl = document.createElement('th');
-                        th1.colspan = "4";
-                        thl.textContent = row['object'];
-                        row.appendChild(thl);
+                        th1.colspan = 4;
+                        thl.textContent = row['object'];    
                     const col1 = document.createElement('td');
-                        col1.textContent = row['id'];
-                        row.appendChild(col1);
+                        col1.textContent = row['id'];   
                     const col2 = document.createElement('td');
-                        col2.textContent = row['sender'];
-                        row.appendChild(col2);
+                        col2.textContent = row['sender'];  
                     const col3 = document.createElement('td');
-                        col3.textContent = `${row['object']} ${row['problem']}`;
-                        row.appendChild(col3);
+                        col3.textContent = `${row['object']} ${row['problem']}`;  
                     const col4 = document.createElement('td');
                         const button = document.createElement('button');
                             button.type = 'button';
                             button.className = 'btn btn-outline-primary dropdown-toggle';
                             button.dataset.bsToggle = 'dropdown';
-                            button.innerText = 'Действия';
-                            col4.appendChild(button);
+                            button.innerText = 'Действия'; 
                         const actionsMenu = document.createElement('div');
                             actionsMenu.className = 'dropdown-menu';
                             actionsMenu.setAttribute('aria-labelledby', 'actionsDropdown');
                             actionsMenu.append(createActionLink('Подтвердить', '#confirm/' + row['id']));
                             actionsMenu.append(createActionLink('Отклонить', "https://timusov.github.io/list/delete.html?uid="+window.Telegram.WebApp.initDataUnsafe.user.id+"&ticketID="+encodeURIComponent(row['id'])));
-                            actionsMenu.append(createActionLink('Перенести', '#move/' + row['id']));
-                            col4.appendChild(actionsMenu);
-                        row.appendChild(col4);
+                            actionsMenu.append(createActionLink('Перенести', '#move/' + row['id']));        
+                    col4.appendChild(button);
+                    col4.appendChild(actionsMenu);
+                    row.appendChild(thl);
+                    row.appendChild(col1);
+                    row.appendChild(col2);
+                    row.appendChild(col3);
+                    row.appendChild(col4);
                     currentTable.appendChild(row);
                     
                     loader.classList.remove('show');
