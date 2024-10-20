@@ -211,9 +211,8 @@
                 currentTable.innerHTML = '';
                 Object.keys(objects).forEach(object => {
                     const TR_1 = document.createElement('tr');
-                        TR_1.setAttribute('class', 'table-dark');
+                        TR_1.setAttribute('class', 'table-dark align-bottom');
                         const TH = document.createElement('th');
-                            TH.setAttribute('class', 'align-bottom');
                             TH.setAttribute('colspan', '4');
                             const tID = document.createElement('h6');
                                 tID.textContent = `${object}  `;
@@ -263,8 +262,8 @@
                         currentTable.appendChild(TR_2);
                         if (request['comments']) {
                             const TR_comments = document.createElement('tr');
-                                TR_comments.setAttribute('class', 'table-Warning');
                                 const TD_comments = document.createElement('td');
+                                    TD_comments.setAttribute('class', 'table-Warning');
                                     TD_comments.setAttribute('colspan', '4');
                                     TD_comments.textContent = `Комментарии: ${request['comments']}`;
                                 TR_comments.appendChild(TD_comments);
