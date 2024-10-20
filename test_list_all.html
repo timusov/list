@@ -213,6 +213,7 @@
                     const TR_1 = document.createElement('tr');
                         TR_1.setAttribute('class', 'table-dark');
                         const TH = document.createElement('th');
+                            TH.setAttribute('class', 'align-bottom');
                             TH.setAttribute('colspan', '4');
                             const tID = document.createElement('h6');
                                 tID.textContent = `${object}  `;
@@ -260,13 +261,22 @@
                                 TR_2.appendChild(CL_4);
                             }
                         currentTable.appendChild(TR_2);
-                        const TR_3 = document.createElement('tr');
-                            TR_3.setAttribute('class', 'table-secondary');
-                        const TD_problem = document.createElement('td');
-                            TD_problem.setAttribute('colspan', '4');
-                            TD_problem.textContent = `Описание: ${request['problem']}`;
-                        TR_3.appendChild(TD_problem);
-                        currentTable.appendChild(TR_3);
+                        if (request['comments']) {
+                            const TR_comments = document.createElement('tr');
+                                TR_comments.setAttribute('class', 'table-Warning');
+                                const TD_comments = document.createElement('td');
+                                    TD_comments.setAttribute('colspan', '4');
+                                    TD_comments.textContent = `Комментарии: ${request['comments']}`;
+                                TR_comments.appendChild(TD_comments);
+                            currentTable.appendChild(TR_comments);
+                        }
+                        const TR_problem = document.createElement('tr');
+                            TR_problem.setAttribute('class', 'table-secondary');
+                            const TD_problem = document.createElement('td');
+                                TD_problem.setAttribute('colspan', '4');
+                                TD_problem.textContent = `Описание: ${request['problem']}`;
+                            TR_problem.appendChild(TD_problem);
+                        currentTable.appendChild(TR_problem);
                     });
                 });
                 loader.classList.remove('show');
