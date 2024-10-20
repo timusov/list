@@ -265,7 +265,7 @@
                                  TR_workers.className = 'table-warning';
                                 const TD_workers = document.createElement('td');
                                     TD_workers.setAttribute('colspan', '4');
-                                    TD_workers.textContent = `Исполнители: ${request['workers']}`;
+                                    TD_workers.textContent = `👷‍♂️: ${request['workers']}`;
                                 TR_workers.appendChild(TD_workers);
                             currentTable.appendChild(TR_workers);
                         }
@@ -274,15 +274,15 @@
                                  TR_comments.className = 'table-warning';
                                 const TD_comments = document.createElement('td');
                                     TD_comments.setAttribute('colspan', '4');
-                                    TD_comments.textContent = `Комментарии: ${request['comments']}`;
+                                    TD_comments.textContent = `🗨️: ${request['comments']}`;
                                 TR_comments.appendChild(TD_comments);
                             currentTable.appendChild(TR_comments);
                         }
                         const TR_problem = document.createElement('tr');
-                            TR_problem.className = 'table-secondary';
+                            TR_problem.className = 'table-warning';
                             const TD_problem = document.createElement('td');
                                 TD_problem.setAttribute('colspan', '4');
-                                TD_problem.textContent = `Описание: ${request['problem']}`;
+                                TD_problem.textContent = `🛠️: ${request['problem']}`;
                             TR_problem.appendChild(TD_problem);
                         currentTable.appendChild(TR_problem);
                     });
