@@ -32,6 +32,12 @@
             font-weight: bold;
         }
 
+        .btn-outline-success {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+        }
+        
         table {
             width: 100%;
         }
@@ -136,6 +142,7 @@
             </div>
         </div>
     </div>
+    <button type="button" class="btn btn-outline-success btn-sm" onclick="refreshTable()">&#129531;</button>
     <div id="loader" class="loader">
         <img src="loading.gif" alt="GIF image">
          <br><p>Пожалуйста, подождите...</p>
@@ -253,7 +260,13 @@
                 loader.classList.remove('show');
             });
         }
-
+        
+        function refreshTable() {
+            const ae = document.querySelector('.active');
+                loader.classList.add('show');
+                updateTable(ae.getAttribute('href').substring(1));
+        }
+        
         function createActionLink(actionText, actionUrl) {
             const link = document.createElement('a');
                 link.className = 'dropdown-item';
