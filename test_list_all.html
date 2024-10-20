@@ -36,7 +36,7 @@
             position: fixed;
             bottom: 20px;
             right: 20px;
-            font-size: 1rem;
+            font-size: 1.2rem;
         }
         
         table {
@@ -265,10 +265,10 @@
         function refreshTable() {
             const nL = document.querySelectorAll('.nav-link');
             for (let i = 0; i < nL.length; ++i) {
-                let tE = document.getElementById(nL[i].target.getAttribute('href').substring(1));
+                let tE = document.getElementById(nL[i].getAttribute('href').substring(1));
                 if (tE.classList.contains('active')) {
                     loader.classList.add('show');
-                    updateTable(nL[i].target);
+                    updateTable(nL[i]);
                 }
             }
         }
