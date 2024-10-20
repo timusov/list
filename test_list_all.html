@@ -96,7 +96,7 @@
                             <th scope="col">№</th>
                             <th scope="col">Отправитель</th>
                             <th scope="col">Дата</th>
-                            <th scope="col">Действия</th>
+                            <th scope="col"></th>
                         </tr>
                     </thead>
                     <tbody id="opened-list"></tbody>
@@ -107,9 +107,9 @@
                     <thead>
                         <tr>
                             <th scope="col">№</th>
-                            <th scope="col">Отправитель</th>
-                            <th scope="col">Дата</th>
-                            <th scope="col">Действия</th>
+                            <th scope="col">Взял</th>
+                            <th scope="col">Открытие</th>
+                            <th scope="col">В работу</th>
                         </tr>
                     </thead>
                     <tbody id="inwork-list"></tbody>
@@ -226,7 +226,7 @@
                                     button.type = 'button';
                                     button.className = 'btn btn-outline-primary dropdown-toggle';
                                     button.dataset.bsToggle = 'dropdown';
-                                    button.innerText = `&#128160; ${request['id']}`;
+                                    button.innerText = `\u2747\ufe0f ${request['id']}`;
                                 CL_1.appendChild(button);
                                 const actionsMenu = document.createElement('div');
                                     actionsMenu.className = 'dropdown-menu';
