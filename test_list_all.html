@@ -181,7 +181,7 @@
                 
                 tabElements.forEach((el) => el.classList.remove('active'));
                 event.target.classList.add('active');
-                if (trs.length > 1) {
+                if (trs.length == 1) {
                     loader.classList.add('show');
                     updateTable(event.target);
                 }
