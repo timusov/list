@@ -215,7 +215,7 @@
                         const TH = document.createElement('th');
                             TH.setAttribute('colspan', '4');
                             const tID = document.createElement('h6');
-                                tID.textContent = object;
+                                tID.textContent = `${object}  `;
                                 const tIDb = document.createElement('span');
                                     tIDb.className = 'badge rounded-pill bg-light text-dark';
                                     tIDb.innerText = objects[object].length;
@@ -250,15 +250,20 @@
                             TR_2.appendChild(CL_2);
                         const CL_3 = document.createElement('td');
                             CL_3.textContent = request['date'];
+                            if (!request['over']) {
+                                CL_3.setAttribute('colspan', '2');
+                            } else {
+                                const CL_4 = document.createElement('td');
+                                    CL_4.textContent = request['over'];
+                                TR_2.appendChild(CL_4);
+                            }
                             TR_2.appendChild(CL_3);
-                        const CL_4 = document.createElement('td');
-                        TR_2.appendChild(CL_4);
                         currentTable.appendChild(TR_2);
                         const TR_3 = document.createElement('tr');
                             TR_3.setAttribute('class', 'table-secondary');
                         const TD_problem = document.createElement('td');
                             TD_problem.setAttribute('colspan', '4');
-                            TD_problem.textContent = `Описание проблемы: ${request['problem']}`;
+                            TD_problem.textContent = `Описание: ${request['problem']}`;
                         TR_3.appendChild(TD_problem);
                         currentTable.appendChild(TR_3);
                     });
