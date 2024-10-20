@@ -212,9 +212,15 @@
                 Object.keys(objects).forEach(object => {
                     const TR_1 = document.createElement('tr');
                         TR_1.setAttribute('class', 'table-dark');
-                    const TH = document.createElement('th');
-                        TH.setAttribute('colspan', '4');
-                        TH.textContent = `${object} (${objects[object].length})`;
+                        const TH = document.createElement('th');
+                            TH.setAttribute('colspan', '4');
+                            const tID = document.createElement('h6');
+                                tID.textContent = object;
+                                const tIDb = document.createElement('span');
+                                    tIDb.className = 'badge rounded-pill bg-light text-dark';
+                                    tIDb.innerText = objects[object].length;
+                                    tID.appendChild(tIDb);
+                         TH.appendChild(tID);
                     TR_1.appendChild(TH);
                     currentTable.appendChild(TR_1);
                     objects[object].forEach(request => {
