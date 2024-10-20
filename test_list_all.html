@@ -143,7 +143,7 @@
             </div>
         </div>
     </div>
-    <button type="button" class="btn btn-outline-danger btn-lg" onclick="refreshTable()">&#128640;</button>
+    <button type="button" class="btn btn-outline-primary btn-lg" onclick="refreshTable()">🔄</button>
     <div id="loader" class="loader">
         <img src="loading.gif" alt="GIF image">
          <br><p>Пожалуйста, подождите...</p>
@@ -232,7 +232,7 @@
                                     button.type = 'button';
                                     button.className = 'btn btn-outline-primary dropdown-toggle';
                                     button.dataset.bsToggle = 'dropdown';
-                                    button.innerText = `\u2747\ufe0f ${request['id']}`;
+                                    button.innerText = `🔵 ${request['id']}`;
                                 CL_1.appendChild(button);
                                 const actionsMenu = document.createElement('div');
                                     actionsMenu.className = 'dropdown-menu';
@@ -246,7 +246,7 @@
                             }
                             TR_2.appendChild(CL_1);
                         const CL_2 = document.createElement('td');
-                            CL_2.textContent = request['sender'];
+                            CL_2.textContent = `💡 ${request['sender']}`;
                             TR_2.appendChild(CL_2);
                         const CL_3 = document.createElement('td');
                             CL_3.textContent = request['date'];
