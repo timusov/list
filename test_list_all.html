@@ -214,7 +214,7 @@
                         TR_1.setAttribute('class', 'table-dark');
                     const TH = document.createElement('th');
                         TH.setAttribute('colspan', '4');
-                        TH.textContent = `${object} : ${objects[object].length}`;
+                        TH.textContent = `${object} (${objects[object].length})`;
                     TR_1.appendChild(TH);
                     currentTable.appendChild(TR_1);
                     objects[object].forEach(request => {
@@ -261,6 +261,10 @@
                 loader.classList.remove('show');
             });
         }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            refreshTable()
+        });
         
         function refreshTable() {
             const nL = document.querySelectorAll('.nav-link');
