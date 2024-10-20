@@ -120,9 +120,9 @@
                     <thead>
                         <tr>
                             <th scope="col">№</th>
-                            <th scope="col">Отправитель</th>
-                            <th scope="col">Дата</th>
-                            <th scope="col">Действия</th>
+                            <th scope="col">Закрыл</th>
+                            <th scope="col">Открытие</th>
+                            <th scope="col">Закрытие</th>
                         </tr>
                     </thead>
                     <tbody id="closed-list"></tbody>
@@ -133,9 +133,9 @@
                     <thead>
                         <tr>
                             <th scope="col">№</th>
-                            <th scope="col">Отправитель</th>
-                            <th scope="col">Дата</th>
-                            <th scope="col">Действия</th>
+                            <th scope="col">Отменил</th>
+                            <th scope="col">Открытие</th>
+                            <th scope="col">Отмена</th>
                         </tr>
                     </thead>
                     <tbody id="deleted-list"></tbody>
@@ -221,7 +221,23 @@
                         const TR_2 = document.createElement('tr');
                             TR_2.setAttribute('class', 'table-light');
                         const CL_1 = document.createElement('td');
-                            CL_1.textContent = request['id'];
+                            if (tbl[tab.getAttribute('href').substring(1)]) {
+                                const button = document.createElement('button');
+                                    button.type = 'button';
+                                    button.className = 'btn btn-outline-primary dropdown-toggle';
+                                    button.dataset.bsToggle = 'dropdown';
+                                    button.innerText = `&#128160; ${request['id']}`;
+                                CL_1.appendChild(button);
+                                const actionsMenu = document.createElement('div');
+                                    actionsMenu.className = 'dropdown-menu';
+                                    actionsMenu.setAttribute('aria-labelledby', 'actionsDropdown');
+                                    tbl[tab.getAttribute('href').substring(1)].forEach(b => {
+                                        actionsMenu.append(createActionLink(btns[b].title, btns[b].url + request['id'].replace('/', '_')));
+                                    });     
+                                CL_1.appendChild(actionsMenu);
+                            } else {
+                                CL_1.textContent = request['id'];
+                            }
                             TR_2.appendChild(CL_1);
                         const CL_2 = document.createElement('td');
                             CL_2.textContent = request['sender'];
@@ -230,21 +246,6 @@
                             CL_3.textContent = request['date'];
                             TR_2.appendChild(CL_3);
                         const CL_4 = document.createElement('td');
-                            if (tbl[tab.getAttribute('href').substring(1)]) {
-                                const button = document.createElement('button');
-                                    button.type = 'button';
-                                    button.className = 'btn btn-outline-primary dropdown-toggle';
-                                    button.dataset.bsToggle = 'dropdown';
-                                    button.innerText = 'действия';
-                                CL_4.appendChild(button);
-                                const actionsMenu = document.createElement('div');
-                                    actionsMenu.className = 'dropdown-menu';
-                                    actionsMenu.setAttribute('aria-labelledby', 'actionsDropdown');
-                                    tbl[tab.getAttribute('href').substring(1)].forEach(b => {
-                                        actionsMenu.append(createActionLink(btns[b].title, btns[b].url + request['id'].replace('/', '_')));
-                                    });     
-                                CL_4.appendChild(actionsMenu);
-                            }
                         TR_2.appendChild(CL_4);
                         currentTable.appendChild(TR_2);
                         const TR_3 = document.createElement('tr');
