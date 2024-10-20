@@ -202,7 +202,7 @@
                         TR_1.setAttribute('class', 'table-dark');
                     const TH = document.createElement('th');
                         TH.setAttribute('colspan', '4');
-                        TH.textContent = object;
+                        TH.textContent = `${object} : ${objects[object].length}`;
                     TR_1.appendChild(TH);
                     currentTable.appendChild(TR_1);
                     objects[object].forEach(request => {
