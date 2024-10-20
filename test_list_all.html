@@ -36,6 +36,7 @@
             position: fixed;
             bottom: 20px;
             right: 20px;
+            font-size: 1rem;
         }
         
         table {
@@ -142,7 +143,7 @@
             </div>
         </div>
     </div>
-    <button type="button" class="btn btn-outline-success btn-sm" onclick="refreshTable()">&#129531;</button>
+    <button type="button" class="btn btn-outline-success btn-lg" onclick="refreshTable()">&#129531;</button>
     <div id="loader" class="loader">
         <img src="loading.gif" alt="GIF image">
          <br><p>Пожалуйста, подождите...</p>
@@ -262,9 +263,14 @@
         }
         
         function refreshTable() {
-            const ae = document.querySelector('.active');
-                loader.classList.add('show');
-                updateTable(ae.getAttribute('href').substring(1));
+            const nL = document.querySelectorAll('.nav-link');
+            for (let i = 0; i < nL.length; ++i) {
+                let tE = document.getElementById(nL[i].target.getAttribute('href').substring(1));
+                if (tE.classList.contains('active')) {
+                    loader.classList.add('show');
+                    updateTable(nL[i].target);
+                }
+            });
         }
         
         function createActionLink(actionText, actionUrl) {
