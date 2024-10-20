@@ -171,14 +171,14 @@
         for (let i = 0; i < tabElements.length; ++i) {
             tabElements[i].addEventListener('click', (event) => {
                 event.preventDefault();
-
-                const trs = document.getElementById(event.target.getAttribute('href').substring(1)).querySelectorAll('tr');
                 
                 let targetElement = document.getElementById(event.target.getAttribute('href').substring(1));
                 if (!targetElement.classList.contains('show')) {
                     targetElement.classList.add('show');
                 }
-    
+
+                const trs = targetElement.querySelectorAll('tr');
+                
                 tabElements.forEach((el) => el.classList.remove('active'));
                 event.target.classList.add('active');
                 if (trs.length > 1) {
