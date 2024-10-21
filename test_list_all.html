@@ -149,6 +149,8 @@
          <br><p>Пожалуйста, подождите...</p>
     </div>
     <script>
+        window.Telegram.WebApp.expand();
+        window.Telegram.WebApp.disableVerticalSwipes();
         const tabElements = document.querySelectorAll('.nav-link');
         const tables = document.querySelectorAll('tbody');
         const loader = document.getElementById('loader');
@@ -330,9 +332,10 @@
             return link;
         }
 
-        function sendMessage(theme, text) {
-            const urlstr = 'mailto:?subject=!print&body='+ encodeURIComponent(text);
-            window.Telegram.WebApp.openLink(urlstr, {tryBrowser: 'chrome', tryInstantView: true});
+        function sendMessage(id, object, problem) {
+            const textstr = `Номер заявки: ${id}. Объект: ${object}. Описание: ${problem}`;
+            const urlstr = `https://timusov.github.io/list/actions/mailto.html?subject=printit&body=`+encodeURIComponent(textstr);
+            window.Telegram.WebApp.openLink(urlstr, {try_instant_view: true});
         }
         
         new bootstrap.Tab.getInstance(document.querySelector('.nav-link.active'))?.show();
