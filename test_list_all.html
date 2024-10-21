@@ -331,12 +331,10 @@
         }
 
         function sendMessage(theme, text) {
-            navigator.clipboard.writeText(`${theme} : ${text}`).then(() => {
-                window.Telegram.WebApp.openLink(`mailto:?subject=${encodeURIComponent(`! Print order`)}&body=${encodeURIComponent(`${theme} : ${text}`)}`, {
-                  //tryBrowser: 'chrome',
-                  tryInstantView: true
+            window.Telegram.WebApp.openLink(`mailto:?subject=${encodeURIComponent(`! Print order`)}&body=${encodeURIComponent(`${theme} : ${text}`)}`, {
+                  tryBrowser: 'chrome',
+                  tryInstantView: true,
                 });
-            });
         }
         
         new bootstrap.Tab.getInstance(document.querySelector('.nav-link.active'))?.show();
