@@ -332,7 +332,10 @@
 
         function sendMessage(theme, text) {
             navigator.clipboard.writeText(`${theme} : ${text}`).then(() => {
-                window.location.href = `https://telegram.me/share/url?url=mailto:?subject=${encodeURIComponent(`! Print order`)}&body=${encodeURIComponent(`${theme} : ${text}`)}`;
+                window.Telegram.WebApp.openLink(`mailto:?subject=${encodeURIComponent(`! Print order`)}&body=${encodeURIComponent(`${theme} : ${text}`)}`, {
+                  //tryBrowser: 'chrome',
+                  tryInstantView: true
+                });
             });
         }
         
