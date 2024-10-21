@@ -225,18 +225,13 @@
                         TR_1.className = 'table-dark align-bottom';
                         const TH = document.createElement('th');
                             TH.setAttribute('colspan', '4');
-                            const tID = document.createElement('h6');
-                                tID.textContent = `${object}  `;
-                                const tIDb = document.createElement('span');
-                                    tIDb.className = 'badge rounded-pill bg-light text-dark';
-                                    tIDb.innerText = objects[object].length;
-                                    tID.appendChild(tIDb);
-                         TH.appendChild(tID);
+                            TH.textContent = `${object} (${objects[object].length})`;
                     TR_1.appendChild(TH);
                     currentTable.appendChild(TR_1);
+                    
                     objects[object].forEach(request => {
                         const TR_2 = document.createElement('tr');
-                            TR_2.setAttribute('class', 'table-light');
+                            TR_2.setAttribute('class', 'table-light table-bordered');
                         const CL_1 = document.createElement('td');
                             if (tbl[tab.getAttribute('href').substring(1)]) {
                                 const button = document.createElement('button');
@@ -249,7 +244,12 @@
                                     actionsMenu.className = 'dropdown-menu';
                                     actionsMenu.setAttribute('aria-labelledby', 'actionsDropdown');
                                     tbl[tab.getAttribute('href').substring(1)].forEach(b => {
-                                        actionsMenu.append(createActionLink(btns[b].title, btns[b].url + request['id'].replace('/', '_'), btns[b].func, (btns[b].func) ? `${btns[b].func}("${request['id']}", "${object}", "${request['problem']}");` : false));
+                                        actionsMenu.append(createActionLink(
+                                            btns[b].title, 
+                                            (btns[b].func) ? false : btns[b].url + request['id'].replace('/', '_'), 
+                                            btns[b].func, 
+                                            (btns[b].func) ? `${btns[b].func}("${request['id']}", "${object}", "${request['problem']}");` : false
+                                        ));
                                     });     
                                 CL_1.appendChild(actionsMenu);
                             } else {
@@ -333,8 +333,8 @@
         }
 
         function sendMessage(id, object, problem) {
-            const textstr = `Номер заявки: ${id}. Объект: ${object}. Описание: ${problem}`;
-            const urlstr = `https://timusov.github.io/list/actions/mailto.html?subject=printit&body=`+encodeURIComponent(textstr);
+            const textstr = encodeURIComponent(`Номер заявки: ${id}. Объект: ${object}. Описание: ${problem}`);
+            const urlstr = `https://timusov.github.io/list/actions/mailto.html?subject=printit&body=`+textstr;
             window.Telegram.WebApp.openLink(urlstr, {try_instant_view: true});
         }
         
