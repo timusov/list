@@ -257,7 +257,7 @@
                                             btns[b].title, 
                                             (btns[b].func) ? false : btns[b].url + request['id'].replace('/', '_'), 
                                             btns[b].func, 
-                                            (btns[b].func) ? `${btns[b].func}("${request['id']}", "${object}", "${request['problem']}");` : false
+                                            (btns[b].func) ? `${btns[b].func}("${request['id']}", "${object}", "${request['problem'].replace(/(\r\n|\n)/gm, ' ')}");` : false
                                         ));
                                     });     
                                 CL_1.appendChild(actionsMenu);
