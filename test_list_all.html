@@ -331,7 +331,13 @@
         }
 
         function sendMessage(theme, text) {
-            navigator.clipboard.writeText(`${theme} : ${text}`);
+            navigator.share({
+                text: `${theme} : ${text}`
+            }).then(() => {
+                console.log('Сообщение успешно отправлено');
+            }).catch(error => {
+                console.error('Ошибка при отправке сообщения:', error);
+            });
         }
         
         new bootstrap.Tab.getInstance(document.querySelector('.nav-link.active'))?.show();
