@@ -331,7 +331,11 @@
         }
 
         function sendMessage(theme, text) {
-            window.Telegram.WebApp.shareURL(`mailto:?subject=${encodeURIComponent(`!print`)}&body=${encodeURIComponent(`${theme} : ${text}`)}`, 'Открой ссылку в браузере');
+            //window.Telegram.WebApp.shareURL(`mailto:?subject=${encodeURIComponent(`!print`)}&body=${encodeURIComponent(`${theme} : ${text}`)}`, 'Открой ссылку в браузере');
+window.Telegram.WebApp.openLink('https://telegram.org', {
+  tryBrowser: 'chrome',
+  tryInstantView: true,
+});
         }
         
         new bootstrap.Tab.getInstance(document.querySelector('.nav-link.active'))?.show();
