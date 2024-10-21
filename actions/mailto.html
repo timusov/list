@@ -10,7 +10,7 @@
           const urlParams = new URLSearchParams(window.location.search);
           const subject = urlParams.get('subject');
           const body = urlParams.get('body');
-          await window.open(`mailto:?subject=${subject}&body=${body}`);
+          window.open(`mailto:?subject=${subject}&body=${body}`);
           window.close();
         });
     </script>
