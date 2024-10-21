@@ -43,6 +43,10 @@
             width: 100%;
         }
 
+        .table-warning {
+            font-size: 1rem;
+        }
+        
         th, td {
             padding: 0.5rem;
             text-align: left;
@@ -89,8 +93,8 @@
         </ul>
 
         <div class="tab-content">
-            <div id="opened" class="tab-pane tab-condensed fade show active">
-                <table class="table table-sm">
+            <div id="opened" class="tab-pane fade show active">
+                <table class="table">
                     <thead>
                         <tr>
                             <th scope="col">№</th>
@@ -102,8 +106,8 @@
                     <tbody id="opened-list"></tbody>
                 </table>
             </div>
-            <div id="inwork" class="tab-pane tab-condensed fade">
-                <table class="table table-sm">
+            <div id="inwork" class="tab-pane fade">
+                <table class="table">
                     <thead>
                         <tr>
                             <th scope="col">№</th>
@@ -115,8 +119,8 @@
                     <tbody id="inwork-list"></tbody>
                 </table>
             </div>
-            <div id="closed" class="tab-pane tab-condensed fade">
-                <table class="table table-sm">
+            <div id="closed" class="tab-pane fade">
+                <table class="table">
                     <thead>
                         <tr>
                             <th scope="col">№</th>
@@ -128,8 +132,8 @@
                     <tbody id="closed-list"></tbody>
                 </table>
             </div>
-            <div id="deleted" class="tab-pane tab-condensed fade">
-                <table class="table table-sm">
+            <div id="deleted" class="tab-pane fade">
+                <table class="table">
                     <thead>
                         <tr>
                             <th scope="col">№</th>
@@ -149,30 +153,46 @@
          <br><p>Пожалуйста, подождите...</p>
     </div>
     <script>
+        window.Telegram.WebApp.expand();
+        window.Telegram.WebApp.disableVerticalSwipes();
         const tabElements = document.querySelectorAll('.nav-link');
         const tables = document.querySelectorAll('tbody');
         const loader = document.getElementById('loader');
         const actionUrl = "https://t.me/Fiveworkbot/doit?startapp=";
         const tbl = {
-            opened: ['inwork', 'del'],
-            inwork: ['comm', 'close'],    
+            opened: ['inwork', 'del', 'buffer', 'share'],
+            inwork: ['comm', 'close', 'buffer', 'share']
         };
         const btns = {
             inwork: {
                 url: actionUrl+"work_",
-                title: "\u2705 в работу"
+                title: "\u2705 в работу",
+                func: false
             },
             del: {
                 url: actionUrl+"del_",
-                title: "\u274c отменить"
+                title: "\u274c отменить",
+                func: false
             },
             comm: {
                 url: actionUrl+"edit_",
-                title: "\u270f\ufe0f комментировать"
+                title: "\u270f\ufe0f комментировать",
+                func: false
             },
             close: {
                 url: actionUrl+"comp_",
-                title: "\u2705 закрыть"
+                title: "\u2705 закрыть",
+                func: false
+            },
+            buffer: {
+                url: false,
+                title: "📋 копировать",
+                func: "copyinBuffer"
+            },
+            share: {
+                url: false,
+                title: "✉️ отправить",
+                func: "sendMessage"
             }
         };
         
@@ -214,15 +234,10 @@
                         TR_1.className = 'table-dark align-bottom';
                         const TH = document.createElement('th');
                             TH.setAttribute('colspan', '4');
-                            const tID = document.createElement('h6');
-                                tID.textContent = `${object}  `;
-                                const tIDb = document.createElement('span');
-                                    tIDb.className = 'badge rounded-pill bg-light text-dark';
-                                    tIDb.innerText = objects[object].length;
-                                    tID.appendChild(tIDb);
-                         TH.appendChild(tID);
+                            TH.textContent = `${object} (${objects[object].length})`;
                     TR_1.appendChild(TH);
                     currentTable.appendChild(TR_1);
+                    
                     objects[object].forEach(request => {
                         const TR_2 = document.createElement('tr');
                             TR_2.setAttribute('class', 'table-light');
@@ -232,13 +247,18 @@
                                     button.type = 'button';
                                     button.className = 'btn btn-outline-primary dropdown-toggle';
                                     button.dataset.bsToggle = 'dropdown';
-                                    button.innerText = `🔵 ${request['id']}`;
+                                    button.innerText = request['id'];
                                 CL_1.appendChild(button);
                                 const actionsMenu = document.createElement('div');
                                     actionsMenu.className = 'dropdown-menu';
                                     actionsMenu.setAttribute('aria-labelledby', 'actionsDropdown');
                                     tbl[tab.getAttribute('href').substring(1)].forEach(b => {
-                                        actionsMenu.append(createActionLink(btns[b].title, btns[b].url + request['id'].replace('/', '_')));
+                                        actionsMenu.append(createActionLink(
+                                            btns[b].title, 
+                                            (btns[b].func) ? false : btns[b].url + request['id'].replace('/', '_'), 
+                                            btns[b].func, 
+                                            (btns[b].func) ? `${btns[b].func}("${request['id']}", "${object}", "${request['problem'].replace(/(\r\n|\n)/gm, ' ')}");` : false
+                                        ));
                                     });     
                                 CL_1.appendChild(actionsMenu);
                             } else {
@@ -308,12 +328,29 @@
             }
         }
         
-        function createActionLink(actionText, actionUrl) {
+        function createActionLink(actionText, actionUrl, func, funcWith) {
             const link = document.createElement('a');
-                link.className = 'dropdown-item';
-                link.textContent = actionText;
+            if (func) {
+                link.setAttribute('onclick', funcWith);
+            }
+            link.className = 'dropdown-item';
+            link.textContent = actionText;
+            if (!func) {
                 link.href = actionUrl;
+            }
             return link;
+        }
+
+        function sendMessage(id, object, problem) {
+            const textstr = encodeURIComponent(`Номер заявки: ${id}. Объект: ${object}. Описание: ${problem}`);
+            const urlstr = `https://timusov.github.io/list/actions/mailto.html?subject=printit&body=`+textstr;
+            window.Telegram.WebApp.openLink(urlstr, {try_instant_view: true});
+        }
+
+        function copyinBuffer(id, object, problem) {
+            const textstr = `Номер заявки: ${id}. Объект: ${object}. Описание: ${problem}`;
+            navigator.clipboard.writeText(textstr);
+            window.Telegram.WebApp.showAlert(`Информация по заявке ${id} скопирована в буфер!`);
         }
         
         new bootstrap.Tab.getInstance(document.querySelector('.nav-link.active'))?.show();
