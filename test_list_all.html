@@ -331,13 +331,7 @@
         }
 
         function sendMessage(theme, text) {
-            const shareData = {
-                text: `${theme} : ${text}`
-            };
-            try {
-                await navigator.share(shareData); 
-            } catch (err) {
-            }
+            await navigator.share({text: `${theme} : ${text}`});
         }
         
         new bootstrap.Tab.getInstance(document.querySelector('.nav-link.active'))?.show();
