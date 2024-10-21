@@ -331,14 +331,13 @@
         }
 
         function sendMessage(theme, text) {
-            navigator.share({
-                title: 'Пример сообщения',
+            const shareData = {
                 text: `${theme} : ${text}`
-            }).then(() => {
-                console.log('Сообщение успешно отправлено');
-            }).catch(error => {
-                console.error('Ошибка при отправке сообщения:', error);
-            });
+            };
+            try {
+                await navigator.share(shareData); 
+            } catch (err) {
+            }
         }
         
         new bootstrap.Tab.getInstance(document.querySelector('.nav-link.active'))?.show();
