@@ -331,7 +331,10 @@
         }
 
         function sendMessage(theme, text) {
-            await navigator.share({text: `${theme} : ${text}`});
+            try {
+                await navigator.share({text: `${theme} : ${text}`});
+            } catch(error) {
+            }
         }
         
         new bootstrap.Tab.getInstance(document.querySelector('.nav-link.active'))?.show();
