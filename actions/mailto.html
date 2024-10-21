@@ -10,8 +10,7 @@
           const urlParams = new URLSearchParams(window.location.search);
           const subject = urlParams.get('subject');
           const body = urlParams.get('body');
-          window.open(`mailto:mail@htmlacademy.ru&body=${body}?subject=${subject}`);
-          window.close();
+          window.open(`mailto:?subject=${subject}&body=${body}`);
         });
     </script>
 
