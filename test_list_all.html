@@ -332,6 +332,7 @@
 
         function sendMessage(theme, text) {
             navigator.share({
+                title: 'Пример сообщения',
                 text: `${theme} : ${text}`
             }).then(() => {
                 console.log('Сообщение успешно отправлено');
