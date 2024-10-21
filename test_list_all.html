@@ -89,7 +89,7 @@
         </ul>
 
         <div class="tab-content">
-            <div id="opened" class="tab-pane tab-condensed fade show active">
+            <div id="opened" class="tab-pane fade show active">
                 <table class="table table-sm">
                     <thead>
                         <tr>
@@ -102,7 +102,7 @@
                     <tbody id="opened-list"></tbody>
                 </table>
             </div>
-            <div id="inwork" class="tab-pane tab-condensed fade">
+            <div id="inwork" class="tab-pane fade">
                 <table class="table table-sm">
                     <thead>
                         <tr>
@@ -115,7 +115,7 @@
                     <tbody id="inwork-list"></tbody>
                 </table>
             </div>
-            <div id="closed" class="tab-pane tab-condensed fade">
+            <div id="closed" class="tab-pane fade">
                 <table class="table table-sm">
                     <thead>
                         <tr>
@@ -128,7 +128,7 @@
                     <tbody id="closed-list"></tbody>
                 </table>
             </div>
-            <div id="deleted" class="tab-pane tab-condensed fade">
+            <div id="deleted" class="tab-pane fade">
                 <table class="table table-sm">
                     <thead>
                         <tr>
@@ -243,7 +243,7 @@
                                     button.type = 'button';
                                     button.className = 'btn btn-outline-primary dropdown-toggle';
                                     button.dataset.bsToggle = 'dropdown';
-                                    button.innerText = `🔵 ${request['id']}`;
+                                    button.innerText = request['id'];
                                 CL_1.appendChild(button);
                                 const actionsMenu = document.createElement('div');
                                     actionsMenu.className = 'dropdown-menu';
