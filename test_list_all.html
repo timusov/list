@@ -331,8 +331,8 @@
         }
 
         function sendMessage(theme, text) {
-            const url = 'mailto:?subject='+{encodeURIComponent('!print')+'&body='+encodeURIComponent(theme+' : '+text);
-            window.Telegram.WebApp.openLink(url, {tryBrowser: 'chrome', tryInstantView: true});
+            const urlstr = 'mailto:?subject=!print&body='+ encodeURIComponent(text);
+            window.Telegram.WebApp.openLink(urlstr, {tryBrowser: 'chrome', tryInstantView: true});
         }
         
         new bootstrap.Tab.getInstance(document.querySelector('.nav-link.active'))?.show();
