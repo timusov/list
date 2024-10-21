@@ -44,7 +44,7 @@
         }
 
         .table-warning {
-            font-size: 0.9rem;
+            font-size: 1rem;
         }
         
         th, td {
@@ -160,8 +160,8 @@
         const loader = document.getElementById('loader');
         const actionUrl = "https://t.me/Fiveworkbot/doit?startapp=";
         const tbl = {
-            opened: ['inwork', 'del', 'share'],
-            inwork: ['comm', 'close', 'share']
+            opened: ['inwork', 'del', 'buffer', 'share'],
+            inwork: ['comm', 'close', 'buffer', 'share']
         };
         const btns = {
             inwork: {
@@ -184,8 +184,13 @@
                 title: "\u2705 закрыть",
                 func: false
             },
+            buffer: {
+                url: false,
+                title: "📋 копировать",
+                func: "copyBuffer"
+            },
             share: {
-                url: actionUrl+"comp_",
+                url: false,
                 title: "✉️ отправить",
                 func: "sendMessage"
             }
@@ -340,6 +345,12 @@
             const textstr = encodeURIComponent(`Номер заявки: ${id}. Объект: ${object}. Описание: ${problem}`);
             const urlstr = `https://timusov.github.io/list/actions/mailto.html?subject=printit&body=`+textstr;
             window.Telegram.WebApp.openLink(urlstr, {try_instant_view: true});
+        }
+
+        function copyBuffer(id, object, problem)
+            const textstr = `Номер заявки: ${id}. Объект: ${object}. Описание: ${problem}`;
+            await navigator.clipboard.writeText(textstr);
+            window.Telegram.WebApp.showAlert(`Информация по заявке ${id} скопирована в буфер!`);
         }
         
         new bootstrap.Tab.getInstance(document.querySelector('.nav-link.active'))?.show();
