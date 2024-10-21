@@ -11,6 +11,7 @@
           const subject = urlParams.get('subject');
           const body = urlParams.get('body');
           window.open(`mailto:?subject=${subject}&body=${body}`);
+          window.close();
         });
     </script>
 
