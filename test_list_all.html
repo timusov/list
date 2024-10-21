@@ -187,7 +187,7 @@
             buffer: {
                 url: false,
                 title: "📋 копировать",
-                func: "copyBuffer"
+                func: "copyinBuffer"
             },
             share: {
                 url: false,
@@ -347,9 +347,9 @@
             window.Telegram.WebApp.openLink(urlstr, {try_instant_view: true});
         }
 
-        function copyBuffer(id, object, problem) {
+        function copyinBuffer(id, object, problem) {
             const textstr = `Номер заявки: ${id}. Объект: ${object}. Описание: ${problem}`;
-            await navigator.clipboard.writeText(textstr);
+            navigator.clipboard.writeText(textstr);
             window.Telegram.WebApp.showAlert(`Информация по заявке ${id} скопирована в буфер!`);
         }
         
