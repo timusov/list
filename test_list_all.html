@@ -247,7 +247,7 @@
                                     actionsMenu.className = 'dropdown-menu';
                                     actionsMenu.setAttribute('aria-labelledby', 'actionsDropdown');
                                     tbl[tab.getAttribute('href').substring(1)].forEach(b => {
-                                        actionsMenu.append(createActionLink(btns[b].title, btns[b].url + request['id'].replace('/', '_'), btns[b].func, (btns[b].func) ? `${btns[b].func}('${object}', '${request['problem']}');` : false));
+                                        actionsMenu.append(createActionLink(btns[b].title, btns[b].url + request['id'].replace('/', '_'), btns[b].func, (btns[b].func) ? `${btns[b].func}("${object}", "${request['problem']}");` : false));
                                     });     
                                 CL_1.appendChild(actionsMenu);
                             } else {
@@ -331,10 +331,7 @@
         }
 
         function sendMessage(theme, text) {
-            navigator.share({
-                title: theme,
-                text: text
-            })
+            navigator.clipboard.writeText(`${theme} : ${text}`);
         }
         
         new bootstrap.Tab.getInstance(document.querySelector('.nav-link.active'))?.show();
