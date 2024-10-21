@@ -247,7 +247,7 @@
                                     actionsMenu.className = 'dropdown-menu';
                                     actionsMenu.setAttribute('aria-labelledby', 'actionsDropdown');
                                     tbl[tab.getAttribute('href').substring(1)].forEach(b => {
-                                        actionsMenu.append(createActionLink(btns[b].title, btns[b].url + request['id'].replace('/', '_'), btns[b].func, (btns[b].func) ? `${btns[b].func}(${object}, ${request['problem']})` : false));
+                                        actionsMenu.append(createActionLink(btns[b].title, btns[b].url + request['id'].replace('/', '_'), btns[b].func, (btns[b].func) ? `${btns[b].func}(${object}, ${request['problem']});` : false));
                                     });     
                                 CL_1.appendChild(actionsMenu);
                             } else {
@@ -320,7 +320,7 @@
         function createActionLink(actionText, actionUrl, func, funcWith) {
             const link = document.createElement('a');
                 if (func) {
-                    link.setAttribute('onclick', `${funcWith}`);
+                    link.setAttribute('onclick', funcWith);
                 }
                 link.className = 'dropdown-item';
                 link.textContent = actionText;
