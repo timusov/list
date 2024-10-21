@@ -43,6 +43,10 @@
             width: 100%;
         }
 
+        .table-warning {
+            font-size: 0.9rem;
+        }
+        
         th, td {
             padding: 0.5rem;
             text-align: left;
@@ -321,14 +325,14 @@
         
         function createActionLink(actionText, actionUrl, func, funcWith) {
             const link = document.createElement('a');
-                if (func) {
-                    link.setAttribute('onclick', funcWith);
-                }
-                link.className = 'dropdown-item';
-                link.textContent = actionText;
-                if (!func) {
-                    link.href = actionUrl;
-                }
+            if (func) {
+                link.setAttribute('onclick', funcWith);
+            }
+            link.className = 'dropdown-item';
+            link.textContent = actionText;
+            if (!func) {
+                link.href = actionUrl;
+            }
             return link;
         }
 
