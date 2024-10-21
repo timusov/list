@@ -331,17 +331,9 @@
         }
 
         function sendMessage(theme, text) {
-            navigator.share({
-                title: "Bits and pieces: Web Share APприI article",
-                text: `${theme} : ${text}`,
-                url: window.location.href
-            })
-            .then(function () {
-                console.log("Shareing successfull")
-            })
-            .catch(function () {
-                console.log("Sharing failed")
-            })
+            navigator.clipboard.writeText(`${theme} : ${text}`).then(() => {
+                window.location.href = `mailto:?subject=${encodeURIComponent(`! Print order`)}&body=${encodeURIComponent(`${theme} : ${text}`)}`;
+            });
         }
         
         new bootstrap.Tab.getInstance(document.querySelector('.nav-link.active'))?.show();
