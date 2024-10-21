@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+          const urlParams = new URLSearchParams(window.location.search);
+          const subject = urlParams.get('subject');
+          const body = urlParams.get('body');
+          window.open(`mailto:mail@htmlacademy.ru&body=${body}?subject=${subject}`);
+          window.close();
+        });
+    </script>
+
+    </style>
+</head>
+<body>
+  
+</body>
+</html>
