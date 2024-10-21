@@ -331,22 +331,10 @@
         }
 
         function sendMessage(theme, text) {
-            const message = text;
-            const title = theme;
-        
-            // Проверка поддержки метода share
-            if ('share' in navigator) {
-                navigator.share({
-                    title: title,
-                    text: message
-                }).then(() => {
-                    console.log('Сообщение успешно отправлено');
-                }).catch(error => {
-                    console.error('Ошибка при отправке сообщения:', error);
-                });
-            } else {
-                console.warn('API share не поддерживается');
-            }
+            navigator.share({
+                title: theme,
+                text: text
+            })
         }
         
         new bootstrap.Tab.getInstance(document.querySelector('.nav-link.active'))?.show();
