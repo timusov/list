@@ -220,7 +220,7 @@
                     targetElement.classList.add('show');
                 }
                 Telegram.WebApp.HapticFeedback.impactOccurred('light');
-                Telegram.WebApp.setHeaderColor(colors[targetElement].HeaderColor);
+                Telegram.WebApp.setHeaderColor(colors[event.target.getAttribute('href').substring(1)].HeaderColor);
                 const trs = targetElement.querySelectorAll('tr');
                 
                 tabElements.forEach((el) => el.classList.remove('active'));
