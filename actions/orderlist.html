@@ -195,17 +195,32 @@
                 func: "sendMessage"
             }
         };
+        const colors = {
+            opened: {
+                HeaderColor: '#FF5733'
+            },
+            inwork: {
+                HeaderColor: '#FFC300'
+            },
+            closed: {
+                HeaderColor: '#DAF7A6'
+            },
+            deleted: {
+                HeaderColor: '#C70039'
+            }
+        }
+
         
         for (let i = 0; i < tabElements.length; ++i) {
             tabElements[i].addEventListener('click', (event) => {
                 event.preventDefault();
 
-                Telegram.WebApp.HapticFeedback.impactOccurred('light');
                 let targetElement = document.getElementById(event.target.getAttribute('href').substring(1));
                 if (!targetElement.classList.contains('show')) {
                     targetElement.classList.add('show');
                 }
-
+                Telegram.WebApp.HapticFeedback.impactOccurred('light');
+                Telegram.WebApp.setHeaderColor(colors[targetElement].HeaderColor);
                 const trs = targetElement.querySelectorAll('tr');
                 
                 tabElements.forEach((el) => el.classList.remove('active'));
