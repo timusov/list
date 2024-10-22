@@ -344,7 +344,7 @@
         function sendMessage(id, object, problem) {
             const textstr = encodeURIComponent(`Номер заявки: ${id}. Объект: ${object}. Описание: ${problem}`);
             const urlstr = `https://timusov.github.io/list/actions/mailto.html?subject=printit&body=`+textstr;
-            window.Telegram.WebApp.openLink(urlstr, {try_instant_view: true});
+            window.Telegram.WebApp.openLink(urlstr, {try_browser: 'chrome', try_instant_view: false});
         }
 
         function copyinBuffer(id, object, problem) {
