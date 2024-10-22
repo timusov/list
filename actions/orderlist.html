@@ -199,7 +199,8 @@
         for (let i = 0; i < tabElements.length; ++i) {
             tabElements[i].addEventListener('click', (event) => {
                 event.preventDefault();
-                
+
+                Telegram.WebApp.HapticFeedback.impactOccurred('light');
                 let targetElement = document.getElementById(event.target.getAttribute('href').substring(1));
                 if (!targetElement.classList.contains('show')) {
                     targetElement.classList.add('show');
@@ -344,12 +345,14 @@
         function sendMessage(id, object, problem) {
             const textstr = encodeURIComponent(`Номер заявки: ${id}. Объект: ${object}. Описание: ${problem}`);
             const urlstr = `https://timusov.github.io/list/actions/mailto.html?subject=printit&body=`+textstr;
+            Telegram.WebApp.HapticFeedback.impactOccurred('light');
             window.Telegram.WebApp.openLink(urlstr, {try_instant_view: false});
         }
 
         function copyinBuffer(id, object, problem) {
             const textstr = `Номер заявки: ${id}. Объект: ${object}. Описание: ${problem}`;
             navigator.clipboard.writeText(textstr);
+            Telegram.WebApp.HapticFeedback.impactOccurred('light');
             window.Telegram.WebApp.showAlert(`Информация по заявке ${id} скопирована в буфер!`);
         }
         
