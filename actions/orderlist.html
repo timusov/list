@@ -338,6 +338,7 @@
             for (let i = 0; i < nL.length; ++i) {
                 let tE = document.getElementById(nL[i].getAttribute('href').substring(1));
                 if (tE.classList.contains('active')) {
+                    Telegram.WebApp.setHeaderColor(colors[document.getElementById(nL[i].getAttribute('href').substring(1))].HeaderColor);
                     loader.classList.add('show');
                     updateTable(nL[i]);
                 }
