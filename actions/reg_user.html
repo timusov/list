@@ -105,17 +105,18 @@
 		
 		document.addEventListener('DOMContentLoaded', function() {
 			loading(true);
-			const response = checkRights();
-			if (response.isuser) {
-				getlistofObjects().then(iobj => {
-					iobj.forEach(obj => {
-						addObject(obj.sName, obj.lName);
+			checkRights().then(thisuid => {
+				if (thisuid.isuser) {
+					getlistofObjects().then(iobj => {
+						iobj.forEach(obj => {
+							addObject(obj.sName, obj.lName);
+						});
 					});
-				});
-			}
-			else {
-				window.location.replace("https://timusov.github.io/list/denied.html");
-			}
+				}
+				else {
+					window.location.replace("https://timusov.github.io/list/denied.html");
+				}
+			});
 			loading(false);
 		});
 		
