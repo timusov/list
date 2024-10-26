@@ -103,10 +103,10 @@
 			const tgApp = window.Telegram.WebApp;
 				tgApp.setHeaderColor('#FF5733');
 			const tgUser = tgApp.initDataUnsafe.user;
+			const loader = document.getElementById('loader');
 		
 			//начало
 			document.addEventListener('DOMContentLoaded', function() {
-				const loader = document.getElementById('loader');
 				loading(loader, true);
 				let haveRights = checkRights();
 				if (haveRights) {
@@ -116,7 +116,8 @@
 				                });
 					});
 					loading(loader, false);
-				} else {
+				}
+				else {
 					window.location.replace("https://timusov.github.io/list/denied.html");
 					loading(loader, false);
 				}
@@ -128,7 +129,8 @@
 				let r = checkForms(forms);
 				if (r.ok) {
 					tgAlert('Отправлен!');
-				} else {
+				}
+				else {
 					tgAlert(r.error);
 				}
 				loading(loader, false);
@@ -148,15 +150,12 @@
 				try {
 					const r = await fetch(apiUrl+'?doit=check&uid='+tgUser.id);
 					const j = await r.json();
-					tgAlert(j.isuser);
-					if (j.isuser == true) {
-						return true;
-					}
-				} catch (err) {
-					tgAlert(err)
+					if (j.isuser && j.isuser == 'true') {return true;}
+				}
+				catch(err) {
 					return false;
 				}
-				return false
+				return false;
 			};
 			
 			async function getlistofObjects() {
@@ -164,7 +163,8 @@
 					const r = await fetch(apiUrl+'?doit=objects&uid='+tgUser.id);
 					const u = await r.json();
 					return u;
-				} catch (err) {
+				}
+				catch(err) {
 					return false;
 				}
 			};
@@ -187,7 +187,8 @@
 			function loading(loader, show) {
 				if (show) {
 					loader.classList.add('show');
-				} else {
+				}
+				else {
 					loader.classList.remove('show');
 				}
 			};
