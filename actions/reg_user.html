@@ -115,10 +115,11 @@
 				if (!checkRights()) {
 					window.location.replace("https://timusov.github.io/list/denied.html");
 				} else {
-					const lobj = getlistofObjects();
-						lobj.forEach(obj => {
-							addObject(obj.sName, obj.lName);
-						});
+					getlistofObjects().then(iobj => {
+				                iobj.forEach(obj => {
+				                    addObject(obj.sName, obj.lName);
+				                });
+					});
 				}
 				loading(loader, false);
 			});
@@ -147,7 +148,7 @@
 				try {
 					const r = await fetch(apiUrl+'?doit=check&uid='+tgUser.id);
 					const u = await r.json();
-					if (!u.isuser) {
+					if (u.isuser) {
 						return true;
 					} else {
 						return false;
