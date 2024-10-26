@@ -97,23 +97,21 @@
     </div>
 	
 	<script>
-			//заданные
-			const forms = ['object', 'problem'];
-			const apiUrl = 'https://script.google.com/macros/s/AKfycbzuAp_OUaUjiurSYi1RUyA89Ufq9CzkHXVLli0EN3fW732XJ0I-0T1bC7yZBSGTd1wK/exec';
-			const tgApp = window.Telegram.WebApp;
-				tgApp.setHeaderColor('#FF5733');
-			const tgUser = tgApp.initDataUnsafe.user;
-			const loader = document.getElementById('loader');
+		const forms = ['object', 'problem'];
+		const apiUrl = 'https://script.google.com/macros/s/AKfycbzuAp_OUaUjiurSYi1RUyA89Ufq9CzkHXVLli0EN3fW732XJ0I-0T1bC7yZBSGTd1wK/exec';
+		const tgApp = window.Telegram.WebApp;
+		tgApp.setHeaderColor('#FF5733');
+		const tgUser = tgApp.initDataUnsafe.user;
+		const loader = document.getElementById('loader');
 		
-			//начало
-			document.addEventListener('DOMContentLoaded', function() {
+		document.addEventListener('DOMContentLoaded', function() {
 				loading(loader, true);
-				let haveRights = checkRights();
+				const haveRights = checkRights();
 				if (haveRights) {
 					getlistofObjects().then(iobj => {
-				                iobj.forEach(obj => {
+						iobj.forEach(obj => {
 				                    addObject(obj.sName, obj.lName);
-				                });
+						});
 					});
 					loading(loader, false);
 				}
@@ -121,82 +119,77 @@
 					window.location.replace("https://timusov.github.io/list/denied.html");
 					loading(loader, false);
 				}
-			});
-			
-			//отправить
-			function submit() {
-				loading(loader, true);
-				let r = checkForms(forms);
-				if (r.ok) {
+		});
+		
+		function submit() {
+			loading(loader, true);
+			let r = checkForms(forms);
+			if (r.ok) {
 					tgAlert('Отправлен!');
 				}
 				else {
 					tgAlert(r.error);
 				}
-				loading(loader, false);
-			};
-		
-			//работа на странице с элементами
-			function addObject(value, label) {
-				const select = document.getElementById('object');
-					const option = document.createElement('option');
-						option.value = value;
-						option.textContent = label;
-						select.appendChild(option);
-			};	
-			
-			//разное
-			async function checkRights() {
-				try {
-					const r = await fetch(apiUrl+'?doit=check&uid='+tgUser.id);
-					const j = await r.json();
-					if (j.isuser && j.isuser == 'true') {return true;}
-				}
-				catch(err) {
-					return false;
-				}
-				return false;
-			};
-			
-			async function getlistofObjects() {
-				try {
-					const r = await fetch(apiUrl+'?doit=objects&uid='+tgUser.id);
-					const u = await r.json();
-					return u;
-				}
-				catch(err) {
-					return false;
-				}
-			};
-			
-			function checkForms(arr) {
-				for (const f in forms) {
-					let form = document.getElementById(forms[f])
-						if (form.value.trim() == '' || form.value.trim() == 0) {
-							return {
-								ok: false,
-								error: "Вы не заполнили требуемые поля..."
-							};
-						}
-				}
-				return {
-					ok: true
-				};
-			};
-			
-			function loading(loader, show) {
-				if (show) {
-					loader.classList.add('show');
+			loading(loader, false);
+		};
+		function addObject(value, label) {
+			const select = document.getElementById('object');
+			const option = document.createElement('option');
+			option.value = value;
+			option.textContent = label;
+			select.appendChild(option);
+		};
+		async function checkRights() {
+			try {
+				const r = await fetch(apiUrl+'?doit=check&uid='+tgUser.id);
+				const j = await r.json();
+				if (j.isuser && j.isuser == true) {
+					return true
 				}
 				else {
-					loader.classList.remove('show');
+					return false
 				}
+			}
+			catch(err) {
+				return false
+			}
+		};
+		async function getlistofObjects() {
+			try {
+				const r = await fetch(apiUrl+'?doit=objects&uid='+tgUser.id);
+				const u = await r.json();
+				return u;
+			}
+				catch(err) {
+				return false
+			}
+		};
+		function checkForms(arr) {
+			for (const f in forms) {
+				let form = document.getElementById(forms[f]);
+				if (form.value.trim() == '' || form.value.trim() == 0) {
+					return {
+						ok: false,
+						error: "Вы не заполнили требуемые поля..."
+					};
+				}
+			}
+			return {
+				ok: true
 			};
-			
-			function tgAlert(text) {
-				tgApp.HapticFeedback.impactOccurred('light');
-				tgApp.showAlert(text);
-			};
+		};
+		function loading(loader, show) {
+			if (show) {
+				loader.classList.add('show');
+			}
+			else {
+				loader.classList.remove('show');
+			}
+		};
+		function tgAlert(text) {
+			tgApp.HapticFeedback.impactOccurred('light');
+			tgApp.showAlert(text);
+		};
 	</script>
 </body>
 
