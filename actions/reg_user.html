@@ -70,33 +70,32 @@
 	        }
 	</style>
 <body>
-	<div class="shadow p-3 bg-body rounded">
-		<h1>Отправить заявку</h1>
-	</div>
-	<div class="wrapper mb-5">
-		<div class="stripes stripe--white"></div>
-		<div class="stripes stripe--blue"></div>
-		<div class="stripes stripe--red"></div>
-	</div>
-	<label for="object" class="mb-3">🏢 Объект</label>
-	<select id="object" class="form-select form-select-lg mb-3" size="1">
-			<option value="0" disabled selected>Выберите из списка</option>
-		</select>
-	<label for="problem" class="mb-3">📃 Описание</label>
-	<div class="form-floating">
-		<textarea id="problem" class="form-control mb-3" style="max-height: 550px; min-height: 250px; padding-top: 15px; font-size: 20px; resize: vertical;"></textarea>
-	</div>
-	<div class="form-check form-switch-lg mb-5">
-		<input class="form-check-input" type="checkbox" id="fire">
-		<label class="form-check-label" for="fire">🔥 Срочно</label>
-	</div>
-	<button type="submit" class="btn btn-outline-danger btn-lg" onclick="submit();">Отправить запрос</button>
-	<div id="loader" class="loader">
-		<img src="loading.gif" alt="GIF image">
-		<br>
-		<p>Пожалуйста, подождите...</p>
-	</div>
-
+    <div class="shadow p-3 bg-body rounded">
+        <h1>Отправить заявку</h1>
+    </div>
+    <div class="wrapper mb-5">
+        <div class="stripes stripe--white"></div>
+        <div class="stripes stripe--blue"></div>
+        <div class="stripes stripe--red"></div>
+    </div>
+    <label for="object" class="mb-3">🏢 Объект</label>
+    <select id="object" class="form-select form-select-lg mb-3" size="1">
+        <option value="0" disabled selected>Выберите из списка</option>
+    </select>
+    <label for="problem" class="mb-3">📃 Описание</label>
+    <div class="form-floating">
+        <textarea id="problem" class="form-control mb-3" style="max-height: 550px; min-height: 250px; padding-top: 15px; font-size: 20px; resize: vertical;"></textarea>
+    </div>
+    <div class="form-check form-switch-lg mb-5">
+        <input class="form-check-input" type="checkbox" id="fire">
+        <label class="form-check-label" for="fire">🔥 Срочно</label>
+    </div>
+    <button type="submit" class="btn btn-outline-danger btn-lg" onclick="submit();">Отправить запрос</button>
+    <div id="loader" class="loader">
+        <img src="loading.gif" alt="GIF image">
+        <br><p>Пожалуйста, подождите...</p>
+    </div>
+	
 	<script>
 			//заданные
 			const forms = ['object', 'problem'];
