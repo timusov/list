@@ -108,17 +108,18 @@
 			document.addEventListener('DOMContentLoaded', function() {
 				const loader = document.getElementById('loader');
 				loading(true);
-				let haveR = checkRights();
-				if (haveR) {
+				let haveRights = checkRights();
+				if (haveRights) {
 					getlistofObjects().then(iobj => {
 				                iobj.forEach(obj => {
 				                    addObject(obj.sName, obj.lName);
 				                });
 					});
+					loading(false);
 				} else {
 					window.location.replace("https://timusov.github.io/list/denied.html");
+					loading(false);
 				}
-				loading(false);
 			});
 			
 			//отправить
@@ -143,17 +144,18 @@
 			};	
 			
 			//разное
-			function checkRights() {
+			async function checkRights() {
 				try {
-					const r = fetch(apiUrl+'?doit=check&uid='+tgUser.id);
-					const j = r.json();
-					if (j.isuser) {
+					const r = await fetch(apiUrl+'?doit=check&uid='+tgUser.id);
+					const j = await r.json();
+					if (j.isuser === true) {
 						return true;
 					}
-					return false;
 				} catch (err) {
+					tgAlert(err)
 					return false;
 				}
+				return false
 			};
 			
 			async function getlistofObjects() {
