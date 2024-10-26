@@ -105,7 +105,8 @@
 		
 		document.addEventListener('DOMContentLoaded', function() {
 			loading(true);
-			if (checkRights()) {
+			const response = checkRights();
+			if (response.isuser) {
 				getlistofObjects().then(iobj => {
 					iobj.forEach(obj => {
 						addObject(obj.sName, obj.lName);
@@ -136,28 +137,23 @@
 			option.textContent = label;
 			select.appendChild(option);
 		};
-		async function checkRights() {
+		function checkRights() {
 			try {
-				const r = await fetch(apiUrl+'?doit=check&uid='+tgUser.id);
-				const j = await r.json();
-				if (j.isuser) {
-					return true
-				}
-				else {
-					return false
-				}
+				const r = fetch(apiUrl+'?doit=check&uid='+tgUser.id);
+				const u = r.json();
+				return u;
 			}
 			catch(err) {
 				return false
 			}
 		};
-		async function getlistofObjects() {
+		function getlistofObjects() {
 			try {
-				const r = await fetch(apiUrl+'?doit=objects&uid='+tgUser.id);
-				const u = await r.json();
+				const r = fetch(apiUrl+'?doit=objects&uid='+tgUser.id);
+				const u = r.json();
 				return u;
 			}
-				catch(err) {
+			catch(err) {
 				return false
 			}
 		};
@@ -175,13 +171,13 @@
 				ok: true
 			};
 		};
-		function loading(show) {
-			const loader = document.getElementById('loader');
-			if (show) {
-				loader.classList.add('show');
+		function loading(result) {
+			const loaderEl = document.getElementById('loader');
+			if (result) {
+				loaderEl.classList.add('show');
 			}
 			else {
-				loader.classList.remove('show');
+				loaderEl.classList.remove('show');
 			}
 		};
 		function tgAlert(text) {
