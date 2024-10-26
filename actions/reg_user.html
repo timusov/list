@@ -105,18 +105,16 @@
 		
 		document.addEventListener('DOMContentLoaded', function() {
 			loading(true);
-			checkRights().then(thisuid => {
-				if (thisuid.isuser) {
-					getlistofObjects().then(iobj => {
-						iobj.forEach(obj => {
-							addObject(obj.sName, obj.lName);
-						});
+			if (checkRights()) {
+				getlistofObjects().then(iobj => {
+					iobj.forEach(obj => {
+						addObject(obj.sName, obj.lName);
 					});
-				}
-				else {
-					window.location.replace("https://timusov.github.io/list/denied.html");
-				}
-			});
+				});
+			}
+			else {
+				window.location.replace("https://timusov.github.io/list/denied.html");
+			}
 			loading(false);
 		});
 		
@@ -142,7 +140,11 @@
 			try {
 				const r = fetch(apiUrl+'?doit=check&uid='+tgUser.id);
 				const u = r.json();
-				return u;
+				u.forEach(id => {
+					if (id.isuser) {
+						return true;
+					};
+				});
 			}
 			catch(err) {
 				return false
