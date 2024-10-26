@@ -107,7 +107,7 @@
 			//начало
 			document.addEventListener('DOMContentLoaded', function() {
 				const loader = document.getElementById('loader');
-				loading(true);
+				loading(loader, true);
 				let haveRights = checkRights();
 				if (haveRights) {
 					getlistofObjects().then(iobj => {
@@ -115,23 +115,23 @@
 				                    addObject(obj.sName, obj.lName);
 				                });
 					});
-					loading(false);
+					loading(loader, false);
 				} else {
 					window.location.replace("https://timusov.github.io/list/denied.html");
-					loading(false);
+					loading(loader, false);
 				}
 			});
 			
 			//отправить
 			function submit() {
-				loading(true);
+				loading(loader, true);
 				let r = checkForms(forms);
 				if (r.ok) {
 					tgAlert('Отправлен!');
 				} else {
 					tgAlert(r.error);
 				}
-				loading(false);
+				loading(loader, false);
 			};
 		
 			//работа на странице с элементами
@@ -148,6 +148,7 @@
 				try {
 					const r = await fetch(apiUrl+'?doit=check&uid='+tgUser.id);
 					const j = await r.json();
+					tgAlert(j);
 					if (j.isuser === true) {
 						return true;
 					}
@@ -183,7 +184,7 @@
 				};
 			};
 			
-			function loading(show) {
+			function loading(loader, show) {
 				if (show) {
 					loader.classList.add('show');
 				} else {
