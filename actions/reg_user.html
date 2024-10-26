@@ -148,8 +148,8 @@
 				try {
 					const r = await fetch(apiUrl+'?doit=check&uid='+tgUser.id);
 					const j = await r.json();
-					tgAlert(j);
-					if (j.isuser === true) {
+					tgAlert(j.isuser);
+					if (j.isuser == true) {
 						return true;
 					}
 				} catch (err) {
