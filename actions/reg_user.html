@@ -13,7 +13,7 @@
 	<script src="https://telegram.org/js/telegram-web-app.js"></script>
 	<style>
 		body {
-			margin: 25px 50px;
+			margin: 25px 25px;
 			font-size: 1.5rem;
 		}
 
@@ -95,34 +95,31 @@
         <img src="loading.gif" alt="GIF image">
         <br><p>Пожалуйста, подождите...</p>
     </div>
-	
 	<script>
 		const forms = ['object', 'problem'];
 		const apiUrl = 'https://script.google.com/macros/s/AKfycbzuAp_OUaUjiurSYi1RUyA89Ufq9CzkHXVLli0EN3fW732XJ0I-0T1bC7yZBSGTd1wK/exec';
 		const tgApp = window.Telegram.WebApp;
 		tgApp.setHeaderColor('#FF5733');
 		const tgUser = tgApp.initDataUnsafe.user;
-		const loader = document.getElementById('loader');
+		
 		
 		document.addEventListener('DOMContentLoaded', function() {
-				loading(loader, true);
-				const haveRights = checkRights();
-				if (haveRights) {
-					getlistofObjects().then(iobj => {
-						iobj.forEach(obj => {
-				                    addObject(obj.sName, obj.lName);
-						});
+			loading(true);
+			if (checkRights()) {
+				getlistofObjects().then(iobj => {
+					iobj.forEach(obj => {
+						addObject(obj.sName, obj.lName);
 					});
-					loading(loader, false);
-				}
-				else {
-					window.location.replace("https://timusov.github.io/list/denied.html");
-					loading(loader, false);
-				}
+				});
+			}
+			else {
+				window.location.replace("https://timusov.github.io/list/denied.html");
+			}
+			loading(false);
 		});
 		
 		function submit() {
-			loading(loader, true);
+			loading(true);
 			let r = checkForms(forms);
 			if (r.ok) {
 					tgAlert('Отправлен!');
@@ -130,7 +127,7 @@
 				else {
 					tgAlert(r.error);
 				}
-			loading(loader, false);
+			loading(false);
 		};
 		function addObject(value, label) {
 			const select = document.getElementById('object');
@@ -143,7 +140,7 @@
 			try {
 				const r = await fetch(apiUrl+'?doit=check&uid='+tgUser.id);
 				const j = await r.json();
-				if (j.isuser && j.isuser == true) {
+				if (j.isuser) {
 					return true
 				}
 				else {
@@ -165,8 +162,8 @@
 			}
 		};
 		function checkForms(arr) {
-			for (const f in forms) {
-				let form = document.getElementById(forms[f]);
+			for (const f in arr) {
+				let form = document.getElementById(arr[f]);
 				if (form.value.trim() == '' || form.value.trim() == 0) {
 					return {
 						ok: false,
@@ -178,7 +175,8 @@
 				ok: true
 			};
 		};
-		function loading(loader, show) {
+		function loading(show) {
+			const loader = document.getElementById('loader');
 			if (show) {
 				loader.classList.add('show');
 			}
