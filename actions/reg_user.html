@@ -108,7 +108,8 @@
 			document.addEventListener('DOMContentLoaded', function() {
 				const loader = document.getElementById('loader');
 				loading(true);
-				if (checkRights().ok) {
+				let haveR = checkRights();
+				if (haveR) {
 					getlistofObjects().then(iobj => {
 				                iobj.forEach(obj => {
 				                    addObject(obj.sName, obj.lName);
@@ -146,11 +147,12 @@
 				try {
 					const r = fetch(apiUrl+'?doit=check&uid='+tgUser.id);
 					const j = r.json();
-					if (j.isuser && j.isuser === true) {
-						return {ok: true}
+					if (j.isuser) {
+						return true;
 					}
+					return false;
 				} catch (err) {
-					return {ok: false}
+					return false;
 				}
 			};
 			
