@@ -145,7 +145,10 @@
 			function checkRights() {
 				try {
 					const r = fetch(apiUrl+'?doit=check&uid='+tgUser.id);
-					return r.json();
+					const j = r.json();
+					if (j.isuser && j.isuser === true) {
+						return {ok: true}
+					}
 				} catch (err) {
 					return {ok: false}
 				}
