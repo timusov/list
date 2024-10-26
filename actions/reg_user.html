@@ -106,8 +106,9 @@
 		
 			//начало
 			document.addEventListener('DOMContentLoaded', function() {
+				const loader = document.getElementById('loader');
 				loading(true);
-				if (checkRights()) {
+				if (checkRights().ok) {
 					getlistofObjects().then(iobj => {
 				                iobj.forEach(obj => {
 				                    addObject(obj.sName, obj.lName);
@@ -141,17 +142,12 @@
 			};	
 			
 			//разное
-			async function checkRights() {
+			function checkRights() {
 				try {
-					const r = await fetch(apiUrl+'?doit=check&uid='+tgUser.id);
-					const u = await r.json();
-					if (u.isuser) {
-						return true;
-					} else {
-						return false;
-					}
+					const r = fetch(apiUrl+'?doit=check&uid='+tgUser.id);
+					return r.json();
 				} catch (err) {
-					return false;
+					return {ok: false}
 				}
 			};
 			
@@ -181,7 +177,6 @@
 			};
 			
 			function loading(show) {
-				const loader = document.getElementById('loader');
 				if (show) {
 					loader.classList.add('show');
 				} else {
