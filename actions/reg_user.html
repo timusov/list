@@ -101,9 +101,8 @@
 	</div>
 
 	<script>
-		//заданные
+			//заданные
 			const forms = ['object', 'problem'];
-			const loader = document.getElementById('loader');
 			const apiUrl = 'https://script.google.com/macros/s/AKfycbzuAp_OUaUjiurSYi1RUyA89Ufq9CzkHXVLli0EN3fW732XJ0I-0T1bC7yZBSGTd1wK/exec'
 			const tgApp = window.Telegram.WebApp;
 				tgApp.setHeaderColor('#FF5733');
@@ -111,7 +110,7 @@
 		
 			//начало
 			document.addEventListener('DOMContentLoaded', function() {
-				loading(loader, true);
+				loading(true);
 				if (!checkRights()) {
 					window.location.replace("https://timusov.github.io/list/denied.html");
 				} else {
@@ -121,18 +120,19 @@
 				                });
 					});
 				}
-				loading(loader, false);
+				loading(false);
 			});
 			
 			//отправить
 			function submit() {
-				loading(loader, true);
+				loading(true);
 				let r = checkForms(forms);
 				if (r.ok) {
 					tgAlert('Отправлен!');
 				} else {
 					tgAlert(r.error);
 				}
+				loading(false);
 			}
 			//работа на странице с элементами
 			function addObject(value, label) {
@@ -183,7 +183,8 @@
 				};
 			}
 			
-			function loading(loader, show) {
+			function loading(show) {
+				const loader = document.getElementById('loader');
 				if (show) {
 					loader.classList.add('show');
 				} else {
