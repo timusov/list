@@ -153,8 +153,11 @@
          <br><p>Пожалуйста, подождите...</p>
     </div>
     <script>
-        window.Telegram.WebApp.expand();
-        window.Telegram.WebApp.disableVerticalSwipes();
+		const tgApp = window.Telegram.WebApp;
+			tgApp.expand();
+			tgApp.disableVerticalSwipes();
+		const tgUser = tgApp.initDataUnsafe.user;
+		const apiUrl = 'https://script.google.com/macros/s/AKfycbzuAp_OUaUjiurSYi1RUyA89Ufq9CzkHXVLli0EN3fW732XJ0I-0T1bC7yZBSGTd1wK/exec';
         const tabElements = document.querySelectorAll('.nav-link');
         const tables = document.querySelectorAll('tbody');
         const loader = document.getElementById('loader');
@@ -219,8 +222,8 @@
                 if (!targetElement.classList.contains('show')) {
                     targetElement.classList.add('show');
                 }
-                Telegram.WebApp.HapticFeedback.impactOccurred('light');
-                Telegram.WebApp.setHeaderColor(colors[event.target.getAttribute('href').substring(1)].HeaderColor);
+                tgApp.HapticFeedback.impactOccurred('light');
+                tgApp.setHeaderColor(colors[event.target.getAttribute('href').substring(1)].HeaderColor);
                 const trs = targetElement.querySelectorAll('tr');
                 
                 tabElements.forEach((el) => el.classList.remove('active'));
@@ -331,7 +334,15 @@
         }
 
         document.addEventListener('DOMContentLoaded', function() {
-            refreshTable()
+			loading(true);
+			checkRights(apiUrl+'?doit=check&uid='+tgUser.id, isuser => {
+				if (ismoderator) {
+					  refreshTable()
+				} else {
+					  window.location.replace("https://timusov.github.io/list/denied.html");
+				}
+				loading(false);
+			});
         });
         
         function refreshTable() {
@@ -373,6 +384,42 @@
             window.Telegram.WebApp.showAlert(`Информация по заявке ${id} скопирована в буфер!`);
         }
         
+		function checkRights(url, callback) {
+		 fetch(url)
+		  .then(response => {
+			  if (!response.ok) {
+				  throw new Error(`HTTP error! Status: ${response.error}`);
+			  }
+			  return response.json();
+		  })
+		  .then(data => {
+			  if (data.isuser) {
+				  result = true;
+			  } else {
+				  result = false;
+			  }
+			  callback(result);
+		  })
+		  .catch(error => {
+			tgAlert(error);
+			callback(false);
+		  });
+		}
+		
+		function tgAlert(text) {
+			tgApp.HapticFeedback.impactOccurred('light');
+			tgApp.showAlert('Сообщение: '+text);
+		};
+		
+		function loading(show) {
+			if (!show) {
+				loader.classList.remove('show');
+			}
+			else {
+				loader.classList.add('show');
+			}
+		};
+		
         new bootstrap.Tab.getInstance(document.querySelector('.nav-link.active'))?.show();
         updateTable(document.querySelector('.nav-link.active'));
     </script>
