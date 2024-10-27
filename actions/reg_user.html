@@ -173,12 +173,7 @@
 			  return response.json();
 		  })
 		  .then(data => {
-			  if (data.ok) {
-				  result = true;
-			  } else {
-				  result = false;
-			  }
-			  callback(result);
+			  callback(data);
 		  })
 		  .catch(error => {
 			tgAlert(error);
