@@ -260,10 +260,11 @@
                         const CL_1 = document.createElement('td');
                             if (tbl[tab.getAttribute('href').substring(1)]) {
                                 const button = document.createElement('button');
+								const fire = (request['fire'] == 'yes') ? '🔥 ' : '';
                                     button.type = 'button';
                                     button.className = 'btn btn-outline-primary dropdown-toggle';
                                     button.dataset.bsToggle = 'dropdown';
-                                    button.innerText = request['id'];
+                                    button.innerText = `${fire}${request['id']}`;
                                 CL_1.appendChild(button);
                                 const actionsMenu = document.createElement('div');
                                     actionsMenu.className = 'dropdown-menu';
