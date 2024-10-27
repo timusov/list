@@ -140,8 +140,8 @@
 			  callback(result);
 		  })
 		  .catch(error => {
-			  alert(error);
-			  callback(false);
+			tgAlert(error);
+			callback(false);
 		  });
 		}
 
@@ -184,7 +184,7 @@
 
     document.addEventListener('DOMContentLoaded', function() {
 			loading(true);
-			checkRights(apiUrl+'?doit=check&uid='+tgUser.id, isUserFound => {
+			checkRights(apiUrl+'?doit=check&uid='+tgUser.id, isuser => {
 				if (isuser) {
 					  getlistofObjects().then(iobj => {
 					  iobj.forEach(obj => {
