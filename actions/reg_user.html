@@ -101,7 +101,8 @@
 		const tgApp = window.Telegram.WebApp;
 		tgApp.setHeaderColor('#FF5733');
 		const tgUser = tgApp.initDataUnsafe.user;
-		
+
+		const loader = document.getElementById('loader');
 		
 		document.addEventListener('DOMContentLoaded', function() {
 			loading(true);
@@ -139,14 +140,15 @@
 		async function checkRights() {
 			try {
 				const r = await fetch(apiUrl+'?doit=check&uid='+tgUser.id);
-				if ('isUser' in r) {
-					return true;
+				const u = await r.json();
+				if ('isUser' in u) {
+					return true
 				}
+				return false
 			}
 			catch(err) {
 				return false
 			}
-			return false
 		};
 		async function getlistofObjects() {
 			try {
@@ -172,13 +174,12 @@
 				ok: true
 			};
 		};
-		function loading(result) {
-			const loaderEl = document.getElementById('loader');
-			if (result) {
-				loaderEl.classList.add('show');
+		function loading(show) {
+			if (show) {
+				loader.classList.add('show');
 			}
 			else {
-				loaderEl.classList.remove('show');
+				loader.classList.remove('show');
 			}
 		};
 		function tgAlert(text) {
