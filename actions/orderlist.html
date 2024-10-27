@@ -163,7 +163,7 @@
         const loader = document.getElementById('loader');
         const actionUrl = "https://t.me/Fiveworkbot/doit?startapp=";
         const tbl = {
-            opened: ['inwork', 'del', 'buffer', 'share'],
+            opened: ['inwork', 'closenow', 'del', 'buffer', 'share'],
             inwork: ['comm', 'close', 'buffer', 'share']
         };
         const btns = {
@@ -184,6 +184,11 @@
             },
             close: {
                 url: actionUrl+"comp_",
+                title: "\u2705 закрыть",
+                func: false
+            },
+            closenow: {
+                url: actionUrl+"compnow_",
                 title: "\u2705 закрыть",
                 func: false
             },
