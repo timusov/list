@@ -136,9 +136,9 @@
 			option.textContent = label;
 			select.appendChild(option);
 		};
-		function checkRights() {
+		async function checkRights() {
 			try {
-				const r = fetch(apiUrl+'?doit=check&uid='+tgUser.id);
+				const r = await fetch(apiUrl+'?doit=check&uid='+tgUser.id);
 				tgApp.showAlert(r.ok);
 				if (r.isuser) {
 					return true;
@@ -149,10 +149,10 @@
 			}
 			return false
 		};
-		function getlistofObjects() {
+		async function getlistofObjects() {
 			try {
-				const r = fetch(apiUrl+'?doit=objects&uid='+tgUser.id);
-				const u = r.json();
+				const r = await fetch(apiUrl+'?doit=objects&uid='+tgUser.id);
+				const u = await r.json();
 				return u;
 			}
 			catch(err) {
