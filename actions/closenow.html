@@ -82,7 +82,7 @@
 		<div class="stripes stripe--red"></div>
 	</div>
 	<label for="workers" class="mb-3">👷‍♂️ Исполнители</label>
-	<select class="form-select form-select-lg mb-3" size="5" id="workers" multiple>
+	<select class="form-select form-select-lg mb-3" size="1" id="workers" multiple>
 		<option value="0" disabled selected>Выберите из списка</option>
 	</select>
 	<div class="form-group mb-5">
@@ -90,7 +90,11 @@
 		<input id="date" type="date" class="form-control form-control-lg">
 	</div>
 	<button type="submit" class="btn btn-outline-danger btn-lg" onclick="submit();">Отправить запрос</button>
-
+	<div id="loader" class="loader">
+        <img src="loading.gif" alt="GIF image">
+         <br><p>Пожалуйста, подождите...</p>
+    </div>
+	
 	<script>
 		const urlParams = new URLSearchParams(window.location.search);
 			const ticketID = urlParams.get('ticketID');
@@ -107,7 +111,7 @@
 		
 		//работа с датой
 		const endDate = new Date();
-		const startDate = new Date(endDate.getFullYear(), endDate.getMonth() - 1, endDate.getDate());
+		const startDate = new Date(endDate.getFullYear(), endDate.getMonth() - 3, endDate.getDate());
 		const date = document.getElementById('date')
 			date.setAttribute('min', startDate.toISOString().split('T')[0]);
 			date.setAttribute('max', endDate.toISOString().split('T')[0]);
