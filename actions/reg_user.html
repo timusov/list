@@ -139,8 +139,7 @@
 		async function checkRights() {
 			try {
 				const r = await fetch(apiUrl+'?doit=check&uid='+tgUser.id);
-				tgApp.showAlert(r.ok);
-				if (r.isuser) {
+				if ('isUser' in r) {
 					return true;
 				}
 			}
