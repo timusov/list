@@ -111,6 +111,7 @@
 		function submit() {
 			let r = checkForms(forms);
 			if (r.ok) {
+					loading(true);
 					var objects = document.getElementById('object');
 						var iObject = objects.selectedIndex;
 						var oObject = objects.options[iObject];
@@ -119,7 +120,15 @@
 						var problem = problems.value;
 					var fire = document.getElementById('fire');
 						var sfire = (fire.checked) ? 'yes' : 'no';
-					tgAlert(`Объект: ${object}. Описание: ${problem}. Срочно: ${sfire}`);
+					sendOrder(`${apiUrl}?doit=reg_user&uid=${tgUser.id}&object=${encodeURIComponent(object)}&problem=${encodeURIComponent(problem)}&fire=${sfire}`, result => {
+						if (result.ok) {
+							tgAlert(`Запрос принят! Мы присвоили номер вашей заявке: №${result.ticketID}. Теперь вы сможете отслеживать статус вашей заявки в журнале. Мы будем сообщать вам обо всех этапах.`);
+							window.close();
+						} else {
+							tgAlert(result.description);
+						}
+						loading(false);
+					});
 				}
 				else {
 					tgAlert(r.error);
@@ -143,6 +152,28 @@
 		  })
 		  .then(data => {
 			  if (data.isuser) {
+				  result = true;
+			  } else {
+				  result = false;
+			  }
+			  callback(result);
+		  })
+		  .catch(error => {
+			tgAlert(error);
+			callback(false);
+		  });
+		}
+		
+		function sendOrder(url, callback) {
+		 fetch(url)
+		  .then(response => {
+			  if (!response.ok) {
+				  throw new Error(`HTTP error! Status: ${response.description}`);
+			  }
+			  return response.json();
+		  })
+		  .then(data => {
+			  if (data.ok) {
 				  result = true;
 			  } else {
 				  result = false;
