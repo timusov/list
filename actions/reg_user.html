@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -45,82 +46,67 @@
 		.stripe--red {
 			background-color: red;
 		}
-		
+
 		#loader {
-	            position: fixed;
-	            top: 0;
-	            left: 0;
-	            right: 0;
-	            bottom: 0;
-	            z-index: 1000;
-	            display: flex;
-	            justify-content: center;
-	            align-items: center;
-	            background-color: rgba(255, 255, 255, 0.8);
-	            opacity: 0;
-	            visibility: hidden;
-	            transition: opacity 0.3s ease-in-out, visibility 0s linear 0.3s;
-	        }
-	        
-	        #loader.show {
-	            opacity: 1;
-	            visibility: visible;
-	            transition-delay: 0s;
-	        }
+			position: fixed;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			z-index: 1000;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			background-color: rgba(255, 255, 255, 0.8);
+			opacity: 0;
+			visibility: hidden;
+			transition: opacity 0.3s ease-in-out, visibility 0s linear 0.3s;
+		}
+
+		#loader.show {
+			opacity: 1;
+			visibility: visible;
+			transition-delay: 0s;
+		}
 	</style>
 </head>
+
 <body>
-    <div class="shadow p-3 bg-body rounded">
-        <h1>Отправить заявку</h1>
-    </div>
-    <div class="wrapper mb-5">
-        <div class="stripes stripe--white"></div>
-        <div class="stripes stripe--blue"></div>
-        <div class="stripes stripe--red"></div>
-    </div>
-    <label for="object" class="mb-3">🏢 Объект</label>
-    <select id="object" class="form-select form-select-lg mb-3" size="1">
+	<div class="shadow p-3 bg-body rounded">
+		<h1>Отправить заявку</h1>
+	</div>
+	<div class="wrapper mb-5">
+		<div class="stripes stripe--white"></div>
+		<div class="stripes stripe--blue"></div>
+		<div class="stripes stripe--red"></div>
+	</div>
+	<label for="object" class="mb-3">🏢 Объект</label>
+	<select id="object" class="form-select form-select-lg mb-3" size="1">
         <option value="0" disabled selected>Выберите из списка</option>
     </select>
-    <label for="problem" class="mb-3">📃 Описание</label>
-    <div class="form-floating">
-        <textarea id="problem" class="form-control mb-3" style="max-height: 550px; min-height: 250px; padding-top: 15px; font-size: 20px; resize: vertical;"></textarea>
-    </div>
-    <div class="form-check form-switch-lg mb-5">
-        <input class="form-check-input" type="checkbox" id="fire">
-        <label class="form-check-label" for="fire">🔥 Срочно</label>
-    </div>
-    <button type="submit" class="btn btn-outline-danger btn-lg" onclick="submit();">Отправить запрос</button>
-    <div id="loader" class="loader">
-        <img src="loading.gif" alt="GIF image">
-        <br><p>Пожалуйста, подождите...</p>
-    </div>
+	<label for="problem" class="mb-3">📃 Описание</label>
+	<div class="form-floating">
+		<textarea id="problem" class="form-control mb-3" style="max-height: 550px; min-height: 250px; padding-top: 15px; font-size: 20px; resize: vertical;"></textarea>
+	</div>
+	<div class="form-check form-switch-lg mb-5">
+		<input class="form-check-input" type="checkbox" id="fire">
+		<label class="form-check-label" for="fire">🔥 Срочно</label>
+	</div>
+	<button type="submit" class="btn btn-outline-danger btn-lg" onclick="submit();">Отправить запрос</button>
+	<div id="loader" class="loader">
+		<img src="loading.gif" alt="GIF image">
+		<br>
+		<p>Пожалуйста, подождите...</p>
+	</div>
 	<script>
 		const forms = ['object', 'problem'];
 		const apiUrl = 'https://script.google.com/macros/s/AKfycbzuAp_OUaUjiurSYi1RUyA89Ufq9CzkHXVLli0EN3fW732XJ0I-0T1bC7yZBSGTd1wK/exec';
 		const tgApp = window.Telegram.WebApp;
 		tgApp.setHeaderColor('#FF5733');
 		const tgUser = tgApp.initDataUnsafe.user;
-
 		const loader = document.getElementById('loader');
 		
-		document.addEventListener('DOMContentLoaded', function() {
-			//loading(true);
-			if (checkRights()) {
-				getlistofObjects().then(iobj => {
-					iobj.forEach(obj => {
-						addObject(obj.sName, obj.lName);
-					});
-				});
-			}
-			else {
-				window.location.replace("https://timusov.github.io/list/denied.html");
-			}
-			//loading(false);
-		});
-		
 		function submit() {
-			//loading(true);
 			let r = checkForms(forms);
 			if (r.ok) {
 					tgAlert('Отправлен!');
@@ -128,7 +114,6 @@
 				else {
 					tgAlert(r.error);
 				}
-			//loading(false);
 		};
 		function addObject(value, label) {
 			const select = document.getElementById('object');
@@ -137,20 +122,29 @@
 			option.textContent = label;
 			select.appendChild(option);
 		};
-		function checkRights() {
-			try {
-				return fetch(apiUrl+'?doit=check&uid='+tgUser.id).then(response => response.json()).then(data => {
-					tgAlert(data.isuser || data.ok);
-					if (data.isuser) {
-						return true
-					}
-					return false
-				});
-			}
-			catch(err) {
-				return false
-			}
-		};
+
+		function checkRights(url, callback) {
+		 fetch(url)
+		  .then(response => {
+			  if (!response.ok) {
+				  throw new Error(`HTTP error! Status: ${response.description}`);
+			  }
+			  return response.json();
+		  })
+		  .then(data => {
+			  if (data.isuser) {
+				  result = true;
+			  } else {
+				  result = false;
+			  }
+			  callback(result);
+		  })
+		  .catch(error => {
+			  alert(error);
+			  callback(false);
+		  });
+		}
+
 		async function getlistofObjects() {
 			try {
 				const r = await fetch(apiUrl+'?doit=objects&uid='+tgUser.id);
@@ -176,17 +170,33 @@
 			};
 		};
 		function loading(show) {
-			if (show) {
-				loader.classList.add('show');
+			if (!show) {
+				loader.classList.remove('show');
 			}
 			else {
-				loader.classList.remove('show');
+				loader.classList.add('show');
 			}
 		};
 		function tgAlert(text) {
 			tgApp.HapticFeedback.impactOccurred('light');
 			tgApp.showAlert(text);
 		};
-	</script>
+
+    document.addEventListener('DOMContentLoaded', function() {
+			loading(true);
+			checkRights(apiUrl+'?doit=check&uid='+tgUser.id, isUserFound => {
+				if (isuser) {
+					  getlistofObjects().then(iobj => {
+					  iobj.forEach(obj => {
+						  addObject(obj.sName, obj.lName);
+						});
+						  loading(false);
+					  });
+				} else {
+					  window.location.replace("https://timusov.github.io/list/denied.html");
+				}
+			});
+	});
+</script>
 </body>
 </html>
