@@ -140,7 +140,8 @@
 		function checkRights() {
 			try {
 				return fetch(apiUrl+'?doit=check&uid='+tgUser.id).then(response => response.json()).then(data => {
-					if ('isuser' in data) {
+					tgAlert(data.isuser || data.ok);
+					if (data.isuser) {
 						return true
 					}
 					return false
