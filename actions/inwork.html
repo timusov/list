@@ -73,7 +73,7 @@
 
 <body>
 	<div class="shadow p-3 bg-body rounded">
-		<h1>Закрыть заявку</h1>
+		<h1>Взять заявку</h1>
 		<h3>№</h3>
 	</div>
 	<div class="wrapper mb-5">
@@ -85,10 +85,6 @@
 	<select class="form-select form-select-lg mb-3" size="1" id="workers" multiple>
 		<option value="0" disabled>Выберите из списка</option>
 	</select>
-	<div class="form-group mb-5">
-		<label for="inputDate" class="mb-3">📆 Дата</label>
-		<input id="date" type="date" class="form-control form-control-lg">
-	</div>
 	<button type="submit" class="btn btn-outline-danger btn-lg" onclick="submit();">Отправить запрос</button>
 	<div id="loader" class="loader">
         <img src="loading.gif" alt="GIF image">
@@ -100,22 +96,16 @@
 			const ticketID = urlParams.get('ticketID');
 			const h3 = document.querySelector('h3');
 				h3.innerText += " "+ticketID;
-		const forms = ['workers', 'date'];
+		const forms = ['workers'];
 		const apiUrl = 'https://script.google.com/macros/s/AKfycbzuAp_OUaUjiurSYi1RUyA89Ufq9CzkHXVLli0EN3fW732XJ0I-0T1bC7yZBSGTd1wK/exec';
 		const tgApp = window.Telegram.WebApp;
 			tgApp.expand();
 			tgApp.disableVerticalSwipes();
-			tgApp.setHeaderColor('#DAF7A6');
+			tgApp.setHeaderColor('#FFC300');
 		const tgUser = tgApp.initDataUnsafe.user;
 		const loader = document.getElementById('loader');
 		
-		//работа с датой
-		const endDate = new Date();
-		const startDate = new Date(endDate.getFullYear(), endDate.getMonth() - 3, endDate.getDate());
-		const date = document.getElementById('date')
-			date.setAttribute('min', startDate.toISOString().split('T')[0]);
-			date.setAttribute('max', endDate.toISOString().split('T')[0]);
-			date.setAttribute('value', endDate.toISOString().split('T')[0]);
+		//работа
 		const workers = document.getElementById('workers')
 
 		//нажатие на отправить
@@ -123,11 +113,10 @@
 			let r = checkForms(forms);
 			if (r.ok) {
 					loading(true);
-					var strdate = fDate(date.value);
 					var strworkers = fWorkers(workers);
-					sendOrder(`${apiUrl}?doit=closenow&uid=${tgUser.id}&ticketID=${encodeURIComponent(ticketID)}&date=${encodeURIComponent(strdate)}&workers=${encodeURIComponent(strworkers)}`, result => {
+					sendOrder(`${apiUrl}?doit=inwork&uid=${tgUser.id}&ticketID=${encodeURIComponent(ticketID)}&workers=${encodeURIComponent(strworkers)}`, result => {
 						if (result.ok) {
-							tgAlert(`Запрос принят! Приступил к закрытию заявки: №${result.ticketID}`);
+							tgAlert(`Запрос принят! Приступил к взятию в работу заявку: №${result.ticketID}`);
 						} else {
 							tgAlert(result.error);
 						}
@@ -138,11 +127,6 @@
 				else {
 					tgAlert(r.error);
 				}
-		}
-		
-		function fDate(date) {
-			let d = new Date(date);  
-			return `${d.getDate()}.${d.getMonth() + 1}.${d.getFullYear()}`;
 		}
 
 		function fWorkers(e) {
