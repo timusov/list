@@ -335,7 +335,7 @@
 
         document.addEventListener('DOMContentLoaded', function() {
 			loading(true);
-			checkRights(apiUrl+'?doit=check&uid='+tgUser.id, isuser => {
+			checkRights(apiUrl+'?doit=check&uid='+tgUser.id, ismoderator => {
 				if (ismoderator) {
 					  refreshTable()
 				} else {
