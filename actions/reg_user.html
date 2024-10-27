@@ -139,11 +139,12 @@
 		};
 		function checkRights() {
 			try {
-				const r = fetch(apiUrl+'?doit=check&uid='+tgUser.id);
-				if (r['isuser']) {
-					return true
-				}
-				return false
+				return fetch(apiUrl+'?doit=check&uid='+tgUser.id).then(response => response.json()).then(data => {
+					if ('isuser' in data) {
+						return true
+					}
+					return false
+				});
 			}
 			catch(err) {
 				return false
