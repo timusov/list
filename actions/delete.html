@@ -94,9 +94,9 @@
 	<script>
 		const config = {
 			rules = 'moderator'
-		}
+		};
 		const urlParams = new URLSearchParams(window.location.search);
-			const ticketID = decodeURIComponent(urlParams.get('ticketID'));
+			const ticketID = urlParams.get('ticketID');
 			const h3 = document.querySelector('h3');
 				h3.innerText += " "+ticketID;
 		const forms = ['reason'];
@@ -195,16 +195,16 @@
 			tgApp.showAlert('Сообщение: '+text);
 		};
 
-    document.addEventListener('DOMContentLoaded', function() {
-			loading(true);
-			checkRights(apiUrl+'?doit=check&uid='+tgUser.id, result => {
-				if (result) {
-					loading(false);
-				} else {
-					window.location.replace("https://timusov.github.io/list/denied.html");
-				}
-			});
-	});
+		document.addEventListener('DOMContentLoaded', function() {
+				loading(true);
+				checkRights(apiUrl+'?doit=check&uid='+tgUser.id, result => {
+					if (result) {
+						loading(false);
+					} else {
+						window.location.replace("https://timusov.github.io/list/denied.html");
+					}
+				});
+		});
 </script>
 </body>
 </html>
