@@ -137,11 +137,10 @@
 			option.textContent = label;
 			select.appendChild(option);
 		};
-		async function checkRights() {
+		function checkRights() {
 			try {
-				const r = await fetch(apiUrl+'?doit=check&uid='+tgUser.id);
-				const u = await r.json();
-				if ('isUser' in u) {
+				const r = fetch(apiUrl+'?doit=check&uid='+tgUser.id);
+				if ('isuser' in r) {
 					return true
 				}
 				return false
