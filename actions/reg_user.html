@@ -105,7 +105,7 @@
 		const loader = document.getElementById('loader');
 		
 		document.addEventListener('DOMContentLoaded', function() {
-			loading(true);
+			//loading(true);
 			if (checkRights()) {
 				getlistofObjects().then(iobj => {
 					iobj.forEach(obj => {
@@ -116,11 +116,11 @@
 			else {
 				window.location.replace("https://timusov.github.io/list/denied.html");
 			}
-			loading(false);
+			//loading(false);
 		});
 		
 		function submit() {
-			loading(true);
+			//loading(true);
 			let r = checkForms(forms);
 			if (r.ok) {
 					tgAlert('Отправлен!');
@@ -128,7 +128,7 @@
 				else {
 					tgAlert(r.error);
 				}
-			loading(false);
+			//loading(false);
 		};
 		function addObject(value, label) {
 			const select = document.getElementById('object');
@@ -140,7 +140,7 @@
 		function checkRights() {
 			try {
 				const r = fetch(apiUrl+'?doit=check&uid='+tgUser.id);
-				if ('isuser' in r) {
+				if (r['isuser']) {
 					return true
 				}
 				return false
