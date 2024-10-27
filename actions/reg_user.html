@@ -102,7 +102,9 @@
 		const forms = ['object', 'problem'];
 		const apiUrl = 'https://script.google.com/macros/s/AKfycbzuAp_OUaUjiurSYi1RUyA89Ufq9CzkHXVLli0EN3fW732XJ0I-0T1bC7yZBSGTd1wK/exec';
 		const tgApp = window.Telegram.WebApp;
-		tgApp.setHeaderColor('#FF5733');
+			tgApp.expand();
+			tgApp.disableVerticalSwipes();
+			tgApp.setHeaderColor('#FF5733');
 		const tgUser = tgApp.initDataUnsafe.user;
 		const loader = document.getElementById('loader');
 		
