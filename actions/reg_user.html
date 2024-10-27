@@ -139,16 +139,15 @@
 		function checkRights() {
 			try {
 				const r = fetch(apiUrl+'?doit=check&uid='+tgUser.id);
-				const u = r.json();
-				u.forEach(id => {
-					if (id.isuser) {
-						return true;
-					};
-				});
+				tgApp.showAlert(r.ok);
+				if (r.isuser) {
+					return true;
+				}
 			}
 			catch(err) {
 				return false
 			}
+			return false
 		};
 		function getlistofObjects() {
 			try {
