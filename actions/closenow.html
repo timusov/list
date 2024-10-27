@@ -83,7 +83,7 @@
 	</div>
 	<label for="workers" class="mb-3">👷‍♂️ Исполнители</label>
 	<select class="form-select form-select-lg mb-3" size="1" id="workers" multiple>
-		<option value="0" disabled selected>Выберите из списка</option>
+		<option value="0" disabled>Выберите из списка</option>
 	</select>
 	<div class="form-group mb-5">
 		<label for="inputDate" class="mb-3">📆 Дата</label>
@@ -100,7 +100,7 @@
 			const ticketID = urlParams.get('ticketID');
 			const h3 = document.querySelector('h3');
 				h3.innerText += " "+ticketID;
-		const forms = ['reason'];
+		const forms = ['workers', 'date'];
 		const apiUrl = 'https://script.google.com/macros/s/AKfycbzuAp_OUaUjiurSYi1RUyA89Ufq9CzkHXVLli0EN3fW732XJ0I-0T1bC7yZBSGTd1wK/exec';
 		const tgApp = window.Telegram.WebApp;
 			tgApp.expand();
