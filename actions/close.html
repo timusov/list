@@ -81,10 +81,6 @@
 		<div class="stripes stripe--blue"></div>
 		<div class="stripes stripe--red"></div>
 	</div>
-	<label for="workers" class="mb-3">👷‍♂️ Исполнители</label>
-	<select class="form-select form-select-lg mb-3" size="1" id="workers" multiple>
-		<option value="0" disabled>Выберите из списка</option>
-	</select>
 	<div class="form-group mb-5">
 		<label for="inputDate" class="mb-3">📆 Дата</label>
 		<input id="date" type="date" class="form-control form-control-lg">
@@ -100,7 +96,7 @@
 			const ticketID = urlParams.get('ticketID');
 			const h3 = document.querySelector('h3');
 				h3.innerText += " "+ticketID;
-		const forms = ['workers', 'date'];
+		const forms = ['date'];
 		const apiUrl = 'https://script.google.com/macros/s/AKfycbzuAp_OUaUjiurSYi1RUyA89Ufq9CzkHXVLli0EN3fW732XJ0I-0T1bC7yZBSGTd1wK/exec';
 		const tgApp = window.Telegram.WebApp;
 			tgApp.expand();
@@ -116,7 +112,6 @@
 			date.setAttribute('min', startDate.toISOString().split('T')[0]);
 			date.setAttribute('max', endDate.toISOString().split('T')[0]);
 			date.setAttribute('value', endDate.toISOString().split('T')[0]);
-		const workers = document.getElementById('workers')
 
 		//нажатие на отправить
 		function submit() {
@@ -124,8 +119,7 @@
 			if (r.ok) {
 					loading(true);
 					var strdate = fDate(date.value);
-					var strworkers = fWorkers(workers);
-					sendOrder(`${apiUrl}?doit=closenow&uid=${tgUser.id}&ticketID=${encodeURIComponent(ticketID)}&date=${encodeURIComponent(strdate)}&workers=${encodeURIComponent(strworkers)}`, result => {
+					sendOrder(`${apiUrl}?doit=close&uid=${tgUser.id}&ticketID=${encodeURIComponent(ticketID)}&date=${encodeURIComponent(strdate)}`, result => {
 						if (result.ok) {
 							tgAlert(`Запрос принят! Приступил к закрытию заявки: №${result.ticketID}`);
 						} else {
@@ -144,19 +138,6 @@
 			let d = new Date(date);  
 			return `${d.getDate()}.${d.getMonth() + 1}.${d.getFullYear()}`;
 		}
-
-		function fWorkers(e) {
-			let s = Array.from(e.selectedOptions).map(option => option.value);
-			return s.join(', ');
-		}
-		
-		function addObject(value, label) {
-			const select = document.getElementById('workers');
-			const option = document.createElement('option');
-			option.value = value;
-			option.textContent = label;
-			select.appendChild(option);
-		};
 		
 		function checkRights(url, callback) {
 		 fetch(url)
@@ -197,17 +178,6 @@
 		  });
 		}
 		
-		async function getlistofWorkers() {
-			try {
-				const r = await fetch(apiUrl+'?doit=workers&uid='+tgUser.id);
-				const u = await r.json();
-				return u;
-			}
-			catch(err) {
-				return false
-			}
-		};
-		
 		function checkForms(arr) {
 			for (const f in arr) {
 				let form = document.getElementById(arr[f]);
@@ -239,13 +209,9 @@
 				loading(true);
 				checkRights(apiUrl+'?doit=check&uid='+tgUser.id, result => {
 					if (result) {
-						getlistofWorkers().then(iobj => {
-							iobj.forEach(obj => {
-								addObject(obj.sName, obj.sName);
-							});
-							loading(false);
-						});
+						loading(false);
 					} else {
+						loading(false);
 						window.location.replace("https://timusov.github.io/list/denied.html");
 					}
 				});
