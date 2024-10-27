@@ -125,7 +125,7 @@
 							tgAlert(`Запрос принят! Мы присвоили номер вашей заявке: №${result.ticketID}. Теперь вы сможете отслеживать статус вашей заявки в журнале. Мы будем сообщать вам обо всех этапах.`);
 							window.close();
 						} else {
-							tgAlert(result.description);
+							tgAlert(result.error);
 						}
 						loading(false);
 					});
@@ -146,7 +146,7 @@
 		 fetch(url)
 		  .then(response => {
 			  if (!response.ok) {
-				  throw new Error(`HTTP error! Status: ${response.description}`);
+				  throw new Error(`HTTP error! Status: ${response.error}`);
 			  }
 			  return response.json();
 		  })
@@ -168,7 +168,7 @@
 		 fetch(url)
 		  .then(response => {
 			  if (!response.ok) {
-				  throw new Error(`HTTP error! Status: ${response.description}`);
+				  throw new Error(`HTTP error! Status: ${response.error}`);
 			  }
 			  return response.json();
 		  })
