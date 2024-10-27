@@ -92,9 +92,6 @@
 		<p>Пожалуйста, подождите...</p>
 	</div>
 	<script>
-		const config = {
-			rules = 'moderator'
-		};
 		const urlParams = new URLSearchParams(window.location.search);
 			const ticketID = urlParams.get('ticketID');
 			const h3 = document.querySelector('h3');
@@ -138,7 +135,7 @@
 			  return response.json();
 		  })
 		  .then(data => {
-			  if (data['is'+config.rules]) {
+			  if (data.ismoderator) {
 				  result = true;
 			  } else {
 				  result = false;
