@@ -123,11 +123,11 @@
 					sendOrder(`${apiUrl}?doit=reg_user&uid=${tgUser.id}&object=${encodeURIComponent(object)}&problem=${encodeURIComponent(problem)}&fire=${sfire}`, result => {
 						if (result.ok) {
 							tgAlert(`Запрос принят! Мы присвоили номер вашей заявке: №${result.ticketID}. Теперь вы сможете отслеживать статус вашей заявки в журнале. Мы будем сообщать вам обо всех этапах.`);
-							window.close();
 						} else {
 							tgAlert(result.error);
 						}
 						loading(false);
+						window.close();
 					});
 				}
 				else {
