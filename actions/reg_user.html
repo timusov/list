@@ -111,7 +111,15 @@
 		function submit() {
 			let r = checkForms(forms);
 			if (r.ok) {
-					tgAlert('Отправлен!');
+					var objects = document.getElementById('object');
+						var iObject = objects.selectedIndex;
+						var oObject = objects.options[selectedIndex];
+						var object = oObject.value;
+					var problems = document.getElementById('problem');
+						var problem = problems.value;
+					var fire = document.getElementById('fire');
+						var sfire = (fire.checked) yes : no;
+					tgAlert(`Объект: ${object}. Описание: ${problem}. Срочно: ${sfire}`);
 				}
 				else {
 					tgAlert(r.error);
@@ -181,7 +189,7 @@
 		};
 		function tgAlert(text) {
 			tgApp.HapticFeedback.impactOccurred('light');
-			tgApp.showAlert(text);
+			tgApp.showAlert('Сообщение: '+text);
 		};
 
     document.addEventListener('DOMContentLoaded', function() {
