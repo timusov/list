@@ -1,191 +1,210 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Удалить заявку</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <script>
-        function deleteInput() {
-            const mainInput = document.getElementById('problemDescription');
-            mainInput.value = '';
-        } 
-        document.addEventListener("DOMContentLoaded", function() {
-          const urlParams = new URLSearchParams(window.location.search);
-          const ticketID = urlParams.get('ticketID');
-          const uid = urlParams.get('uid');
-          const submitButton = document.getElementById('submit');
-          const loader = document.getElementById('loader');
-          const form = document.getElementById('contactForm');
-            
-          const h1 = document.querySelector('h1');
-          h1.innerText += " "+ticketID;
-            
-          if (ticketID) {
-            document.getElementById('ticketID').value = decodeURIComponent(ticketID);
-          }
-          if (uid) {
-            document.getElementById('uid').value = uid;
-          }
-            
-          form.addEventListener('submit', function(event) {
-            event.preventDefault();
-            loader.classList.add('show');
-            fetch("https://script.google.com/macros/s/AKfycbzuAp_OUaUjiurSYi1RUyA89Ufq9CzkHXVLli0EN3fW732XJ0I-0T1bC7yZBSGTd1wK/exec?doit=del&uid="+uid+"&ticketID="+ticketID+"&reason="+encodeURIComponent(document.getElementById('problemDescription').value))
-                .then(() => {
-                    loader.classList.remove('show');
-                    window.close();
-                })
-                .catch(() => {
-                    loader.classList.remove('show');
-                    window.close();
-                });
-            });
-        });
-    </script>
-    <style>
-        * {
-            box-sizing: border-box;
-        }
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Закрыть сразу</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+		integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
+	</script>
+	<script src="https://telegram.org/js/telegram-web-app.js"></script>
+	<style>
+		body {
+			margin: 25px 25px;
+			font-size: 1.5rem;
+		}
 
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #fff;
-            color: #333;
-        }
-        
-        .container {
-            max-width: 500px;
-            margin: 0 auto;
-            padding: 1em;
-            border: 1px solid #ccc;
-            box-shadow: 0 0 10px rgba(0, 0, 0, .1);
-        }
+		h1, h3 {
+			text-align: center;
+		}
 
-        label {
-            display: block;
-            margin-bottom: .5rem;
-        }
+		.btn {
+			width: 100%;
+		}
 
-        input, select, textarea {
-            width: 100%;
-            padding: .5rem;
-            border: 1px solid #ddd;
-            outline: none;
-        }
+		.wrapper {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
 
-        textarea {
-            min-height: 50px;
-            max-height: 200px;
-            overflow: auto;
-        }
-        
-        .hidden {
-            display: none;
-        }
+		.stripes {
+			width: 100%;
+			height: 10px;
+			background-color: white;
+			border-radius: 5px;
+			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15), 0 8px 16px rgba(0, 0, 0, 0.2);
+		}
 
-        .buttons {
-            display: flex;
-            gap: 10px;
-        }
-        
-        .wide-button {
-            width: 100%;
-            padding: 0.5em 1em;
-            cursor: pointer;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            background-color: #eee;
-            transition: all 0.2s ease-in-out;
-        }
-        
-        .wide-button:hover {
-            background-color: #ddd;
-        }
-        
-        .small-button {
-            padding: 0.5em 1em;
-            cursor: pointer;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            background-color: #fff;
-            transition: all 0.2s ease-in-out;
-        }
-        
-        .small-button:hover {
-            background-color: #f5f5f5;
-        }
-        
-        .red-button {
-            color: white;
-            background-color: #ff3333;
-        }
-        
-        .red-button svg {
-            fill: currentColor;
-            vertical-align: middle;
-            margin-right: 0.5em;
-        }
-        
-        .clear-field {
-            color: white;
-            background-color: #ff3333;
-        }
-        
-        .clear-field:hover {
-            background-color: #cc0000;
-        }
-        
-        @media (max-width: 400px) {
-            form {
-                padding: 0.5em;
-            }
-        }
+		.stripe--blue {
+			background-color: blue;
+		}
 
-        img {
-            max-width: 100%;
-            display: block;
-        }
-        
-        #loader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            z-index: 1000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: rgba(255, 255, 255, 0.8);
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease-in-out, visibility 0s linear 0.3s;
-        }
-        
-        #loader.show {
-            opacity: 1;
-            visibility: visible;
-            transition-delay: 0s;
-        }
-    </style>
+		.stripe--red {
+			background-color: red;
+		}
+
+		#loader {
+			position: fixed;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			z-index: 1000;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			background-color: rgba(255, 255, 255, 0.8);
+			opacity: 0;
+			visibility: hidden;
+			transition: opacity 0.3s ease-in-out, visibility 0s linear 0.3s;
+		}
+
+		#loader.show {
+			opacity: 1;
+			visibility: visible;
+			transition-delay: 0s;
+		}
+	</style>
 </head>
+
 <body>
-    <div class="container">
-        <h1>Удалить заявку № </h1>
-        <form id="contactForm" action="" method="GET">
-            <input type="hidden" name="uid" id="uid" required/>
-            <input type="hidden" name="ticketID" id="ticketID" required/>
-            <label for="problemDescription">Опишите причину</label>
-            <textarea name="problemDescription" id="problemDescription" cols="30" rows="5" style="resize: vertical;" placeholder="Причина удаления заявки..." required></textarea>
-            <div class="buttons">
-                <button type="submit" id="submit" class="wide-button">Отправить заявку в удалённые</button>
-                <button type="delete" id="delete" class="small-button red-button clear-field" onclick="deleteInput()">Очистить поле</button>
-            </div>
-        </form>
-        <div id="loader" class="loader">
-            <img src="loading.gif" alt="GIF image">
-            <br><p>Пожалуйста, подождите...</p>
-        </div>
+	<div class="shadow p-3 bg-body rounded">
+		<h1>Отменить заявку</h1>
+		<h3>№</h3>
+	</div>
+	<div class="wrapper mb-5">
+		<div class="stripes stripe--white"></div>
+		<div class="stripes stripe--blue"></div>
+		<div class="stripes stripe--red"></div>
+	</div>
+	<label for="reason" class="mb-3">📃 Причина</label>
+	<div class="form-floating">
+		<textarea id="reason" class="form-control mb-3" style="max-height: 550px; min-height: 250px; padding-top: 15px; font-size: 20px; resize: vertical;"></textarea>
+	</div>
+	<button type="submit" class="btn btn-outline-danger btn-lg" onclick="submit();">Отправить запрос</button>
+	<div id="loader" class="loader">
+		<img src="loading.gif" alt="GIF image">
+		<br>
+		<p>Пожалуйста, подождите...</p>
+	</div>
+	<script>
+		const config = {
+			rules = 'moderator'
+		}
+		const urlParams = new URLSearchParams(window.location.search);
+			const ticketID = decodeURIComponent(urlParams.get('ticketID'));
+			const h3 = document.querySelector('h3');
+				h3.innerText += " "+ticketID;
+		const forms = ['reason'];
+		const apiUrl = 'https://script.google.com/macros/s/AKfycbzuAp_OUaUjiurSYi1RUyA89Ufq9CzkHXVLli0EN3fW732XJ0I-0T1bC7yZBSGTd1wK/exec';
+		const tgApp = window.Telegram.WebApp;
+			tgApp.expand();
+			tgApp.disableVerticalSwipes();
+			tgApp.setHeaderColor('#C70039');
+		const tgUser = tgApp.initDataUnsafe.user;
+		const loader = document.getElementById('loader');
+		
+		function submit() {
+			let r = checkForms(forms);
+			if (r.ok) {
+					loading(true);
+					var reasons = document.getElementById('reason');
+						var reason = reasons.value;
+					sendOrder(`${apiUrl}?doit=del&uid=${tgUser.id}&ticketID=${encodeURIComponent(ticketID)}&reason=${encodeURIComponent(reason)}`, result => {
+						if (result.ok) {
+							tgAlert(`Запрос принят! Приступил к отмене заявки: №${result.ticketID}`);
+						} else {
+							tgAlert(result.error);
+						}
+						loading(false);
+						window.close();
+					});
+				}
+				else {
+					tgAlert(r.error);
+				}
+		};
+
+		function checkRights(url, callback) {
+		 fetch(url)
+		  .then(response => {
+			  if (!response.ok) {
+				  throw new Error(`HTTP error! Status: ${response.error}`);
+			  }
+			  return response.json();
+		  })
+		  .then(data => {
+			  if (data['is'+config.rules]) {
+				  result = true;
+			  } else {
+				  result = false;
+			  }
+			  callback(result);
+		  })
+		  .catch(error => {
+			tgAlert(error);
+			callback(false);
+		  });
+		}
+		
+		function sendOrder(url, callback) {
+		 fetch(url)
+		  .then(response => {
+			  if (!response.ok) {
+				  throw new Error(`HTTP error! Status: ${response.error}`);
+			  }
+			  return response.json();
+		  })
+		  .then(data => {
+			  callback(data);
+		  })
+		  .catch(error => {
+			tgAlert(error);
+			callback(false);
+		  });
+		}
+
+		function checkForms(arr) {
+			for (const f in arr) {
+				let form = document.getElementById(arr[f]);
+				if (form.value.trim() == '' || form.value.trim() == 0) {
+					return {
+						ok: false,
+						error: "Вы не заполнили требуемые поля..."
+					};
+				}
+			}
+			return {
+				ok: true
+			};
+		};
+		function loading(show) {
+			if (!show) {
+				loader.classList.remove('show');
+			}
+			else {
+				loader.classList.add('show');
+			}
+		};
+		function tgAlert(text) {
+			tgApp.HapticFeedback.impactOccurred('light');
+			tgApp.showAlert('Сообщение: '+text);
+		};
+
+    document.addEventListener('DOMContentLoaded', function() {
+			loading(true);
+			checkRights(apiUrl+'?doit=check&uid='+tgUser.id, result => {
+				if (result) {
+					loading(false);
+				} else {
+					window.location.replace("https://timusov.github.io/list/denied.html");
+				}
+			});
+	});
+</script>
 </body>
 </html>
