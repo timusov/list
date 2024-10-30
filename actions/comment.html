@@ -207,10 +207,31 @@
 		async function sendImages() {
 			const imagesInput = document.getElementById("formFileLg");
 			const files = Array.from(imagesInput.files).slice(0, 5); // Берем первые 5 файлов
-		
+
 			if (files.length > 0) {
+				const compressedFiles = await Promise.all(
+					files.map(async (file) => {
+						const canvas = document.createElement('canvas');
+						const ctx = canvas.getContext('2d');
+		
+						const img = new Image();
+						img.src = URL.createObjectURL(file);
+		
+						return new Promise(resolve => {
+							img.onload = async () => {
+								canvas.width = img.width;
+								canvas.height = img.height;
+								ctx.drawImage(img, 0, 0);
+		
+								const quality = 0.7; // Качество сжатия (значение от 0 до 1)
+								canvas.toBlob(blob => resolve(new File([blob], file.name, {type: blob.type})), 'image/jpeg', quality);
+							};
+						});
+					})
+				);
+		
 				const formData = new FormData();
-				files.forEach((file, index) => {
+				compressedFiles.forEach((file, index) => {
 					formData.append(`image_${index}`, file);
 				});
 		
