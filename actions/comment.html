@@ -204,36 +204,78 @@
 		}
 
 		async function sendImages() {
-			const imagesInput = document.getElementById('formFileLg');
-			const files = imagesInput.files;
+			const imageInput = document.getElementById('formFileLg');
+			const file = imageInput.files[0];
 
-			if (files.length === 0) {
-				tgAlert('Пожалуйста, выберите хотя бы одно изображение.');
+			if (!file) {
+				tgAlert('Пожалуйста, выберите изображение.');
 				return;
 			}
 
-			const mediaArray = [];
-			for (let i = 0; i < files.length && i < 10; i++) {
-				const file = files[i];
+			const compressedImage = await resizeImage(file, 0.7); // Степень сжатия 70%
+			const formData = new FormData();
+			formData.append('image', compressedImage);
+
+			try {
+				const response = await fetch(apiUrl, {
+					method: 'POST',
+					body: formData
+				});
+
+				const result = await response.json();
+				console.log('Ответ сервера:', result);
+				tgAlert('Изображение успешно отправлено!');
+			} catch (error) {
+				console.error('Ошибка при отправке изображения:', error);
+				tgAlert(`Произошла ошибка при отправке изображения: ${error.message}`);
+			}
+		}
+
+		function resizeImage(image, quality) {
+			return new Promise((resolve, reject) => {
+				if (!image.type.match(/image.*/)) {
+					reject(new Error('Файл не является изображением.'));
+					return;
+				}
+
 				const reader = new FileReader();
+				reader.onload = (readerEvent) => {
+					const img = new Image();
+					img.onload = () => {
+						const canvas = document.createElement('canvas');
+						const maxSize = 1200; // Максимальный размер изображения
+						let width = img.width;
+						let height = img.height;
 
-				reader.onloadend = () => {
-					const dataUrl = reader.result;
-					const base64Image = dataUrl.split(',')[1]; // Убираем префикс "data:image/png;base64,"
-					const mediaObject = {
-						type: 'photo',
-						media: `data:${file.type};base64,${base64Image}`,
-						caption: `Image ${i + 1}`
+						if (width > height) {
+							if (width > maxSize) {
+								height *= maxSize / width;
+								width = maxSize;
+							}
+						} else {
+							if (height > maxSize) {
+								width *= maxSize / height;
+								height = maxSize;
+							}
+						}
+
+						canvas.width = width;
+						canvas.height = height;
+						const ctx = canvas.getContext('2d');
+						ctx.drawImage(img, 0, 0, width, height);
+
+						const resizedImage = canvas.toBlob(
+							blob => resolve(new File([blob], image.name, { type: 'image/jpeg' })),
+							'image/jpeg',
+							quality
+						);
 					};
-					mediaArray.push(mediaObject);
 
-					if (mediaArray.length === files.length) {
-						sendMediaGroup(mediaArray);
-					}
+					img.src = readerEvent.target.result;
 				};
 
-				reader.readAsDataURL(file);
-			}
+				reader.readAsDataURL(image);
+			});
 		}
 
 		async function sendMediaGroup(media) {
