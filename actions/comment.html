@@ -219,9 +219,7 @@
 			try {
 				const response = await fetch(apiUrl, {
 					method: 'POST',
-					headers: {
-						'Content-Type': 'multipart/form-data'
-					},
+					contentType: 'application/json',
 					body: formData
 				});
 
