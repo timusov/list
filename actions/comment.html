@@ -219,7 +219,7 @@
 			try {
 				const response = await fetch(apiUrl, {
 					method: 'POST',
-					body: formData
+					payload: formData
 				});
 
 				const result = await response.json();
