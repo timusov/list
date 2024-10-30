@@ -94,7 +94,10 @@
 		<label for="formFileLg" class="form-label">🖼️ Вложить фото</label>
 		<input class="form-control form-control-lg mb-5" id="formFileLg" type="file" accept="image/*" multiple>
 	</div> -->
-	<input type="file" id="formFileLg" multiple>
+	<form id="imageForm" method="post" enctype="multipart/form-data" action="https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec">
+        <input type="file" name="image[]" multiple><br><br>
+        <button type="submit">Отправить</button>
+    </form>
 	<button type="submit" class="btn btn-outline-danger btn-lg" onclick="submit();">Отправить запрос</button>
 	<div id="loader" class="loader">
 		<img src="loading.gif" alt="GIF image">
@@ -275,6 +278,15 @@
 				}
 			}
 		});
+		document.getElementById('imageForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const formData = new FormData(this);
+            fetch(this.action, {method: 'POST', body: formData})
+                .then(response => response.json())
+                .then(data => console.log(data))
+                .catch(error => console.error('Ошибка:', error));
+        });
 </script>
 </body>
 </html>
