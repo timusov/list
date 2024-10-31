@@ -166,8 +166,9 @@
 		  });
 		}
 
-		function sendImages() {
-            const files = Array.from(document.getElementById('formFileLg').files).slice(0, 5); // Берем первые 5 файлов
+		async function sendImages() {
+			let getfromElement = document.getElementById('formFileLg');
+            const files = Array.from(getfromElement.files).slice(0, 5); // Берем первые 5 файлов
 
 			if (files.length > 0) {
 				const encodedFiles = await Promise.all(
