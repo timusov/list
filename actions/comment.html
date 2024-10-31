@@ -167,48 +167,44 @@
 		}
 
 		function sendImages() {
-            const files = document.getElementById('formFileLg').files;
-            
-            if (files.length > 1) {
-                tgAlert("Можно выбрать максимум 1 изображение.");
-                return;
-            }
+            const files = Array.from(document.getElementById('formFileLg').files).slice(0, 5); // Берем первые 5 файлов
 
-            // Создаем форму данных для отправки
-            const formData = new FormData();
-            for (let i = 0; i < files.length; i++) {
-                formData.append(`file${i}`, files[i]);
-            }
-
-            // Отправляем данные на сервер
-            $.ajax({
-                url: apiUrl, // Укажите URL вашего скрипта
-                method: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false,
-                xhr: function () {
-                    var xhr = new window.XMLHttpRequest();
-                    
-                    <!-- // Обновление прогресса загрузки -->
-                    <!-- xhr.upload.addEventListener("progress", function (evt) { -->
-                        <!-- if (evt.lengthComputable) { -->
-                            <!-- var percentComplete = evt.loaded / evt.total * 100; -->
-                            <!-- $('#progressBar').css('width', percentComplete + '%'); -->
-                        <!-- } -->
-                    <!-- }, false); -->
-
-                    return xhr;
-                },
-                success: function (response) {
-                    console.log(response); // Логируем ответ сервера
-                    tgAlert("Файлы успешно загружены!\n"+response);
-                },
-                error: function (xhr, status, error) {
-                    console.error(xhr.statusText);
-                    tgAlert("Произошла ошибка при загрузке файлов.");
-                }
-            });
+			if (files.length > 0) {
+				const encodedFiles = await Promise.all(
+					files.map(async (file) => {
+						const reader = new FileReader();
+						return new Promise(resolve => {
+							reader.onloadend = () => {
+								resolve(reader.result.split(',')[1]); // Получаем Base64 строку без префикса
+							};
+							reader.readAsDataURL(file);
+						});
+					})
+				);
+		
+				const formData = new FormData();
+				encodedFiles.forEach((encodedFile, index) => {
+					formData.append(`image_${index}`, encodedFile);
+				});
+		
+				try {
+					const response = await fetch(apiUrl, {
+						method: "POST",
+						body: formData,
+						headers: {
+							'Content-Type': 'multipart/form-data'
+						}
+					});
+		
+					const result = await response.json();
+					alert(result.message);
+				} catch (error) {
+					console.error("Error:", error);
+					alert("Произошла ошибка при отправке изображений.");
+				}
+			} else {
+				alert("Выберите хотя бы одно изображение.");
+			}
 		}
 
 		function checkForms(arr) {
