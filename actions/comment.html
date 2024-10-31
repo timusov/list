@@ -116,17 +116,61 @@
 		const loader = document.getElementById('loader');
 			const loaderText = 'Пожалуйста, подождите...';
 		
-		function submit() {
-			let r = checkForms(forms);
-			if (r.ok) {
-					//loading(true);
-						const imagesInput = document.getElementById("formFileLg");
-						sendImages();
-					//loading(false);
-			} else {
-				tgAlert(r.error);
+		<!-- function submit() { -->
+			<!-- let r = checkForms(forms); -->
+			<!-- if (r.ok) { -->
+					<!-- //loading(true); -->
+						<!-- const imagesInput = document.getElementById("formFileLg"); -->
+						<!-- sendImages(); -->
+					<!-- //loading(false); -->
+			<!-- } else { -->
+				<!-- tgAlert(r.error); -->
+			<!-- } -->
+		<!-- }; -->
+
+		async function submit() {
+			// Получаем файловые объекты из input
+			const fileInput = document.getElementById('formFileLg');
+			const files = fileInput.files;
+			
+			if (!files.length) {
+			  alert('Пожалуйста, выберите хотя бы одно изображение.');
+			  return;
 			}
-		};
+
+			// Кодируем файлы в base64
+			let imagesBase64 = [];
+			for (let i = 0; i < files.length; i++) {
+			  const reader = new FileReader();
+			  reader.onloadend = () => {
+				imagesBase64.push(reader.result);
+				
+				// Если все файлы обработаны, отправляем данные на сервер
+				if (imagesBase64.length === files.length) {
+				  sendToServer(imagesBase64);
+				}
+			  };
+			  reader.readAsDataURL(files[i]);
+			}
+		  }
+		  
+		  async function sendToServer(imagesBase64) {
+			try {
+			  const response = await fetch('https://script.google.com/macros/s/XXXXXXXX/exec', {
+				method: 'POST',
+				body: JSON.stringify({ images: imagesBase64 }),
+				headers: { 'Content-Type': 'application/json' },
+			  });
+			  
+			  if (!response.ok) {
+				throw new Error(`Ошибка сервера: ${response.status}`);
+			  }
+			  
+			  console.log('Запрос успешно отправлен!');
+			} catch (error) {
+			  console.error('Ошибка при отправке запроса:', error.message);
+			}
+		  }
 
 		function checkRights(url, callback) {
 		 fetch(url)
@@ -150,63 +194,63 @@
 		  });
 		}
 		
-		function sendOrder(url, callback) {
-		 fetch(url)
-		  .then(response => {
-			  if (!response.ok) {
-				  throw new Error(`HTTP error! Status: ${response.error}`);
-			  }
-			  return response.json();
-		  })
-		  .then(data => {
-			  callback(data);
-		  })
-		  .catch(error => {
-			tgAlert(error);
-			callback(false);
-		  });
-		}
+		<!-- function sendOrder(url, callback) { -->
+		 <!-- fetch(url) -->
+		  <!-- .then(response => { -->
+			  <!-- if (!response.ok) { -->
+				  <!-- throw new Error(`HTTP error! Status: ${response.error}`); -->
+			  <!-- } -->
+			  <!-- return response.json(); -->
+		  <!-- }) -->
+		  <!-- .then(data => { -->
+			  <!-- callback(data); -->
+		  <!-- }) -->
+		  <!-- .catch(error => { -->
+			<!-- tgAlert(error); -->
+			<!-- callback(false); -->
+		  <!-- }); -->
+		<!-- } -->
 
-		async function sendImages() {
-            const files = Array.from(imagesInput.files).slice(0, 5); // Берем первые 5 файлов
+		<!-- async function sendImages() { -->
+            <!-- const files = Array.from(imagesInput.files).slice(0, 5); // Берем первые 5 файлов -->
 
-			if (files.length > 0) {
-				const encodedFiles = await Promise.all(
-					files.map(async (file) => {
-						const reader = new FileReader();
-						return new Promise(resolve => {
-							reader.onloadend = () => {
-								resolve(reader.result.split(',')[1]); // Получаем Base64 строку без префикса
-							};
-							reader.readAsDataURL(file);
-						});
-					})
-				);
+			<!-- if (files.length > 0) { -->
+				<!-- const encodedFiles = await Promise.all( -->
+					<!-- files.map(async (file) => { -->
+						<!-- const reader = new FileReader(); -->
+						<!-- return new Promise(resolve => { -->
+							<!-- reader.onloadend = () => { -->
+								<!-- resolve(reader.result.split(',')[1]); // Получаем Base64 строку без префикса -->
+							<!-- }; -->
+							<!-- reader.readAsDataURL(file); -->
+						<!-- }); -->
+					<!-- }) -->
+				<!-- ); -->
 		
-				const formData = new FormData();
-				encodedFiles.forEach((encodedFile, index) => {
-					formData.append(`image_${index}`, encodedFile);
-				});
+				<!-- const formData = new FormData(); -->
+				<!-- encodedFiles.forEach((encodedFile, index) => { -->
+					<!-- formData.append(`image_${index}`, encodedFile); -->
+				<!-- }); -->
 		
-				try {
-					const response = await fetch(apiUrl, {
-						method: "POST",
-						body: formData,
-						headers: {
-							'Content-Type': 'multipart/form-data'
-						}
-					});
+				<!-- try { -->
+					<!-- const response = await fetch(apiUrl, { -->
+						<!-- method: "POST", -->
+						<!-- body: formData, -->
+						<!-- headers: { -->
+							<!-- 'Content-Type': 'multipart/form-data' -->
+						<!-- } -->
+					<!-- }); -->
 		
-					const result = await response.json();
-					tgAlert(result.message);
-				} catch (error) {
-					console.error("Error:", error);
-					tgAlert("Произошла ошибка при отправке изображений.");
-				}
-			} else {
-				tgAlert("Выберите хотя бы одно изображение.");
-			}
-		}
+					<!-- const result = await response.json(); -->
+					<!-- tgAlert(result.message); -->
+				<!-- } catch (error) { -->
+					<!-- console.error("Error:", error); -->
+					<!-- tgAlert("Произошла ошибка при отправке изображений."); -->
+				<!-- } -->
+			<!-- } else { -->
+				<!-- tgAlert("Выберите хотя бы одно изображение."); -->
+			<!-- } -->
+		<!-- } -->
 
 		function checkForms(arr) {
 			for (const f in arr) {
@@ -261,8 +305,8 @@
 			}
 			
 			for (let i = 0; i < files.length; i++) { 
-				if (files[i].size> 1 * 1024 * 1024) {
-					tgAlert('Размер файла превышает 9 МБ.');
+				if (files[i].size> 9 * 1024 * 1024) {
+					tgAlert('Размер файла превышает 10 МБ.');
 					e.target.value = '';
 					break;
 				}
