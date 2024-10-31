@@ -12,6 +12,7 @@
 	</script>
 	<script src="https://telegram.org/js/telegram-web-app.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/browser-image-compression@1.0.12/dist/browser-image-compression.js"></script>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<style>
 		body {
 			margin: 25px 25px;
@@ -90,14 +91,10 @@
 		<input class="form-check-input" type="checkbox" id="tosender">
 		<label class="form-check-label" for="tosender">✉️ отправителю</label>
 	</div>
-	<!-- <div>
+	<div>
 		<label for="formFileLg" class="form-label">🖼️ Вложить фото</label>
-		<input class="form-control form-control-lg mb-5" id="formFileLg" type="file" accept="image/*" multiple>
-	</div> -->
-	<form id="imageForm" method="post" enctype="multipart/form-data" action="https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec">
-        <input type="file" name="image[]" multiple><br><br>
-        <button type="submit">Отправить</button>
-    </form>
+		<input class="form-control mb-5" id="formFileLg" type="file" accept="image/*">
+	</div>
 	<button type="submit" class="btn btn-outline-danger btn-lg" onclick="submit();">Отправить запрос</button>
 	<div id="loader" class="loader">
 		<img src="loading.gif" alt="GIF image">
@@ -169,53 +166,49 @@
 		  });
 		}
 
-		async function sendImages() {
-			const imagesInput = document.getElementById("formFileLg");
-			const files = Array.from(imagesInput.files).slice(0, 5); // Берем первые 5 файлов
+		function sendImages() {
+            const files = document.getElementById('formFileLg').files;
+            
+            if (files.length > 1) {
+                tgAlert("Можно выбрать максимум 1 изображение.");
+                return;
+            }
 
-			if (files.length > 0) {
-				const compressedFiles = await Promise.all(
-					files.map(async (file) => {
-						const canvas = document.createElement('canvas');
-						const ctx = canvas.getContext('2d');
-		
-						const img = new Image();
-						img.src = URL.createObjectURL(file);
-		
-						return new Promise(resolve => {
-							img.onload = async () => {
-								canvas.width = img.width;
-								canvas.height = img.height;
-								ctx.drawImage(img, 0, 0);
-		
-								const quality = 0.7; // Качество сжатия (значение от 0 до 1)
-								canvas.toBlob(blob => resolve(new File([blob], file.name, {type: blob.type})), 'image/jpeg', quality);
-							};
-						});
-					})
-				);
-		
-				const formData = new FormData();
-				compressedFiles.forEach((file, index) => {
-					formData.append(`image_${index}`, file);
-				});
-		
-				try {
-					const response = await fetch("https://script.google.com/macros/s/AKfycbwRXVLd8j-F-X9PC6EXNaHMAKcElipLBgPz1poNd5LDmk65z4W3oGSKa-o1f2Io4MTIcw/exec", {
-						method: "POST",
-						body: formData,
-						'Content-Type': 'multipart/form-data'
-					});
-		
-					const result = await response.json();
-					alert(result.message);
-				} catch (error) {
-					console.error("Error:", error);
-					alert("Произошла ошибка при отправке изображений");
-				}
-			} else {
-				alert("Выберите хотя бы одно изображение.");
-			}
+            // Создаем форму данных для отправки
+            const formData = new FormData();
+            for (let i = 0; i < files.length; i++) {
+                formData.append(`file${i}`, files[i]);
+            }
+
+            // Отправляем данные на сервер
+            $.ajax({
+                url: apiUrl, // Укажите URL вашего скрипта
+                method: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                xhr: function () {
+                    var xhr = new window.XMLHttpRequest();
+                    
+                    <!-- // Обновление прогресса загрузки -->
+                    <!-- xhr.upload.addEventListener("progress", function (evt) { -->
+                        <!-- if (evt.lengthComputable) { -->
+                            <!-- var percentComplete = evt.loaded / evt.total * 100; -->
+                            <!-- $('#progressBar').css('width', percentComplete + '%'); -->
+                        <!-- } -->
+                    <!-- }, false); -->
+
+                    return xhr;
+                },
+                success: function (response) {
+                    console.log(response); // Логируем ответ сервера
+                    tgAlert("Файлы успешно загружены!");
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.statusText);
+                    tgAlert("Произошла ошибка при загрузке файлов.");
+                }
+            });
 		}
 
 		function checkForms(arr) {
@@ -264,29 +257,20 @@
 		document.getElementById('formFileLg').addEventListener('change', function(e) {
 			let files = e.target.files;
 
-			if (files.length > 5) {
-				tgAlert('Вы можете загрузить не более 5 файлов.');
+			if (files.length > 1) {
+				tgAlert('Вы можете загрузить не более 1 файла.');
 				e.target.value = '';
 				return;
 			}
 			
 			for (let i = 0; i < files.length; i++) { 
-				if (files[i].size> 9 * 1024 * 1024) {
-					tgAlert('Размер файла превышает 20 МБ.');
+				if (files[i].size> 1 * 1024 * 1024) {
+					tgAlert('Размер файла превышает 9 МБ.');
 					e.target.value = '';
 					break;
 				}
 			}
 		});
-		document.getElementById('imageForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            
-            const formData = new FormData(this);
-            fetch(this.action, {method: 'POST', body: formData})
-                .then(response => response.json())
-                .then(data => console.log(data))
-                .catch(error => console.error('Ошибка:', error));
-        });
 </script>
 </body>
 </html>
