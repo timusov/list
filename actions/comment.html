@@ -202,7 +202,7 @@
                 },
                 success: function (response) {
                     console.log(response); // Логируем ответ сервера
-                    tgAlert("Файлы успешно загружены!");
+                    tgAlert("Файлы успешно загружены!\n"+response);
                 },
                 error: function (xhr, status, error) {
                     console.error(xhr.statusText);
