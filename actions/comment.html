@@ -93,7 +93,7 @@
 	</div>
 	<div>
 		<label for="formFileLg" class="form-label">🖼️ Вложить фото</label>
-		<input class="form-control mb-5" id="formFileLg" type="file" accept="image/*">
+		<input class="form-control mb-5" id="formFileLg" type="file" accept="image/*" multiple>
 	</div>
 	<button type="submit" class="btn btn-outline-danger btn-lg" onclick="submit();">Отправить запрос</button>
 	<div id="loader" class="loader">
@@ -120,6 +120,7 @@
 			let r = checkForms(forms);
 			if (r.ok) {
 					//loading(true);
+						const imagesInput = document.getElementById("formFileLg");
 						sendImages();
 					//loading(false);
 			} else {
@@ -167,7 +168,6 @@
 		}
 
 		async function sendImages() {
-			const imagesInput = document.getElementById("formFileLg");
             const files = Array.from(imagesInput.files).slice(0, 5); // Берем первые 5 файлов
 
 			if (files.length > 0) {
