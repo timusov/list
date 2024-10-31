@@ -167,8 +167,8 @@
 		}
 
 		async function sendImages() {
-			let getfromElement = document.getElementById('formFileLg');
-            const files = Array.from(getfromElement.files).slice(0, 5); // Берем первые 5 файлов
+			const imagesInput = document.getElementById("formFileLg");
+            const files = Array.from(imagesInput.files).slice(0, 5); // Берем первые 5 файлов
 
 			if (files.length > 0) {
 				const encodedFiles = await Promise.all(
@@ -198,13 +198,13 @@
 					});
 		
 					const result = await response.json();
-					alert(result.message);
+					tgAlert(result.message);
 				} catch (error) {
 					console.error("Error:", error);
-					alert("Произошла ошибка при отправке изображений.");
+					tgAlert("Произошла ошибка при отправке изображений.");
 				}
 			} else {
-				alert("Выберите хотя бы одно изображение.");
+				tgAlert("Выберите хотя бы одно изображение.");
 			}
 		}
 
