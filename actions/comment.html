@@ -156,7 +156,7 @@
 		  
 		  async function sendToServer(imagesBase64) {
 			try {
-			  const response = await fetch('https://script.google.com/macros/s/XXXXXXXX/exec', {
+			  const response = await fetch(apiUrl, {
 				method: 'POST',
 				body: JSON.stringify({ images: imagesBase64 }),
 				headers: { 'Content-Type': 'application/json' },
@@ -166,9 +166,9 @@
 				throw new Error(`Ошибка сервера: ${response.status}`);
 			  }
 			  
-			  console.log('Запрос успешно отправлен!');
+			  tgAlert('Запрос успешно отправлен!');
 			} catch (error) {
-			  console.error('Ошибка при отправке запроса:', error.message);
+			  tgAlert('Ошибка при отправке запроса:', error.message);
 			}
 		  }
 
