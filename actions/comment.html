@@ -130,7 +130,7 @@
 		async function submit() {
 			// Получаем файловые объекты из input
 			const fileInput = document.getElementById('formFileLg');
-			const file = compressImage(fileInput.files[0]);
+			const file = fileInput.files[0];
 			sendToServer(file);
 		}
 		  
