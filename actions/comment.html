@@ -75,10 +75,10 @@
                 method: 'POST',
                 data: { image: base64Image, name: filename },
                 success: function(response) {
-                    console.log('Успешная загрузка:', response);
+                    alert('Успешная загрузка:', response);
                 },
                 error: function(xhr, status, error) {
-                    console.error('Ошибка загрузки:', xhr.statusText);
+                    alert('Ошибка загрузки:', xhr.statusText);
                 }
             });
         }
