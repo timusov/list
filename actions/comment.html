@@ -12,7 +12,6 @@
 	</script>
 	<script src="https://telegram.org/js/telegram-web-app.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/browser-image-compression@1.0.12/dist/browser-image-compression.js"></script>
-	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<style>
 		body {
 			margin: 25px 25px;
@@ -131,46 +130,43 @@
 		async function submit() {
 			// Получаем файловые объекты из input
 			const fileInput = document.getElementById('formFileLg');
-			const files = fileInput.files;
-			
-			if (!files.length) {
-			  alert('Пожалуйста, выберите хотя бы одно изображение.');
-			  return;
-			}
-
-			// Кодируем файлы в base64
-			let imagesBase64 = [];
-			for (let i = 0; i < files.length; i++) {
-			  const reader = new FileReader();
-			  reader.onloadend = () => {
-				imagesBase64.push(reader.result);
-				
-				// Если все файлы обработаны, отправляем данные на сервер
-				if (imagesBase64.length === files.length) {
-				  sendToServer(imagesBase64);
-				}
-			  };
-			  reader.readAsDataURL(files[i]);
-			}
-		  }
+			const file = compressImage(fileInput.files[0]);
+			sendToServer(file);
+		}
 		  
-		  async function sendToServer(imagesBase64) {
+		async function compressImage(file) {
+			const options = {
+				maxSizeMB: 1,
+				maxWidthOrHeight: 1920,
+				useWebWorker: true
+			};
+		 
 			try {
-			  const response = await fetch(apiUrl, {
-				method: 'POST',
-				body: JSON.stringify({ images: imagesBase64 }),
-				headers: { 'Content-Type': 'application/json' },
-			  });
+				const compressedFile = await imageCompression(file, options);
+				return compressedFile;
+			} catch (error) {
+				tgAlert('Ошибка сжатия файла: '+error);
+				throw error;
+			}
+		}
+		  
+		async function sendToServer(file) {
+			try {
+				const response = await fetch(apiUrl, {
+					method: 'POST',
+					body: JSON.stringify({ image: btoa(file) }),
+					headers: { 'Content-Type': 'application/json' },
+				});
 			  
-			  if (!response.ok) {
-				throw new Error(`Ошибка сервера: ${response.status}`);
-			  }
-			  
-			  tgAlert('Запрос успешно отправлен!');
+				if (!response.ok) {
+					throw new Error(`Ошибка сервера: ${response.status}`);
+				}
+				
+				tgAlert('Запрос успешно отправлен!');
 			} catch (error) {
 			  tgAlert('Ошибка при отправке запроса:'+error.message);
 			}
-		  }
+		}
 
 		function checkRights(url, callback) {
 		 fetch(url)
