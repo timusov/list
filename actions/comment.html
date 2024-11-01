@@ -19,7 +19,7 @@
             
             // Сжимаем и отправляем каждое изображение
             for (let i = 0; i < files.length; i++) {
-                compressAndEncodeImage(files[i]);
+				sendToServer(compressAndEncodeImage(files[i]), file.name);
             }
         }
         
@@ -32,10 +32,7 @@
 				};
 				
 				const compressedFile = await imageCompression(file, options);
-				
-				// Преобразуем сжатый файл в Base64
-				sendToServer(toBase64(compressedFile), file.name);
-				
+				return await toBase64(compressedFile);
 			} catch (error) {
 				console.error('Error compressing or encoding the image:', error);
 			}
