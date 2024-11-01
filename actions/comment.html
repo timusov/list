@@ -23,7 +23,7 @@
             }
         }
         
-		function compressAndEncodeImage(file) {
+		async function compressAndEncodeImage(file) {
 			try {
 				const options = {
 					maxSizeMB: 1, // Максимальный размер файла после сжатия (в мегабайтах)
@@ -31,7 +31,7 @@
 					useWebWorker: true // Использовать Web Worker для параллельной обработки
 				};
 				
-				const compressedFile = imageCompression(file, options);
+				const compressedFile = await imageCompression(file, options);
 				
 				// Преобразуем сжатый файл в Base64
 				sendToServer(toBase64(compressedFile), file.name);
