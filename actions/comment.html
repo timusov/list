@@ -11,6 +11,7 @@
     
     <!-- Подключаем jQuery для упрощения работы с AJAX -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/browser-image-compression@1.0.12/dist/browser-image-compression.js"></script>
     <script>
         function uploadImages() {
             const files = document.getElementById('images').files;
@@ -18,10 +19,38 @@
             
             // Сжимаем и отправляем каждое изображение
             for (let i = 0; i < files.length; i++) {
-                compressAndSend(files[i]);
+                compressAndEncodeImage(files[i]);
             }
         }
         
+		function compressAndEncodeImage(file) {
+			try {
+				const options = {
+					maxSizeMB: 1, // Максимальный размер файла после сжатия (в мегабайтах)
+					maxWidthOrHeight: 1920, // Максимальная ширина или высота изображения
+					useWebWorker: true // Использовать Web Worker для параллельной обработки
+				};
+				
+				const compressedFile = imageCompression(file, options);
+				
+				// Преобразуем сжатый файл в Base64
+				sendToServer(toBase64(compressedFile), file.name);
+				
+			} catch (error) {
+				console.error('Error compressing or encoding the image:', error);
+			}
+		}
+
+		// Функция для преобразования Blob в Base64
+		function toBase64(blob) {
+			return new Promise((resolve, reject) => {
+				const reader = new FileReader();
+				reader.onloadend = () => resolve(reader.result);
+				reader.onerror = reject;
+				reader.readAsDataURL(blob);
+			});
+		}
+		
         function compressAndSend(file) {
             const reader = new FileReader();
             reader.onload = async function(event) {
