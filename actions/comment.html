@@ -19,35 +19,10 @@
             
             // Сжимаем и отправляем каждое изображение
             for (let i = 0; i < files.length; i++) {
-				sendToServer(compressAndEncodeImage(files[i]), files[i].name);
+                compressAndSend(files[i]);
             }
         }
         
-		async function compressAndEncodeImage(file) {
-			try {
-				const options = {
-					maxSizeMB: 1, // Максимальный размер файла после сжатия (в мегабайтах)
-					maxWidthOrHeight: 1920, // Максимальная ширина или высота изображения
-					useWebWorker: true // Использовать Web Worker для параллельной обработки
-				};
-				
-				const compressedFile = await imageCompression(file, options);
-				return await toBase64(compressedFile);
-			} catch (error) {
-				alert('Error compressing or encoding the image:', error);
-			}
-		}
-
-		// Функция для преобразования Blob в Base64
-		function toBase64(blob) {
-			return new Promise((resolve, reject) => {
-				const reader = new FileReader();
-				reader.onloadend = () => resolve(reader.result);
-				reader.onerror = reject;
-				reader.readAsDataURL(blob);
-			});
-		}
-		
         function compressAndSend(file) {
             const reader = new FileReader();
             reader.onload = async function(event) {
