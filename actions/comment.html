@@ -154,8 +154,7 @@
 			try {
 				const response = await fetch(apiUrl, {
 					method: 'POST',
-					body: JSON.stringify({ image: btoa(file) }),
-					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({ image: btoa(file) })
 				});
 			  
 				if (!response.ok) {
