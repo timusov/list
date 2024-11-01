@@ -1,312 +1,87 @@
 <!DOCTYPE html>
 <html lang="ru">
-
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Оставить сообщение</title>
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-		integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-		integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
-	</script>
-	<script src="https://telegram.org/js/telegram-web-app.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/browser-image-compression@1.0.12/dist/browser-image-compression.js"></script>
-	<style>
-		body {
-			margin: 25px 25px;
-			font-size: 1.5rem;
-		}
-
-		h1, h3 {
-			text-align: center;
-		}
-
-		.btn {
-			width: 100%;
-		}
-
-		.wrapper {
-			display: flex;
-			justify-content: center;
-			align-items: center;
-		}
-
-		.stripes {
-			width: 100%;
-			height: 10px;
-			background-color: white;
-			border-radius: 5px;
-			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15), 0 8px 16px rgba(0, 0, 0, 0.2);
-		}
-
-		.stripe--blue {
-			background-color: blue;
-		}
-
-		.stripe--red {
-			background-color: red;
-		}
-
-		#loader {
-			position: fixed;
-			top: 0;
-			left: 0;
-			right: 0;
-			bottom: 0;
-			z-index: 1000;
-			display: flex;
-			justify-content: center;
-			align-items: center;
-			background-color: rgba(255, 255, 255, 0.8);
-			opacity: 0;
-			visibility: hidden;
-			transition: opacity 0.3s ease-in-out, visibility 0s linear 0.3s;
-		}
-
-		#loader.show {
-			opacity: 1;
-			visibility: visible;
-			transition-delay: 0s;
-		}
-	</style>
+    <meta charset="UTF-8">
+    <title>Загрузка изображений</title>
 </head>
-
 <body>
-	<div class="shadow p-3 bg-body rounded">
-		<h1>Оставить сообщение</h1>
-		<h3>№</h3>
-	</div>
-	<div class="wrapper mb-5">
-		<div class="stripes stripe--white"></div>
-		<div class="stripes stripe--blue"></div>
-		<div class="stripes stripe--red"></div>
-	</div>
-	<label for="message" class="mb-3">📃 Содержание</label>
-	<div class="form-floating">
-		<textarea id="message" class="form-control mb-3" style="max-height: 550px; min-height: 250px; padding-top: 15px; font-size: 20px; resize: vertical;"></textarea>
-	</div>
-	<div class="form-check form-switch-lg mb-3">
-		<input class="form-check-input" type="checkbox" id="tosender">
-		<label class="form-check-label" for="tosender">✉️ отправителю</label>
-	</div>
-	<div>
-		<label for="formFileLg" class="form-label">🖼️ Вложить фото</label>
-		<input class="form-control mb-5" id="formFileLg" type="file" accept="image/*" multiple>
-	</div>
-	<button type="submit" class="btn btn-outline-danger btn-lg" onclick="submit();">Отправить запрос</button>
-	<div id="loader" class="loader">
-		<img src="loading.gif" alt="GIF image">
-		<br>
-		<p>Пожалуйста, подождите...</p>
-	</div>
-	<script>
-		const urlParams = new URLSearchParams(window.location.search);
-			const ticketID = urlParams.get('ticketID');
-			const h3 = document.querySelector('h3');
-				h3.innerText += " "+ticketID;
-		const forms = ['message'];
-		const apiUrl = 'https://script.google.com/macros/s/AKfycbwRXVLd8j-F-X9PC6EXNaHMAKcElipLBgPz1poNd5LDmk65z4W3oGSKa-o1f2Io4MTIcw/exec';
-		const tgApp = window.Telegram.WebApp;
-			tgApp.expand();
-			tgApp.disableVerticalSwipes();
-			tgApp.setHeaderColor('#FFC300');
-		const tgUser = tgApp.initDataUnsafe.user;
-		const loader = document.getElementById('loader');
-			const loaderText = 'Пожалуйста, подождите...';
-		
-		<!-- function submit() { -->
-			<!-- let r = checkForms(forms); -->
-			<!-- if (r.ok) { -->
-					<!-- //loading(true); -->
-						<!-- const imagesInput = document.getElementById("formFileLg"); -->
-						<!-- sendImages(); -->
-					<!-- //loading(false); -->
-			<!-- } else { -->
-				<!-- tgAlert(r.error); -->
-			<!-- } -->
-		<!-- }; -->
-
-		async function submit() {
-			// Получаем файловые объекты из input
-			const fileInput = document.getElementById('formFileLg');
-			const file = fileInput.files[0];
-			sendToServer(file);
-		}
-		  
-		async function compressImage(file) {
-			const options = {
-				maxSizeMB: 1,
-				maxWidthOrHeight: 1920,
-				useWebWorker: true
-			};
-		 
-			try {
-				const compressedFile = await imageCompression(file, options);
-				return compressedFile;
-			} catch (error) {
-				tgAlert('Ошибка сжатия файла: '+error);
-				throw error;
-			}
-		}
-		  
-		async function sendToServer(file) {
-			try {
-				const response = await fetch(apiUrl, {
-					method: 'POST',
-					body: JSON.stringify({ image: btoa(file) })
-				});
-			  
-				if (!response.ok) {
-					throw new Error(`Ошибка сервера: ${response.status}`);
-				}
-				
-				tgAlert('Запрос успешно отправлен!');
-			} catch (error) {
-			  tgAlert('Ошибка при отправке запроса:'+error.message);
-			}
-		}
-
-		function checkRights(url, callback) {
-		 fetch(url)
-		  .then(response => {
-			  if (!response.ok) {
-				  throw new Error(`HTTP error! Status: ${response.error}`);
-			  }
-			  return response.json();
-		  })
-		  .then(data => {
-			  if (data.ismoderator) {
-				  result = true;
-			  } else {
-				  result = false;
-			  }
-			  callback(result);
-		  })
-		  .catch(error => {
-			tgAlert(error);
-			callback(false);
-		  });
-		}
-		
-		<!-- function sendOrder(url, callback) { -->
-		 <!-- fetch(url) -->
-		  <!-- .then(response => { -->
-			  <!-- if (!response.ok) { -->
-				  <!-- throw new Error(`HTTP error! Status: ${response.error}`); -->
-			  <!-- } -->
-			  <!-- return response.json(); -->
-		  <!-- }) -->
-		  <!-- .then(data => { -->
-			  <!-- callback(data); -->
-		  <!-- }) -->
-		  <!-- .catch(error => { -->
-			<!-- tgAlert(error); -->
-			<!-- callback(false); -->
-		  <!-- }); -->
-		<!-- } -->
-
-		<!-- async function sendImages() { -->
-            <!-- const files = Array.from(imagesInput.files).slice(0, 5); // Берем первые 5 файлов -->
-
-			<!-- if (files.length > 0) { -->
-				<!-- const encodedFiles = await Promise.all( -->
-					<!-- files.map(async (file) => { -->
-						<!-- const reader = new FileReader(); -->
-						<!-- return new Promise(resolve => { -->
-							<!-- reader.onloadend = () => { -->
-								<!-- resolve(reader.result.split(',')[1]); // Получаем Base64 строку без префикса -->
-							<!-- }; -->
-							<!-- reader.readAsDataURL(file); -->
-						<!-- }); -->
-					<!-- }) -->
-				<!-- ); -->
-		
-				<!-- const formData = new FormData(); -->
-				<!-- encodedFiles.forEach((encodedFile, index) => { -->
-					<!-- formData.append(`image_${index}`, encodedFile); -->
-				<!-- }); -->
-		
-				<!-- try { -->
-					<!-- const response = await fetch(apiUrl, { -->
-						<!-- method: "POST", -->
-						<!-- body: formData, -->
-						<!-- headers: { -->
-							<!-- 'Content-Type': 'multipart/form-data' -->
-						<!-- } -->
-					<!-- }); -->
-		
-					<!-- const result = await response.json(); -->
-					<!-- tgAlert(result.message); -->
-				<!-- } catch (error) { -->
-					<!-- console.error("Error:", error); -->
-					<!-- tgAlert("Произошла ошибка при отправке изображений."); -->
-				<!-- } -->
-			<!-- } else { -->
-				<!-- tgAlert("Выберите хотя бы одно изображение."); -->
-			<!-- } -->
-		<!-- } -->
-
-		function checkForms(arr) {
-			for (const f in arr) {
-				let form = document.getElementById(arr[f]);
-				if (form.value.trim() == '' || form.value.trim() == 0) {
-					return {
-						ok: false,
-						error: "Вы не заполнили требуемые поля..."
-					};
-				}
-			}
-			return {
-				ok: true
-			};
-		};
-		
-		function loading(show) {
-			if (show instanceof Boolean) {
-				if (!show) {
-					loader.classList.remove('show');
-				} else {
-					loader.classList.add('show');
-				}
-			} else {
-				const p = document.querySelector('p');
-				p.innerText = loaderText+"<br>"+show;
-			}
-		};
-		
-		function tgAlert(text) {
-			tgApp.HapticFeedback.impactOccurred('medium');
-			tgApp.showAlert('Сообщение:\n'+text);
-		};
-
-		document.addEventListener('DOMContentLoaded', function() {
-				//checkRights(apiUrl+'?doit=check&uid='+tgUser.id, result => {
-				//	if (result) {
-				//		loading(false);
-				//	} else {
-				//		window.location.replace("https://timusov.github.io/list/denied.html");
-				//	}
-				//});
-		});
-		
-		document.getElementById('formFileLg').addEventListener('change', function(e) {
-			let files = e.target.files;
-
-			if (files.length > 1) {
-				tgAlert('Вы можете загрузить не более 1 файла.');
-				e.target.value = '';
-				return;
-			}
-			
-			for (let i = 0; i < files.length; i++) { 
-				if (files[i].size> 9 * 1024 * 1024) {
-					tgAlert('Размер файла превышает 10 МБ.');
-					e.target.value = '';
-					break;
-				}
-			}
-		});
-</script>
+    <h1>Выберите изображения:</h1>
+    <input type="file" id="images" multiple accept="image/*">
+    <button onclick="uploadImages()">Отправить</button>
+    
+    <!-- Подключаем jQuery для упрощения работы с AJAX -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function uploadImages() {
+            const files = document.getElementById('images').files;
+            if (!files.length) return alert('Пожалуйста, выберите хотя бы одно изображение.');
+            
+            // Сжимаем и отправляем каждое изображение
+            for (let i = 0; i < files.length; i++) {
+                compressAndSend(files[i]);
+            }
+        }
+        
+        function compressAndSend(file) {
+            const reader = new FileReader();
+            reader.onload = async function(event) {
+                try {
+                    const img = await resizeImage(event.target.result);
+                    sendToServer(img, file.name);
+                } catch (error) {
+                    console.error(error);
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+        
+        function resizeImage(imageSrc) {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                img.src = imageSrc;
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    
+                    // Определяем максимальный размер изображения
+                    let width = img.width;
+                    let height = img.height;
+                    const maxSize = 1024;
+                    if (width > height) {
+                        if (width > maxSize) {
+                            height *= maxSize / width;
+                            width = maxSize;
+                        }
+                    } else {
+                        if (height > maxSize) {
+                            width *= maxSize / height;
+                            height = maxSize;
+                        }
+                    }
+                    
+                    canvas.width = width;
+                    canvas.height = height;
+                    ctx.drawImage(img, 0, 0, width, height);
+                    
+                    resolve(canvas.toDataURL('image/jpeg', 0.7)); // Качество сжатия 70%
+                };
+                img.onerror = reject;
+            });
+        }
+        
+        function sendToServer(base64Image, filename) {
+            $.ajax({
+                url: 'https://script.google.com/macros/s/AKfycbwRXVLd8j-F-X9PC6EXNaHMAKcElipLBgPz1poNd5LDmk65z4W3oGSKa-o1f2Io4MTIcw/exec',
+                method: 'POST',
+                data: { image: base64Image, name: filename },
+                success: function(response) {
+                    console.log('Успешная загрузка:', response);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Ошибка загрузки:', xhr.statusText);
+                }
+            });
+        }
+    </script>
 </body>
 </html>
