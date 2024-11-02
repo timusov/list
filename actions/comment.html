@@ -47,7 +47,7 @@
                     // Определяем максимальный размер изображения
                     let width = img.width;
                     let height = img.height;
-                    const maxSize = 1024;
+                    const maxSize = 2048;
                     if (width > height) {
                         if (width > maxSize) {
                             height *= maxSize / width;
@@ -64,7 +64,7 @@
                     canvas.height = height;
                     ctx.drawImage(img, 0, 0, width, height);
                     
-                    resolve(canvas.toDataURL('image/jpeg', 0.7)); // Качество сжатия 70%
+                    resolve(canvas.toDataURL('image/jpeg', 0.9)); // Качество сжатия 70%
                 };
                 img.onerror = reject;
             });
