@@ -188,7 +188,7 @@
                 }
             };
             reader.readAsDataURL(file);
-			return img || 0
+			return img
         }
         
         function resizeImage(imageSrc) {
@@ -250,17 +250,18 @@
         }
 		
 		function loading(show) {
-			if (show instanceof Boolean) {
+			//if (show instanceof Boolean) {
 				if (!show) {
 					loader.classList.remove('show');
 					p.innerText = loaderText;
 				} else {
 					loader.classList.add('show');
+					const p = document.querySelector('p');
+						p.innerText = loaderText+"<br>"+show;
 				}
-			} else {
-				const p = document.querySelector('p');
-				p.innerText = loaderText+"<br>"+show;
-			}
+			//} else {
+				
+			//}
 		};
 		
 		function tgAlert(text) {
