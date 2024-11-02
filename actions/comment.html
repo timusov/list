@@ -186,7 +186,6 @@
                 }
             };
             reader.readAsDataURL(file);
-			return img
         }
         
         function resizeImage(imageSrc) {
@@ -223,7 +222,7 @@
             });
         }
         
-        function sendToServer(images) {
+        function sendToServer(imgs) {
 			//loading('отправка данных на сервер...');
 			const text = document.getElementById('message').value;
 			const check = document.getElementById('tosender');
@@ -233,7 +232,7 @@
 				text: JSON.stringify(text),
 				toSender: check.checked
 			};
-			if (images) {data['images'] = images};
+			if (imgs) {data['images'] = imgs};
             $.ajax({
                 url: apiUrl_post,
                 method: 'POST',
