@@ -251,13 +251,13 @@
 		
 		function loading(show) {
 			//if (show instanceof Boolean) {
+				var p = document.querySelector('p');
 				if (!show) {
 					loader.classList.remove('show');
 					p.innerText = loaderText;
 				} else {
 					loader.classList.add('show');
-					const p = document.querySelector('p');
-						p.innerText = loaderText+"<br>"+show;
+					p.innerText = loaderText+"<br>"+show;
 				}
 			//} else {
 				
