@@ -179,7 +179,7 @@
         function compress(file, nFile) {
             const reader = new FileReader();
             reader.onload = async function(event) {
-				loading('подготовка фото № '+nFile);
+				//loading('подготовка фото № '+nFile);
                 try {
                     const img = await resizeImage(event.target.result);
                     //sendToServer(img, file.name);
@@ -226,7 +226,7 @@
         }
         
         function sendToServer(images) {
-			loading('отправка данных на сервер...');
+			//loading('отправка данных на сервер...');
 			const text = document.getElementById('message').value;
 			const check = document.getElementById('tosender');
 			
@@ -251,13 +251,13 @@
 		
 		function loading(show) {
 			//if (show instanceof Boolean) {
-				var p = document.querySelector('p');
+				//var p = document.querySelector('p');
 				if (!show) {
 					loader.classList.remove('show');
-					p.innerText = loaderText;
+					//p.innerText = show;
 				} else {
 					loader.classList.add('show');
-					p.innerText = loaderText+"<br>"+show;
+					//p.innerText = "Пожалуйста, подождите<br>"+show;
 				}
 			//} else {
 				
@@ -286,7 +286,7 @@
 		
 		document.addEventListener('DOMContentLoaded', function() {
 				loading(true);
-				loading('проверяю ваш статус в системе...');
+				//loading('проверяю ваш статус в системе...');
 				checkRights(apiUrl_get+'?doit=check&uid='+tgUser.id, result => {
 					if (!result) {
 						window.location.replace("https://timusov.github.io/list/denied.html");
