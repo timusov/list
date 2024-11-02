@@ -1,39 +1,197 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Загрузка изображений</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Закрыть сразу</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+		integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
+	</script>
+	<script src="https://telegram.org/js/telegram-web-app.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/browser-image-compression@1.0.12/dist/browser-image-compression.js">
+	</script>
+	<style>
+		body {
+			margin: 25px 25px;
+			font-size: 1.5rem;
+		}
+
+		h1,
+		h3 {
+			text-align: center;
+		}
+
+		.btn {
+			width: 100%;
+		}
+
+		.wrapper {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+
+		.stripes {
+			width: 100%;
+			height: 10px;
+			background-color: white;
+			border-radius: 5px;
+			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15), 0 8px 16px rgba(0, 0, 0, 0.2);
+		}
+
+		.stripe--blue {
+			background-color: blue;
+		}
+
+		.stripe--red {
+			background-color: red;
+		}
+
+		#loader {
+			position: fixed;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			z-index: 1000;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			background-color: rgba(255, 255, 255, 0.8);
+			opacity: 0;
+			visibility: hidden;
+			transition: opacity 0.3s ease-in-out, visibility 0s linear 0.3s;
+		}
+
+		#loader.show {
+			opacity: 1;
+			visibility: visible;
+			transition-delay: 0s;
+		}
+	</style>
 </head>
+
 <body>
-    <h1>Выберите изображения:</h1>
-    <input type="file" id="images" multiple accept="image/*">
-    <button onclick="uploadImages()">Отправить</button>
+	<div class="shadow p-3 bg-body rounded">
+		<h1>Оставить сообщение</h1>
+		<h3>№</h3>
+	</div>
+	<div class="wrapper mb-5">
+		<div class="stripes stripe--white"></div>
+		<div class="stripes stripe--blue"></div>
+		<div class="stripes stripe--red"></div>
+	</div>
+	<label for="message" class="mb-3">📃 Содержание</label>
+	<div class="form-floating">
+		<textarea id="message" class="form-control mb-3" style="max-height: 550px; min-height: 250px; padding-top: 15px; font-size: 20px; resize: vertical;"></textarea>
+	</div>
+	<div class="form-check form-switch-lg mb-3">
+		<input class="form-check-input" type="checkbox" id="tosender">
+		<label class="form-check-label" for="tosender">✉️ отправителю</label>
+	</div>
+	
+	<div class="accordion mb-5" id="image">
+		<div class="accordion-item">
+			<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#uploadforms" aria-expanded="true" aria-controls="collapseOne">📎 вложить фото</button>
+			<div id="uploadforms" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#image">
+				<div class="accordion-body">
+					<div>
+						<input class="form-control mb-2" id="photo-1" type="file" accept="image/*">
+					</div>
+					<div>
+						<input class="form-control mb-2" id="photo-2" type="file" accept="image/*">
+					</div>
+					<div>
+						<input class="form-control mb-2" id="photo-3" type="file" accept="image/*">
+					</div>
+					<div>
+						<input class="form-control mb-2" id="photo-4" type="file" accept="image/*">
+					</div>
+					<div>
+						<input class="form-control mb-2" id="photo-5" type="file" accept="image/*">
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<button type="submit" class="btn btn-outline-danger btn-lg" onclick="submit();">Отправить запрос</button>
+	<div id="loader" class="loader">
+		<img src="loading.gif" alt="GIF image">
+		<br>
+		<p>loading.gif</p>
+	</div>
     
     <!-- Подключаем jQuery для упрощения работы с AJAX -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/browser-image-compression@1.0.12/dist/browser-image-compression.js"></script>
     <script>
+		const urlParams = new URLSearchParams(window.location.search);
+			const ticketID = urlParams.get('ticketID');
+			const h3 = document.querySelector('h3');
+				h3.innerText += " "+ticketID;
+		const forms = ['message'];
+		const apiUrl_post = 'https://script.google.com/macros/s/AKfycbwRXVLd8j-F-X9PC6EXNaHMAKcElipLBgPz1poNd5LDmk65z4W3oGSKa-o1f2Io4MTIcw/exec';
+		const apiUrl_get = 'https://script.google.com/macros/s/AKfycbzuAp_OUaUjiurSYi1RUyA89Ufq9CzkHXVLli0EN3fW732XJ0I-0T1bC7yZBSGTd1wK/exec';
+		const tgApp = window.Telegram.WebApp;
+			tgApp.expand();
+			tgApp.disableVerticalSwipes();
+			tgApp.setHeaderColor('#FFC300');
+		const tgUser = tgApp.initDataUnsafe.user;
+		const loader = document.getElementById('loader');
+			const loaderText = 'Пожалуйста, подождите';
+			loader.innerText = loaderText;
+		const nUpload = 5;
+		
+		function submit() {
+			let r = checkForms(forms);
+			if (r.ok) {
+					loading(true);
+						var rImages = uploadImages();
+						var result = sendToServer(rImages);
+						tgAlert(result);
+					loading(false);
+			} else {
+				tgAlert(r.error);
+			}
+		};
+		
         function uploadImages() {
-            const files = document.getElementById('images').files;
-            if (!files.length) return alert('Пожалуйста, выберите хотя бы одно изображение.');
-            
-            // Сжимаем и отправляем каждое изображение
-            for (let i = 0; i < files.length; i++) {
-                compressAndSend(files[i]);
+            // Сжимаем каждое изображение
+			arr = [];
+			var n = 0;
+			var f = 0;
+            for (let i = 0; i < nUpload; i++) {
+				n++
+				const file = document.getElementById('photo-'+n).files;
+				if (file.length) {
+					f++
+					arr.push({image: compress(file[0], f)});
+				}
             }
+			if (arr.length == 0) {
+				return false;
+			} else {
+				return arr;
+			}
         }
         
-        function compressAndSend(file) {
+        function compress(file, nFile) {
             const reader = new FileReader();
             reader.onload = async function(event) {
+				loading('подготовка фото № '+nFile);
                 try {
                     const img = await resizeImage(event.target.result);
-                    sendToServer(img, file.name);
+                    //sendToServer(img, file.name);
                 } catch (error) {
-                    console.error(error);
+                    tgAlert(error);
                 }
             };
             reader.readAsDataURL(file);
+			return img || 0
         }
         
         function resizeImage(imageSrc) {
@@ -70,19 +228,71 @@
             });
         }
         
-        function sendToServer(base64Image, filename) {
+        function sendToServer(images) {
+			loading('отправка данных на сервер...');
+			const data = {
+				ticketID: '',
+				text: '',
+				toSender: ''
+			};
+			if (images) {data['images'] = images};
             $.ajax({
-                url: 'https://script.google.com/macros/s/AKfycbwRXVLd8j-F-X9PC6EXNaHMAKcElipLBgPz1poNd5LDmk65z4W3oGSKa-o1f2Io4MTIcw/exec',
+                url: apiUrl_post,
                 method: 'POST',
-                data: { image: base64Image, name: filename },
+                data: data,
                 success: function(response) {
-                    alert('Успешная загрузка:', response);
+                   return 'успешная загрузка: '+response;
                 },
                 error: function(xhr, status, error) {
-                    alert('Ошибка загрузки:', xhr.statusText);
+                   return 'ошибка загрузки: '+xhr.statusText;
                 }
             });
         }
+		
+		function loading(show) {
+			if (show instanceof Boolean) {
+				if (!show) {
+					loader.classList.remove('show');
+					p.innerText = loaderText;
+				} else {
+					loader.classList.add('show');
+				}
+			} else {
+				const p = document.querySelector('p');
+				p.innerText = loaderText+"<br>"+show;
+			}
+		};
+		
+		function tgAlert(text) {
+			tgApp.HapticFeedback.impactOccurred('medium');
+			tgApp.showAlert('Сообщение:\n'+text);
+		};
+		
+		function checkForms(arr) {
+			for (const f in arr) {
+				let form = document.getElementById(arr[f]);
+				if (form.value.trim() == '' || form.value.trim() == 0) {
+					return {
+						ok: false,
+						error: "Вы не заполнили требуемые поля..."
+					};
+				}
+			}
+			return {
+				ok: true
+			};
+		};
+		
+		document.addEventListener('DOMContentLoaded', function() {
+				loading(true);
+				loading('проверяю ваш статус в системе...');
+				checkRights(apiUrl_get+'?doit=check&uid='+tgUser.id, result => {
+					if (!result)
+						window.location.replace("https://timusov.github.io/list/denied.html");
+					}
+				});
+				loading(false);
+		});
     </script>
 </body>
 </html>
