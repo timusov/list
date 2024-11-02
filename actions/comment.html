@@ -230,10 +230,13 @@
         
         function sendToServer(images) {
 			loading('отправка данных на сервер...');
+			const text = document.getElementById('message').value
+			const check = document.getElementById('tosender');
+			
 			const data = {
-				ticketID: '',
-				text: '',
-				toSender: ''
+				ticketID: ticketID || null,
+				text: JSON.stringify(text),
+				toSender: check.checked
 			};
 			if (images) {data['images'] = images};
             $.ajax({
