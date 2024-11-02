@@ -123,7 +123,7 @@
 	<div id="loader" class="loader">
 		<img src="loading.gif" alt="GIF image">
 		<br>
-		<p>loading.gif</p>
+		<p>Пожалуйста, подождите</p>
 	</div>
     <script>
 		const urlParams = new URLSearchParams(window.location.search);
@@ -139,8 +139,6 @@
 			tgApp.setHeaderColor('#FFC300');
 		const tgUser = tgApp.initDataUnsafe.user;
 		const loader = document.getElementById('loader');
-			const loaderText = 'Пожалуйста, подождите';
-			loader.innerText = loaderText;
 		const nUpload = 5;
 		
 		function submit() {
