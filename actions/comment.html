@@ -282,6 +282,28 @@
 			};
 		};
 		
+		function checkRights(url, callback) {
+		 fetch(url)
+		  .then(response => {
+			  if (!response.ok) {
+				  throw new Error(`HTTP error! Status: ${response.error}`);
+			  }
+			  return response.json();
+		  })
+		  .then(data => {
+			  if (data.ismoderator) {
+				  result = true;
+			  } else {
+				  result = false;
+			  }
+			  callback(result);
+		  })
+		  .catch(error => {
+			tgAlert(error);
+			callback(false);
+		  });
+		}
+		
 		document.addEventListener('DOMContentLoaded', function() {
 				loading(true);
 				//loading('проверяю ваш статус в системе...');
