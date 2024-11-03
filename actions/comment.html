@@ -172,22 +172,21 @@
 			} else {
 				return arr;
 			}
-        }
+        };
         
         function compress(file, nFile) {
             const reader = new FileReader();
-            reader.onload = async function(event) {
-				//loading('подготовка фото № '+nFile);
+            reader.onload = function(event) {
                 try {
-                    const img = await resizeImage(event.target.result);
-                    //sendToServer(img, file.name);
+                    const img = resizeImage(event.target.result);
+					reader.readAsDataURL(file);
 					return img
                 } catch (error) {
                     tgAlert(error);
                 }
             };
-            reader.readAsDataURL(file);
-        }
+            //reader.readAsDataURL(file);
+        };
         
         function resizeImage(imageSrc) {
             return new Promise((resolve, reject) => {
@@ -221,7 +220,7 @@
                 };
                 img.onerror = reject;
             });
-        }
+        };
         
         function sendToServer(imgs) {
 			//loading('отправка данных на сервер...');
@@ -245,7 +244,7 @@
                    return 'ошибка загрузки: '+xhr.statusText;
                 }
             });
-        }
+        };
 		
 		function loading(show) {
 			if (!show) {
@@ -299,7 +298,6 @@
 		
 		document.addEventListener('DOMContentLoaded', function() {
 				loading(true);
-				//loading('проверяю ваш статус в системе...');
 				checkRights(apiUrl_get+'?doit=check&uid='+tgUser.id, result => {
 					if (!result) {
 						window.location.replace("https://timusov.github.io/list/denied.html");
