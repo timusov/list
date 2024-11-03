@@ -180,7 +180,7 @@
             reader.onload = async function(event) {
                 try {
                     const img = await resizeImage(event.target.result);
-                    array.push(img);
+                    arr.push(img);
                 } catch (error) {
                     console.error(error);
                 }
