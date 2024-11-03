@@ -141,91 +141,98 @@
 		const loader = document.getElementById('loader');
 		const nUpload = 5;
 		
-		function submit() {
+		async function submit() {
 			let r = checkForms(forms);
 			if (r.ok) {
-					loading(true);
-						var rImages = uploadImages();
-						var result = sendToServer(rImages);
-						tgAlert(result);
-					loading(false);
+				loading(true);
+				var rImages = await uploadImages();
+				var result = await sendToServer(rImages);
+				tgAlert(result);
+				loading(false);
 			} else {
 				tgAlert(r.error);
 			}
 		};
-		
-        function uploadImages() {
-            // Сжимаем каждое изображение
+
+		async function uploadImages() {
+			// Сжимаем каждое изображение
 			var compressedImages = [];
 			var n = 0;
 			var f = 0;
-            for (let i = 0; i < nUpload; i++) {
-				n++
-				const file = document.getElementById('photo-'+n).files;
+			for (let i = 0; i < nUpload; i++) {
+				n++;
+				const file = document.getElementById('photo-' + n).files;
 				if (file[0]) {
-					f++
-					compressedImages.push({image: compress(file[0], f)});
+					f++;
+					const compressedImage = await compress(file[0], f);
+					if (compressedImage) {
+						compressedImages.push({ image: compressedImage });
+					}
 				}
-            }
-			tgAlert("выбрано файлов: "+f);
-			if (arr.length == 0) {
+			}
+			tgAlert("выбрано файлов: " + f);
+			if (compressedImages.length === 0) {
 				return false;
 			} else {
 				return compressedImages;
 			}
-        };
-        
-        function compress(file, n) {
-            const reader = new FileReader();
-			reader.readAsDataURL(file);
-            reader.onload = function(event) {
-                try {
-                    return resizeImage(event.target.result);
-                } catch (error) {
-                    console.error(error);
-                }
-            };
-			return reader.onload
-        };
+		};
+
+		async function compress(file, n) {
+			return new Promise((resolve, reject) => {
+				const reader = new FileReader();
+				reader.readAsDataURL(file);
+				reader.onload = async function (event) {
+					try {
+						const resizedImage = await resizeImage(event.target.result);
+						resolve(resizedImage);
+					} catch (error) {
+						console.error(error);
+						reject(error);
+					}
+				};
+				reader.onerror = reject;
+			});
+		};
+	
+		function resizeImage(imageSrc) {
+			return new Promise((resolve, reject) => {
+				const img = new Image();
+				img.src = imageSrc;
+				img.onload = () => {
+					const canvas = document.createElement('canvas');
+					const ctx = canvas.getContext('2d');
 		
-        function resizeImage(imageSrc) {
-            return new Promise((resolve, reject) => {
-                const img = new Image();
-                img.src = imageSrc;
-                img.onload = () => {
-                    const canvas = document.createElement('canvas');
-                    const ctx = canvas.getContext('2d');
-                    
-                    // Определяем максимальный размер изображения
-                    let width = img.width;
-                    let height = img.height;
-                    const maxSize = 2048;
-                    if (width > height) {
-                        if (width > maxSize) {
-                            height *= maxSize / width;
-                            width = maxSize;
-                        }
-                    } else {
-                        if (height > maxSize) {
-                            width *= maxSize / height;
-                            height = maxSize;
-                        }
-                    }
-                    
-                    canvas.width = width;
-                    canvas.height = height;
-                    ctx.drawImage(img, 0, 0, width, height);
-                    
-                    resolve(canvas.toDataURL('image/jpeg', 0.9)); // Качество сжатия 70%
-                };
-                img.onerror = reject;
-            });
-        };
-        
-        function sendToServer(imgs) {
+					// Определяем максимальный размер изображения
+					let width = img.width;
+					let height = img.height;
+					const maxSize = 2048;
+					if (width > height) {
+						if (width > maxSize) {
+							height *= maxSize / width;
+							width = maxSize;
+						}
+					} else {
+						if (height > maxSize) {
+							width *= maxSize / height;
+							height = maxSize;
+						}
+					}
+		
+					canvas.width = width;
+					canvas.height = height;
+					ctx.drawImage(img, 0, 0, width, height);
+		
+					resolve(canvas.toDataURL('image/jpeg', 0.9)); // Качество сжатия 90%
+				};
+				img.onerror = reject;
+			});
+		};
+	
+		async function sendToServer(imgs) {
 			const text = document.getElementById('message').value;
 			const check = document.getElementById('tosender');
-			
+		
 			const data = {
 				ticketID: ticketID || null,
 				text: JSON.stringify(text),
@@ -234,19 +241,19 @@
 			if (imgs) {
 				data['images'] = imgs;
 			};
-            $.ajax({
-                url: apiUrl_post,
-                method: 'POST',
-                data: data,
-                success: function(response) {
-                   return 'успешная загрузка: '+response;
-                },
-                error: function(xhr, status, error) {
-                   return 'ошибка загрузки: '+xhr.statusText;
-                }
-            });
-        };
 		
+			try {
+				const response = await $.ajax({
+					url: apiUrl_post,
+					method: 'POST',
+					data: data
+				});
+				return 'успешная загрузка: ' + response;
+			} catch (error) {
+				return 'ошибка загрузки: ' + error.responseText;
+			}
+		};
+	
 		function loading(show) {
 			if (!show) {
 				loader.classList.remove('show');
@@ -257,13 +264,13 @@
 		
 		function tgAlert(text) {
 			tgApp.HapticFeedback.impactOccurred('medium');
-			tgApp.showAlert('Сообщение:\n'+text);
+			tgApp.showAlert('Сообщение:\n' + text);
 		};
 		
 		function checkForms(arr) {
 			for (const f in arr) {
 				let form = document.getElementById(arr[f]);
-				if (form.value.trim() == '' || form.value.trim() == 0) {
+				if (form.value.trim() === '' || form.value.trim() === 0) {
 					return {
 						ok: false,
 						error: "Вы не заполнили требуемые поля..."
@@ -296,15 +303,15 @@
 			callback(false);
 		  });
 		}
-		
+			
 		document.addEventListener('DOMContentLoaded', function() {
-				loading(true);
-				checkRights(apiUrl_get+'?doit=check&uid='+tgUser.id, result => {
-					if (!result) {
-						window.location.replace("https://timusov.github.io/list/denied.html");
-					}
-					loading(false);
-				});
+			loading(true);
+			checkRights(apiUrl_get+'?doit=check&uid='+tgUser.id, result => {
+				if (!result) {
+					window.location.replace("https://timusov.github.io/list/denied.html");
+				}
+				loading(false);
+			});
 		});
     </script>
 </body>
