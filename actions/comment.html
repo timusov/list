@@ -166,7 +166,7 @@
 					f++;
 					const compressedImage = await compress(file[0]);
 					if (compressedImage) {
-						compressedImages.push(compressedImage);
+						compressedImages.push({image: compressedImage});
 					}
 				}
 			}
