@@ -145,8 +145,8 @@
 			let r = checkForms(forms);
 			if (r.ok) {
 				loading(true);
-				var array = await uploadImages();
-				var result = await sendToServer((!array) ? false : array.imgs, (!array) ? false : array.count);
+				var uImages = await uploadImages();
+				var result = await sendToServer((!uImages) ? false : uImages.tbl, (!uImages) ? false : uImages.count);
 				tgAlert(result);
 				loading(false);
 			} else {
@@ -173,10 +173,7 @@
 			if (compressedImages.length === 0) {
 				return false;
 			} else {
-				return {
-					imgs: compressedImages,
-					count: f
-				};
+				return {tbl: compressedImages, count: f}
 			}
 		};
 
@@ -236,7 +233,7 @@
 			const check = document.getElementById('tosender');
 		
 			const data = {
-				ticketID: ticketID || null,
+				ticketID: ticketID,
 				text: JSON.stringify(text),
 				toSender: check.checked
 			};
