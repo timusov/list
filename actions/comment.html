@@ -162,7 +162,7 @@
             for (let i = 0; i < nUpload; i++) {
 				n++
 				const file = document.getElementById('photo-'+n).files;
-				if (file.length) {
+				if (file[0]) {
 					f++
 					arr.push({image: compress(file[0], f)});
 				}
