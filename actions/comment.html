@@ -145,8 +145,8 @@
 			let r = checkForms(forms);
 			if (r.ok) {
 				loading(true);
-				var rImages = await uploadImages();
-				var result = await sendToServer(rImages);
+				var array = await uploadImages();
+				var result = await sendToServer((!array) ? false : array.imgs, (!array) ? false : array.count);
 				tgAlert(result);
 				loading(false);
 			} else {
@@ -173,7 +173,10 @@
 			if (compressedImages.length === 0) {
 				return false;
 			} else {
-				return compressedImages;
+				return {
+					imgs: compressedImages,
+					count: f
+				};
 			}
 		};
 
@@ -228,7 +231,7 @@
 			});
 		};
 	
-		async function sendToServer(imgs) {
+		async function sendToServer(imgs, count) {
 			const text = document.getElementById('message').value;
 			const check = document.getElementById('tosender');
 		
@@ -238,7 +241,8 @@
 				toSender: check.checked
 			};
 			if (imgs) {
-				data['images'] = JSON.stringify(imgs);
+				data['images'] = imgs;
+				data['imagesCount'] = count;
 			};
 		
 			try {
