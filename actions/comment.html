@@ -167,6 +167,7 @@
 					arr.push({image: compress(file[0], f)});
 				}
             }
+			tgAlert("выбрано файлов: "+f);
 			if (arr.length == 0) {
 				return false;
 			} else {
@@ -178,14 +179,12 @@
             const reader = new FileReader();
             reader.onload = function(event) {
                 try {
-                    const img = resizeImage(event.target.result);
 					reader.readAsDataURL(file);
-					return img
+					return resizeImage(event.target.result);
                 } catch (error) {
                     tgAlert(error);
                 }
-            };
-            //reader.readAsDataURL(file);
+            };  
         };
         
         function resizeImage(imageSrc) {
