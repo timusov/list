@@ -164,7 +164,9 @@
 				const file = document.getElementById('photo-'+n).files;
 				if (file[0]) {
 					f++
-					arr.push({image: compress(file[0], f)});
+					compress(file[0], f, result => {
+						arr.push({image: result});
+					});
 				}
             }
 			tgAlert("выбрано файлов: "+f);
@@ -175,16 +177,16 @@
 			}
         };
         
-        function compress(file, nFile) {
+        function compress(file, nFile, callback) {
             const reader = new FileReader();
-            reader.onload = function(event) {
+            reader.onload = async function(event) {
                 try {
-					reader.readAsDataURL(file);
-					return resizeImage(event.target.result);
+					callback(await resizeImage(event.target.result));
                 } catch (error) {
                     tgAlert(error);
                 }
-            };  
+            };
+			reader.readAsDataURL(file);			
         };
         
         function resizeImage(imageSrc) {
@@ -222,7 +224,6 @@
         };
         
         function sendToServer(imgs) {
-			//loading('отправка данных на сервер...');
 			const text = document.getElementById('message').value;
 			const check = document.getElementById('tosender');
 			
