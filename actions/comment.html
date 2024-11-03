@@ -171,9 +171,15 @@
 				}
 			}
 			if (compressedImages.length === 0) {
-				return false;
+				return {
+					ok: false
+				}
 			} else {
-				return compressedImages;
+				return {
+					ok: true,
+					imgs: compressedImages,
+					count: f
+				};
 			}
 		};
 
@@ -237,8 +243,9 @@
 				text: JSON.stringify(text),
 				toSender: check.checked
 			};
-			if (imgs) {
-				data['images'] = imgs;
+			if (imgs.ok) {
+				data['images'] = imgs.imgs;
+				data['imagesCount'] = imgs.count;
 			};
 		
 			try {
