@@ -123,7 +123,7 @@
 	<div id="loader" class="loader">
 		<img src="loading.gif" alt="GIF image">
 		<br>
-		<p>Пожалуйста, подождите</p>
+		<p>Пожалуйста, подождите...</p>
 	</div>
     <script>
 		const urlParams = new URLSearchParams(window.location.search);
@@ -181,6 +181,7 @@
                 try {
                     const img = await resizeImage(event.target.result);
                     //sendToServer(img, file.name);
+					return img
                 } catch (error) {
                     tgAlert(error);
                 }
@@ -247,18 +248,11 @@
         }
 		
 		function loading(show) {
-			//if (show instanceof Boolean) {
-				//var p = document.querySelector('p');
-				if (!show) {
-					loader.classList.remove('show');
-					//p.innerText = show;
-				} else {
-					loader.classList.add('show');
-					//p.innerText = "Пожалуйста, подождите<br>"+show;
-				}
-			//} else {
-				
-			//}
+			if (!show) {
+				loader.classList.remove('show');
+			} else {
+				loader.classList.add('show');
+			}
 		};
 		
 		function tgAlert(text) {
@@ -310,8 +304,8 @@
 					if (!result) {
 						window.location.replace("https://timusov.github.io/list/denied.html");
 					}
+					loading(false);
 				});
-				loading(false);
 		});
     </script>
 </body>
