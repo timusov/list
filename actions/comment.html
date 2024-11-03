@@ -164,7 +164,7 @@
 				const file = document.getElementById('photo-'+n).files;
 				if (file[0]) {
 					f++
-					compress(file[0], f, compressedImages);
+					compressedImages.push({image: compress(file[0], f)});
 				}
             }
 			tgAlert("выбрано файлов: "+f);
@@ -175,17 +175,17 @@
 			}
         };
         
-        function compress(file, n, arr) {
+        function compress(file, n) {
             const reader = new FileReader();
-            reader.onload = async function(event) {
+			reader.readAsDataURL(file);
+            reader.onload = function(event) {
                 try {
-                    const img = await resizeImage(event.target.result);
-                    return arr.push({image: img});
+                    return resizeImage(event.target.result);
                 } catch (error) {
                     console.error(error);
                 }
             };
-            reader.readAsDataURL(file);
+			return reader.onload
         };
 		
         function resizeImage(imageSrc) {
