@@ -164,7 +164,7 @@
 				const file = document.getElementById('photo-' + n).files;
 				if (file[0]) {
 					f++;
-					const compressedImage = await compress(file[0]);
+					const compressedImage = await compress(file[0], f);
 					if (compressedImage) {
 						compressedImages.push({ image: compressedImage });
 					}
@@ -173,7 +173,7 @@
 			if (compressedImages.length === 0) {
 				return false;
 			} else {
-				return compressedImages
+				return compressedImages;
 			}
 		};
 
@@ -233,7 +233,7 @@
 			const check = document.getElementById('tosender');
 		
 			const data = {
-				ticketID: ticketID,
+				ticketID: ticketID || null,
 				text: JSON.stringify(text),
 				toSender: check.checked
 			};
