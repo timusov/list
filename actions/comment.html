@@ -146,7 +146,7 @@
 			if (r.ok) {
 				loading(true);
 				var uImages = await uploadImages();
-				var result = await sendToServer((uImages) ? uImages : false);
+				var result = await sendToServer(uImages);
 				tgAlert(result);
 				loading(false);
 			} else {
