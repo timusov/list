@@ -145,8 +145,8 @@
 			let r = checkForms(forms);
 			if (r.ok) {
 				loading(true);
-				var uImages = await uploadImages();
-				var result = await sendToServer(uImages);
+				var rImages = await uploadImages();
+				var result = await sendToServer(rImages);
 				tgAlert(result);
 				loading(false);
 			} else {
@@ -164,7 +164,7 @@
 				const file = document.getElementById('photo-' + n).files;
 				if (file[0]) {
 					f++;
-					const compressedImage = await compress(file[0], f);
+					const compressedImage = await compress(file[0]);
 					if (compressedImage) {
 						compressedImages.push({ image: compressedImage });
 					}
@@ -177,7 +177,7 @@
 			}
 		};
 
-		async function compress(file, n) {
+		async function compress(file) {
 			return new Promise((resolve, reject) => {
 				const reader = new FileReader();
 				reader.readAsDataURL(file);
