@@ -146,7 +146,7 @@
 			if (r.ok) {
 				loading(true);
 				var uImages = await uploadImages();
-				var result = await sendToServer((!uImages) ? false : uImages.tbl, (!uImages) ? false : uImages.count);
+				var result = await sendToServer((!uImages) ? false : uImages);
 				tgAlert(result);
 				loading(false);
 			} else {
@@ -173,7 +173,7 @@
 			if (compressedImages.length === 0) {
 				return false;
 			} else {
-				return {tbl: compressedImages, count: f}
+				return compressedImages
 			}
 		};
 
@@ -228,7 +228,7 @@
 			});
 		};
 	
-		async function sendToServer(imgs, count) {
+		async function sendToServer(imgs) {
 			const text = document.getElementById('message').value;
 			const check = document.getElementById('tosender');
 		
@@ -239,7 +239,6 @@
 			};
 			if (imgs) {
 				data['images'] = imgs;
-				data['imagesCount'] = count;
 			};
 		
 			try {
