@@ -170,7 +170,6 @@
 					}
 				}
 			}
-			tgAlert("выбрано файлов: " + f);
 			if (compressedImages.length === 0) {
 				return false;
 			} else {
@@ -239,7 +238,7 @@
 				toSender: check.checked
 			};
 			if (imgs) {
-				data['images'] = imgs;
+				data['images'] = JSON.stringify(imgs);
 			};
 		
 			try {
