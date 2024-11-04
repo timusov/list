@@ -273,7 +273,7 @@
 				const response = await $.ajax({
 					url: apiUrl_post,
 					method: 'POST',
-					data: data
+					data: data,
 					success: function (response) {
 						return $('#result').html(response);
 					},
