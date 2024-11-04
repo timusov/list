@@ -55,37 +55,40 @@
 			background-color: red;
 		}
 
-		.loader,
-		.loaderWait,
-		.loaderText {
+		#loader {
 			position: fixed;
 			top: 0;
 			left: 0;
 			right: 0;
 			bottom: 0;
 			z-index: 1000;
+			
+			/* Центрирование контента */
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
 			align-items: center;
+			font-size: 1.2rem;
+			
 			background-color: rgba(255, 255, 255, 0.8);
 			opacity: 0;
 			visibility: hidden;
 			transition: opacity 0.3s ease-in-out, visibility 0s linear 0.3s;
 		}
 		
-		.loaderWait {
-			font-size: 1.5rem;
-			display: flex;
-			justify-content: center;
-		}
-		
-		.loaderText {
-			font-size: 1.2rem;
-			margin-top: 8px;
-		}
-		
-		.loader.show {
+		#loader.show {
 			opacity: 1;
 			visibility: visible;
 			transition-delay: 0s;
+		}
+		
+		#loader > p {
+			margin: 0; /* Сбросим стандартные отступы для абзацев */
+		}
+		
+		#loadingText {
+			font-size: 1rem; /* Можно задать нужный размер шрифта */
+			margin-top: 10px; /* Отступ сверху для второго абзаца */
 		}
 	</style>
 </head>
@@ -136,14 +139,9 @@
 
 	<button type="submit" class="btn btn-outline-danger btn-lg" onclick="submit();">Отправить запрос</button>
 	<div id="loader" class="loader">
-		<div class="loaderWait">
-			<img src="loading.gif" alt="GIF image">
-			<p>Пожалуйста, подождите...</p>
-		</div>
-		<div class="loaderText">
-			<br>
-			<p id="loadingText"></p>
-		</div>
+		<img src="loading.gif" alt="GIF image">
+		<p>Пожалуйста, подождите</p>
+		<p id="loadingText"></p>
 	</div>
     <script>
 		const urlParams = new URLSearchParams(window.location.search);
