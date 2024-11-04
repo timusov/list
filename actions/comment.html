@@ -265,15 +265,20 @@
 		};
 	
 		function loading(show) {
-			if (show instanceof Boolean) {
-				if (!show) {
-					loader.classList.remove('show');
-					loaderText.innerText = "";
+			if (typeof show === 'boolean') {
+				// Обрабатываем булевы значения
+				if (show) {
+					loader.classList.add('show'); // Показываем лоадер
 				} else {
-					loader.classList.add('show');
+					loader.classList.remove('show'); // Скрываем лоадер
+					loaderText.innerText = ""; // Очищаем текст
 				}
+			} else if (typeof show === 'string') {
+				// Обрабатываем строки
+				loaderText.innerText = show; // Устанавливаем новый текст
+				loader.classList.add('show'); // Показываем лоадер
 			} else {
-				loaderText.innerText = show;
+				throw new Error("неподдерживаемый тип аргумента");
 			}
 		};
 		
