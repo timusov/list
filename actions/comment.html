@@ -96,7 +96,7 @@
 	
 	<div class="accordion mb-5" id="image">
 		<div class="accordion-item">
-			<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#uploadforms" aria-expanded="true" aria-controls="collapseOne">📎 вложить фото</button>
+			<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#uploadforms" aria-expanded="true" aria-controls="uploadforms">📎 вложить фото</button>
 			<div id="uploadforms" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#image">
 				<div class="accordion-body">
 					<div>
@@ -254,7 +254,7 @@
 					method: 'POST',
 					data: data
 				});
-				return 'успешная загрузка: ' + response;
+				return 'успешная загрузка: ' + response.message;
 			} catch (error) {
 				return 'ошибка загрузки: ' + error.responseText;
 			}
