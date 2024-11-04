@@ -62,18 +62,22 @@
 			right: 0;
 			bottom: 0;
 			z-index: 1000;
+			justify-content: center;
+			align-items: center;
 			background-color: rgba(255, 255, 255, 0.8);
 			opacity: 0;
 			visibility: hidden;
 			transition: opacity 0.3s ease-in-out, visibility 0s linear 0.3s;
 		}
 		
-		#loaderWait {
+		#loader, #loaderWait {
 			display: flex;
-			justify-content: center;
-			align-items: center;
 		}
-
+		
+		#loader, #loaderText {
+			margin-top: 8px;
+		}
+		
 		#loader.show {
 			opacity: 1;
 			visibility: visible;
@@ -130,10 +134,12 @@
 	<div id="loader" class="loader">
 		<div class="loaderWait">
 			<img src="loading.gif" alt="GIF image">
-			<br>
 			<p>Пожалуйста, подождите...</p>
 		</div>
-		<br><p id="loadingText">Пожалуйста, подождите...</p>
+		<div class="loaderText">
+			<br>
+			<p id="loadingText"></p>
+		</div>
 	</div>
     <script>
 		const urlParams = new URLSearchParams(window.location.search);
@@ -267,9 +273,9 @@
 					method: 'POST',
 					data: data
 				});
-				return 'успешная загрузка: ' + response.message;
+				return 'успешная загрузка: ' + response.json().message;
 			} catch (error) {
-				return 'ошибка загрузки: ' + error.responseText;
+				return 'ошибка загрузки: ' + error;
 			}
 		};
 	
