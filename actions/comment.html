@@ -123,7 +123,8 @@
 	<div id="loader" class="loader">
 		<img src="loading.gif" alt="GIF image">
 		<br>
-		<p>Пожалуйста, подождите...</p>
+		<p>Пожалуйста, подождите...</p><br>
+		<p id="loadingText">Пожалуйста, подождите...</p>
 	</div>
     <script>
 		const urlParams = new URLSearchParams(window.location.search);
@@ -139,6 +140,7 @@
 			tgApp.setHeaderColor('#FFC300');
 		const tgUser = tgApp.initDataUnsafe.user;
 		const loader = document.getElementById('loader');
+		const loaderText = document.getElementById('loadingText');
 		const nUpload = 5;
 		
 		async function submit() {
@@ -164,6 +166,7 @@
 				const file = document.getElementById('photo-' + n).files;
 				if (file[0]) {
 					f++;
+					loading('обработка фото № ' + f);
 					const compressedImage = await compress(file[0]);
 					if (compressedImage) {
 						compressedImages.push({image: compressedImage});
@@ -235,6 +238,7 @@
 		};
 	
 		async function sendToServer(imgs) {
+			loading('отправка запроса...');
 			const text = document.getElementById('message').value;
 			const check = document.getElementById('tosender');
 		
@@ -261,10 +265,15 @@
 		};
 	
 		function loading(show) {
-			if (!show) {
-				loader.classList.remove('show');
+			if (show instanceof Boolean) {
+				if (!show) {
+					loader.classList.remove('show');
+					loaderText.innerText = "";
+				} else {
+					loader.classList.add('show');
+				}
 			} else {
-				loader.classList.add('show');
+				loaderText.innerText = show;
 			}
 		};
 		
@@ -312,6 +321,7 @@
 			
 		document.addEventListener('DOMContentLoaded', function() {
 			loading(true);
+			loading('проверяю ваш статус...');
 			checkRights(apiUrl_get+'?doit=check&uid='+tgUser.id, result => {
 				if (!result) {
 					window.location.replace("https://timusov.github.io/list/denied.html");
