@@ -68,7 +68,7 @@
 			flex-direction: column;
 			justify-content: center;
 			align-items: center;
-			font-size: 1.2rem;
+			font-size: 1.5rem;
 			
 			background-color: rgba(255, 255, 255, 0.8);
 			opacity: 0;
@@ -87,7 +87,7 @@
 		}
 		
 		#loadingText {
-			font-size: 1rem; /* Можно задать нужный размер шрифта */
+			font-size: 1.2rem; /* Можно задать нужный размер шрифта */
 			margin-top: 10px; /* Отступ сверху для второго абзаца */
 		}
 	</style>
@@ -140,7 +140,7 @@
 	<button type="submit" class="btn btn-outline-danger btn-lg" onclick="submit();">Отправить запрос</button>
 	<div id="loader" class="loader">
 		<img src="loading.gif" alt="GIF image">
-		<p>Пожалуйста, подождите</p>
+		<span>Пожалуйста, подождите</span>
 		<p id="loadingText"></p>
 	</div>
     <script>
