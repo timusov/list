@@ -274,11 +274,17 @@
 					url: apiUrl_post,
 					method: 'POST',
 					data: data
+					success: function (response) {
+						return $('#result').html(response);
+					},
+					error: function (xhr, status, error) {
+						return 'Произошла ошибка: ' + xhr.responseText;
+					}
 				});
-				return 'успешная загрузка: ' + response.json().message;
-			} catch (error) {
-				return 'ошибка загрузки: ' + error;
-			}
+				<!-- return 'успешная загрузка: ' + response.json().message; -->
+			<!-- } catch (error) { -->
+				<!-- return 'ошибка загрузки: ' + error; -->
+			<!-- } -->
 		};
 	
 		function loading(show) {
