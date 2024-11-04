@@ -55,7 +55,7 @@
 			background-color: red;
 		}
 
-		#loader {
+		.loader {
 			font-size: 1rem;
 			position: fixed;
 			top: 0;
@@ -71,15 +71,17 @@
 			transition: opacity 0.3s ease-in-out, visibility 0s linear 0.3s;
 		}
 		
-		#loader, #loaderWait {
+		.loader,
+		.loaderWait {
 			display: flex;
 		}
 		
-		#loader, #loaderText {
+		.loader,
+		.loaderText {
 			margin-top: 8px;
 		}
 		
-		#loader.show {
+		.loader.show {
 			opacity: 1;
 			visibility: visible;
 			transition-delay: 0s;
