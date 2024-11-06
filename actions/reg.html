@@ -21,6 +21,10 @@
 			text-align: center;
 		}
 
+		p {
+			font-size: 1rem;
+		}
+
 		span,
 		.accordion-body {
 			font-size: 1rem;
@@ -110,7 +114,7 @@
 	<label for="sender" class="mb-3">🙋‍♂️ Отправитель</label>
 	<div class="input-group-lg mb-3">
 		<input id="sender" type="text" class="form-control">
-		<span>❕ Если вы не знаете, кто отправитель, то можете оставить поле пустым.</span>
+		<span>❕ Вы можете оставить поле пустым.</span>
 	</div>
 	<label for="problem" class="mb-3">📃 Описание *</label>
 	<div class="form-floating">
@@ -163,6 +167,8 @@
 			tgApp.setHeaderColor('#FF5733');
 		const tgUser = tgApp.initDataUnsafe.user;
 		const loader = document.getElementById('loader');
+		const loaderText = document.getElementById('loadingText');
+		const nUpload = 5;
 		
 		function loading(show) {
 			if (typeof show === 'boolean') {
