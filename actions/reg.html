@@ -22,7 +22,7 @@
 		}
 
 		p {
-			font-size: 1rem;
+			font-size: 1.5rem;
 		}
 
 		span,
@@ -145,7 +145,7 @@
 					<div>
 						<input class="form-control mb-2" id="photo-5" type="file" accept="image/*">
 					</div>
-					❕ От <strong>информативности</strong> на снимках зависит <strong>качество</strong> выполнения работы и <strong>понимание</strong> проблемы.
+					❕ От <strong>информативности</strong> на фото зависит <strong>качество</strong> выполнения работы и <strong>понимание</strong> проблемы.
 				</div>
 			</div>
 		</div>
@@ -154,8 +154,8 @@
 	<button type="submit" class="btn btn-outline-danger btn-lg" onclick="submit();">Отправить запрос</button>
 	<div id="loader" class="loader">
 		<img src="loading.gif" alt="GIF image">
-		<span>Пожалуйста, подождите</span>
-		<p id="loadingText"></p>
+		<p>Пожалуйста, подождите</p>
+		<span id="loadingText"></span>
 	</div>
 	<script>
 		const forms = ['object', 'problem'];
@@ -254,8 +254,8 @@
 				if (!result) {
 					window.location.replace("https://timusov.github.io/list/denied.html");
 				} else {
+					loading('загружаю список объектов...');
 					getlistofObjects().then(iobj => {
-					  loading('загружаю список объектов...');
 					  iobj.forEach(obj => {
 						  addObject(obj.sName, obj.lName);
 						});
