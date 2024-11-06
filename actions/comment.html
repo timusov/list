@@ -270,6 +270,7 @@
 			const check = document.getElementById('tosender');
 		
 			const data = {
+				doit: 'comment',
 				ticketID: ticketID || null,
 				text: JSON.stringify(text),
 				toSender: check.checked
@@ -299,17 +300,15 @@
 	
 		function loading(show) {
 			if (typeof show === 'boolean') {
-				// Обрабатываем булевы значения
 				if (show) {
-					loader.classList.add('show'); // Показываем лоадер
+					loader.classList.add('show');
 				} else {
-					loader.classList.remove('show'); // Скрываем лоадер
-					loaderText.innerText = ""; // Очищаем текст
+					loader.classList.remove('show');
+					loaderText.innerText = "";
 				}
 			} else if (typeof show === 'string') {
-				// Обрабатываем строки
-				loaderText.innerText = show; // Устанавливаем новый текст
-				loader.classList.add('show'); // Показываем лоадер
+				loaderText.innerText = show;
+				loader.classList.add('show');
 			} else {
 				throw new Error("неподдерживаемый тип аргумента");
 			}
