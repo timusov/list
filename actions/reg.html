@@ -63,19 +63,33 @@
 			right: 0;
 			bottom: 0;
 			z-index: 1000;
+			
+			/* Центрирование контента */
 			display: flex;
+			flex-direction: column;
 			justify-content: center;
 			align-items: center;
+			font-size: 1.5rem;
+			
 			background-color: rgba(255, 255, 255, 0.8);
 			opacity: 0;
 			visibility: hidden;
 			transition: opacity 0.3s ease-in-out, visibility 0s linear 0.3s;
 		}
-
+		
 		#loader.show {
 			opacity: 1;
 			visibility: visible;
 			transition-delay: 0s;
+		}
+		
+		#loader > p {
+			margin: 0; /* Сбросим стандартные отступы для абзацев */
+		}
+		
+		#loadingText {
+			font-size: 1.2rem; /* Можно задать нужный размер шрифта */
+			margin-top: 10px; /* Отступ сверху для второго абзаца */
 		}
 	</style>
 </head>
@@ -107,7 +121,7 @@
 		<label class="form-check-label" for="fire">🔥 Срочно</label>
 	</div>
 
-<div class="accordion mb-5" id="image">
+	<div class="accordion mb-5" id="image">
 		<div class="accordion-item">
 			<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#upload" aria-expanded="false" aria-controls="upload">📎 вложить фото</button>
 			<div id="upload" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#image">
@@ -127,7 +141,7 @@
 					<div>
 						<input class="form-control mb-2" id="photo-5" type="file" accept="image/*">
 					</div>
-				❕ От <strong>информативности</strong> на снимках зависит <strong>качество</strong> выполнения работы и <strong>понимание</strong> проблемы.
+					❕ От <strong>информативности</strong> на снимках зависит <strong>качество</strong> выполнения работы и <strong>понимание</strong> проблемы.
 				</div>
 			</div>
 		</div>
@@ -136,9 +150,114 @@
 	<button type="submit" class="btn btn-outline-danger btn-lg" onclick="submit();">Отправить запрос</button>
 	<div id="loader" class="loader">
 		<img src="loading.gif" alt="GIF image">
-		<br>
-		<p>Пожалуйста, подождите...</p>
+		<span>Пожалуйста, подождите</span>
+		<p id="loadingText"></p>
 	</div>
+	<script>
+		const forms = ['object', 'problem'];
+		const apiUrl_post = 'https://script.google.com/macros/s/AKfycbzuAp_OUaUjiurSYi1RUyA89Ufq9CzkHXVLli0EN3fW732XJ0I-0T1bC7yZBSGTd1wK/exec';
+		const apiUrl_get = 'https://script.google.com/macros/s/AKfycbzuAp_OUaUjiurSYi1RUyA89Ufq9CzkHXVLli0EN3fW732XJ0I-0T1bC7yZBSGTd1wK/exec';
+		const tgApp = window.Telegram.WebApp;
+			tgApp.expand();
+			tgApp.disableVerticalSwipes();
+			tgApp.setHeaderColor('#FF5733');
+		const tgUser = tgApp.initDataUnsafe.user;
+		const loader = document.getElementById('loader');
+		
+		function loading(show) {
+			if (typeof show === 'boolean') {
+				if (show) {
+					loader.classList.add('show');
+				} else {
+					loader.classList.remove('show');
+					loaderText.innerText = "";
+				}
+			} else if (typeof show === 'string') {
+				loaderText.innerText = show;
+				loader.classList.add('show');
+			} else {
+				throw new Error("неподдерживаемый тип аргумента");
+			}
+		};
+		
+		function tgAlert(text) {
+			tgApp.HapticFeedback.impactOccurred('medium');
+			tgApp.showAlert('Сообщение:\n' + text);
+		};
+		
+		function checkForms(arr) {
+			for (const f in arr) {
+				let form = document.getElementById(arr[f]);
+				if (form.value.trim() === '' || form.value.trim() === 0) {
+					return {
+						ok: false,
+						error: "Вы не заполнили требуемые поля..."
+					};
+				}
+			}
+			return {
+				ok: true
+			};
+		};
+		
+		function checkRights(url, callback) {
+		 fetch(url)
+		  .then(response => {
+			  if (!response.ok) {
+				  throw new Error(`HTTP error! Status: ${response.error}`);
+			  }
+			  return response.json();
+		  })
+		  .then(data => {
+			  if (data.ismoderator) {
+				  result = true;
+			  } else {
+				  result = false;
+			  }
+			  callback(result);
+		  })
+		  .catch(error => {
+			tgAlert(error);
+			callback(false);
+		  });
+		}
+		
+		async function getlistofObjects() {
+			try {
+				const r = await fetch(apiUrl_get+'?doit=objects&uid='+tgUser.id);
+				const u = await r.json();
+				return u;
+			}
+			catch(err) {
+				return false
+			}
+		};
+		
+		function addObject(value, label) {
+			const select = document.getElementById('object');
+			const option = document.createElement('option');
+			option.value = value;
+			option.textContent = label;
+			select.appendChild(option);
+		};
+		
+		document.addEventListener('DOMContentLoaded', function() {
+			loading(true);
+			loading('проверяю ваш статус...');
+			checkRights(apiUrl_get+'?doit=check&uid='+tgUser.id, result => {
+				if (!result) {
+					window.location.replace("https://timusov.github.io/list/denied.html");
+				} else {
+					getlistofObjects().then(iobj => {
+					  loading('загружаю список объектов...');
+					  iobj.forEach(obj => {
+						  addObject(obj.sName, obj.lName);
+						});
+						  loading(false);
+					});
+				}
+			});
+		});
+	</script>
 </body>
-
 </html>
