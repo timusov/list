@@ -170,6 +170,141 @@
 		const loaderText = document.getElementById('loadingText');
 		const nUpload = 5;
 		
+		async function submit() {
+			let r = checkForms(forms);
+			if (r.ok) {
+				loading(true);
+				var rImages = await uploadImages();
+				var result = await sendToServer(rImages);
+				tgAlert(result);
+				loading(false);
+			} else {
+				tgAlert(r.error);
+			}
+		};
+		
+		async function uploadImages() {
+			// Сжимаем каждое изображение
+			var compressedImages = [];
+			var n = 0;
+			var f = 0;
+			for (let i = 0; i < nUpload; i++) {
+				n++;
+				const file = document.getElementById('photo-' + n).files;
+				if (file[0]) {
+					f++;
+					loading('обработка фото № ' + f);
+					const compressedImage = await compress(file[0]);
+					if (compressedImage) {
+						compressedImages.push({image: compressedImage});
+					}
+				}
+			}
+			if (compressedImages.length === 0) {
+				return {
+					ok: false
+				}
+			} else {
+				return {
+					ok: true,
+					imgs: compressedImages,
+					count: f
+				};
+			}
+		};
+
+		async function compress(file) {
+			return new Promise((resolve, reject) => {
+				const reader = new FileReader();
+				reader.readAsDataURL(file);
+				reader.onload = async function (event) {
+					try {
+						const resizedImage = await resizeImage(event.target.result);
+						resolve(resizedImage);
+					} catch (error) {
+						console.error(error);
+						reject(error);
+					}
+				};
+				reader.onerror = reject;
+			});
+		};
+	
+		function resizeImage(imageSrc) {
+			return new Promise((resolve, reject) => {
+				const img = new Image();
+				img.src = imageSrc;
+				img.onload = () => {
+					const canvas = document.createElement('canvas');
+					const ctx = canvas.getContext('2d');
+		
+					// Определяем максимальный размер изображения
+					let width = img.width;
+					let height = img.height;
+					const maxSize = 2048;
+					if (width > height) {
+						if (width > maxSize) {
+							height *= maxSize / width;
+							width = maxSize;
+						}
+					} else {
+						if (height > maxSize) {
+							width *= maxSize / height;
+							height = maxSize;
+						}
+					}
+		
+					canvas.width = width;
+					canvas.height = height;
+					ctx.drawImage(img, 0, 0, width, height);
+		
+					resolve(canvas.toDataURL('image/jpeg', 0.9)); // Качество сжатия 90%
+				};
+				img.onerror = reject;
+			});
+		};
+	
+		async function sendToServer(imgs) {
+			loading('отправка запроса...');
+			const objects = document.getElementById('object');
+						const iObject = objects.selectedIndex;
+						const oObject = objects.options[iObject];
+						const object = oObject.value;
+			const problem = document.getElementById('problem').value;
+			const sender = document.getElementById('sender').value;
+			const eFire = document.getElementById('fire');
+						const fire = (eFire.checked) ? 'yes' : 'no';
+		
+			const data = {
+				doit: 'reg',
+				object: object,
+				sender: sender,
+				problem: JSON.stringify(problem),
+				fire: fire
+			};
+			if (imgs.ok) {
+				data['images'] = imgs.imgs;
+				data['imagesCount'] = imgs.count;
+			};
+		
+			try {
+				const response = await $.ajax({
+					url: apiUrl_post,
+					method: 'POST',
+					data: data,
+					success: function (response) {
+						$('#result').html(response);
+					},
+					error: function (xhr, status, error) {
+						'Произошла ошибка: ' + xhr.responseText;
+					}
+				});
+				return response;
+			} catch (error) {
+				return 'ошибка загрузки: ' + error;
+			}
+		};
+		
 		function loading(show) {
 			if (typeof show === 'boolean') {
 				if (show) {
