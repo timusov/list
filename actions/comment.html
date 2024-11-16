@@ -178,10 +178,10 @@
 				var result = await sendToServer(rImages);
 				tgAlert(result);
 				loading(false);
+				window.close();
 			} else {
 				tgAlert(r.error);
 			}
-			window.close();
 		};
 
 		async function uploadImages() {
