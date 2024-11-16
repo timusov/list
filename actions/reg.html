@@ -178,7 +178,7 @@
 				loading(true);
 				var rImages = await uploadImages();
 				var result = await sendToServer(rImages);
-				tgAlert(result.responseText);
+				tgAlert(result);
 				loading(false);
 				window.close();
 			} else {
@@ -300,7 +300,7 @@
 						$('#result').html(response);
 					},
 					error: function (xhr, status, error) {
-						'Произошла ошибка: ' + xhr.responseText;
+						'произошла ошибка: ' + xhr.responseText;
 					}
 				});
 				return response;
