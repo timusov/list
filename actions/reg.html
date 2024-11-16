@@ -281,7 +281,7 @@
 			const data = {
 				doit: 'reg_itr',
 				object: JSON.stringify(object),
-				sender: sender,
+				sender: (sender.trim() == "") ? "" : JSON.stringify(sender),
 				problem: JSON.stringify(problem),
 				fire: fire,
 				uid: tgUser.id
