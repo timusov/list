@@ -51,14 +51,14 @@
 		var startParam = startParam.split('_')
 		if (startParam[0] == "reg") {
 			var action = "102662277";
-			var answerUserID = "&answer_choices_52985821=";
+			window.location.replace("https://timusov.github.io/list/actions/reg.html);
 		}
 		else if (startParam[0] == "work") {
 			window.location.replace("https://timusov.github.io/list/actions/inwork.html?ticketID="+encodeURIComponent(startParam[1] +"/"+ startParam[2]));
 		}
 		else if (startParam[0] == "edit") {
 			var action = "102662360";
-			var answerUserID = "&id-question-53059802=";
+			window.location.replace("https://timusov.github.io/list/actions/comment.html?ticketID="+encodeURIComponent(startParam[1] +"/"+ startParam[2]));
 		}
 		else if (startParam[0] == "comp") {
 			window.location.replace("https://timusov.github.io/list/actions/close.html?ticketID="+encodeURIComponent(startParam[1] +"/"+ startParam[2]));
