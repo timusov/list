@@ -333,7 +333,7 @@
 		function checkForms(arr) {
 			for (const f in arr) {
 				let form = document.getElementById(arr[f]);
-				if (form.value.trim() === '' || form.value === 0) {
+				if (form.value.trim() == '' || form.value.trim() == 0) {
 					return {
 						ok: false,
 						error: "Вы не заполнили требуемые поля..."
