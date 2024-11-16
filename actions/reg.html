@@ -178,7 +178,7 @@
 				loading(true);
 				var rImages = await uploadImages();
 				var result = await sendToServer(rImages);
-				tgAlert(result);
+				tgAlert(result.responseText);
 				loading(false);
 				window.close();
 			} else {
