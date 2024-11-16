@@ -9,7 +9,6 @@
     <meta name="HandheldFriendly" content="True" />
     <meta name="robots" content="noindex,nofollow" />
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <script src="https://forms.yandex.ru/_static/embed.js"></script>
     <style>
         body{
 	        color: #000000;
@@ -39,11 +38,6 @@
     </style>
 </head>
     <body>
-        <div class="body">
-		<div id="text-container" contenteditable="true" style="text-align: center;">Привет, </div>
-		<p> </p>
-		<iframe id="iframe" frameborder="0" name="ya-form-668e55ae2530c24b27c69ea5" scrolling="no" width= "350px" src=""></iframe>
-        </div>
     </body>
 <script>
 	var startParam = window.Telegram.WebApp.initDataUnsafe.start_param;
@@ -51,7 +45,7 @@
 		var startParam = startParam.split('_')
 		if (startParam[0] == "reg") {
 			var action = "102662277";
-			window.location.replace("https://timusov.github.io/list/actions/reg.html);
+			window.location.replace("https://timusov.github.io/list/actions/reg.html");
 		}
 		if (startParam[0] == "work") {
 			window.location.replace("https://timusov.github.io/list/actions/inwork.html?ticketID="+encodeURIComponent(startParam[1] +"/"+ startParam[2]));
@@ -70,7 +64,7 @@
 			window.location.replace("https://timusov.github.io/list/actions/delete.html?uid="+window.Telegram.WebApp.initDataUnsafe.user.id+"&ticketID="+encodeURIComponent(startParam[1] +"/"+ startParam[2]));
 		}
 	} else {
-		window.location.replace("https://timusov.github.io/list/actions/reg.html);	
+		window.location.replace("https://timusov.github.io/list/actions/reg.html");	
 	}
 </script>
 </html>
