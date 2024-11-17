@@ -44,14 +44,12 @@
 	if (startParam != undefined) {
 		var startParam = startParam.split('_')
 		if (startParam[0] == "reg") {
-			var action = "102662277";
 			window.location.replace("https://timusov.github.io/list/actions/reg.html");
 		}
 		if (startParam[0] == "work") {
 			window.location.replace("https://timusov.github.io/list/actions/inwork.html?ticketID="+encodeURIComponent(startParam[1] +"/"+ startParam[2]));
 		}
 		if (startParam[0] == "edit") {
-			var action = "102662360";
 			window.location.replace("https://timusov.github.io/list/actions/comment.html?ticketID="+encodeURIComponent(startParam[1] +"/"+ startParam[2]));
 		}
 		if (startParam[0] == "comp") {
