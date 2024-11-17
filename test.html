@@ -11,6 +11,8 @@
 		integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
 	</script>
 	<script src="https://telegram.org/js/telegram-web-app.js"></script>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/browser-image-compression@1.0.12/dist/browser-image-compression.js"></script>
 	<style>
 		body {
 			margin: 25px 25px;
@@ -54,19 +56,33 @@
 			right: 0;
 			bottom: 0;
 			z-index: 1000;
+			
+			/* Центрирование контента */
 			display: flex;
+			flex-direction: column;
 			justify-content: center;
 			align-items: center;
+			font-size: 1.5rem;
+			
 			background-color: rgba(255, 255, 255, 0.8);
 			opacity: 0;
 			visibility: hidden;
 			transition: opacity 0.3s ease-in-out, visibility 0s linear 0.3s;
 		}
-
+		
 		#loader.show {
 			opacity: 1;
 			visibility: visible;
 			transition-delay: 0s;
+		}
+		
+		#loader > p {
+			margin: 0; /* Сбросим стандартные отступы для абзацев */
+		}
+		
+		#loadingText {
+			font-size: 1.2rem; /* Можно задать нужный размер шрифта */
+			margin-top: 10px; /* Отступ сверху для второго абзаца */
 		}
 	</style>
 </head>
@@ -92,48 +108,187 @@
 		<input class="form-check-input" type="checkbox" id="fire">
 		<label class="form-check-label" for="fire">🔥 Срочно</label>
 	</div>
+
+	<div class="accordion mb-5" id="image">
+		<div class="accordion-item">
+			<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#upload" aria-expanded="false" aria-controls="upload">📎 вложить фото</button>
+			<div id="upload" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#image">
+				<div class="accordion-body">
+					<div>
+						<input class="form-control mb-2" id="photo-1" type="file" accept="image/*">
+					</div>
+					<div>
+						<input class="form-control mb-2" id="photo-2" type="file" accept="image/*">
+					</div>
+					<div>
+						<input class="form-control mb-2" id="photo-3" type="file" accept="image/*">
+					</div>
+					<div>
+						<input class="form-control mb-2" id="photo-4" type="file" accept="image/*">
+					</div>
+					<div>
+						<input class="form-control mb-2" id="photo-5" type="file" accept="image/*">
+					</div>
+					❕ От <strong>информативности</strong> на фото зависит <strong>качество</strong> выполнения работы и <strong>понимание</strong> проблемы.
+				</div>
+			</div>
+		</div>
+	</div>
+
 	<button type="submit" class="btn btn-outline-danger btn-lg" onclick="submit();">Отправить запрос</button>
 	<div id="loader" class="loader">
 		<img src="loading.gif" alt="GIF image">
-		<br>
-		<p>Пожалуйста, подождите...</p>
+		<p>Пожалуйста, подождите</p>
+		<span id="loadingText"></span>
 	</div>
 	<script>
 		const forms = ['object', 'problem'];
-		const apiUrl = 'https://script.google.com/macros/s/AKfycbzuAp_OUaUjiurSYi1RUyA89Ufq9CzkHXVLli0EN3fW732XJ0I-0T1bC7yZBSGTd1wK/exec';
+		const apiUrl_post = 'https://script.google.com/macros/s/AKfycbzuAp_OUaUjiurSYi1RUyA89Ufq9CzkHXVLli0EN3fW732XJ0I-0T1bC7yZBSGTd1wK/exec';
+		const apiUrl_get = 'https://script.google.com/macros/s/AKfycbzuAp_OUaUjiurSYi1RUyA89Ufq9CzkHXVLli0EN3fW732XJ0I-0T1bC7yZBSGTd1wK/exec';
 		const tgApp = window.Telegram.WebApp;
 			tgApp.expand();
 			tgApp.disableVerticalSwipes();
 			tgApp.setHeaderColor('#FF5733');
 		const tgUser = tgApp.initDataUnsafe.user;
 		const loader = document.getElementById('loader');
+		const loaderText = document.getElementById('loadingText');
+		const nUpload = 5;
 		
-		function submit() {
+		async function submit() {
 			let r = checkForms(forms);
 			if (r.ok) {
-					loading(true);
-					var objects = document.getElementById('object');
-						var iObject = objects.selectedIndex;
-						var oObject = objects.options[iObject];
-						var object = oObject.value;
-					var problems = document.getElementById('problem');
-						var problem = problems.value;
-					var fire = document.getElementById('fire');
-						var sfire = (fire.checked) ? 'yes' : 'no';
-					sendOrder(`${apiUrl}?doit=reg_user&uid=${tgUser.id}&object=${encodeURIComponent(object)}&problem=${encodeURIComponent(problem)}&fire=${sfire}`, result => {
-						if (result.ok) {
-							tgAlert(`Запрос принят! Мы присвоили номер вашей заявке: №${result.ticketID}. Теперь вы сможете отслеживать статус вашей заявки в журнале. Мы будем сообщать вам обо всех этапах.`);
-						} else {
-							tgAlert(result.error);
-						}
-						loading(false);
-						window.close();
-					});
-				}
-				else {
-					tgAlert(r.error);
-				}
+				loading(true);
+				var rImages = await uploadImages();
+				var result = await sendToServer(rImages);
+				tgAlert(result);
+				loading(false);
+				window.close();
+			} else {
+				tgAlert(r.error);
+			}
 		};
+		
+		async function uploadImages() {
+			// Сжимаем каждое изображение
+			var compressedImages = [];
+			var n = 0;
+			var f = 0;
+			for (let i = 0; i < nUpload; i++) {
+				n++;
+				const file = document.getElementById('photo-' + n).files;
+				if (file[0]) {
+					f++;
+					loading('обработка фото № ' + f);
+					const compressedImage = await compress(file[0]);
+					if (compressedImage) {
+						compressedImages.push({image: compressedImage});
+					}
+				}
+			}
+			if (compressedImages.length === 0) {
+				return {
+					ok: false
+				}
+			} else {
+				return {
+					ok: true,
+					imgs: compressedImages,
+					count: f
+				};
+			}
+		};
+
+		async function compress(file) {
+			return new Promise((resolve, reject) => {
+				const reader = new FileReader();
+				reader.readAsDataURL(file);
+				reader.onload = async function (event) {
+					try {
+						const resizedImage = await resizeImage(event.target.result);
+						resolve(resizedImage);
+					} catch (error) {
+						console.error(error);
+						reject(error);
+					}
+				};
+				reader.onerror = reject;
+			});
+		};
+	
+		function resizeImage(imageSrc) {
+			return new Promise((resolve, reject) => {
+				const img = new Image();
+				img.src = imageSrc;
+				img.onload = () => {
+					const canvas = document.createElement('canvas');
+					const ctx = canvas.getContext('2d');
+		
+					// Определяем максимальный размер изображения
+					let width = img.width;
+					let height = img.height;
+					const maxSize = 2048;
+					if (width > height) {
+						if (width > maxSize) {
+							height *= maxSize / width;
+							width = maxSize;
+						}
+					} else {
+						if (height > maxSize) {
+							width *= maxSize / height;
+							height = maxSize;
+						}
+					}
+		
+					canvas.width = width;
+					canvas.height = height;
+					ctx.drawImage(img, 0, 0, width, height);
+		
+					resolve(canvas.toDataURL('image/jpeg', 0.9)); // Качество сжатия 90%
+				};
+				img.onerror = reject;
+			});
+		};
+	
+		async function sendToServer(imgs) {
+			loading('отправка запроса...');
+			const objects = document.getElementById('object');
+						const iObject = objects.selectedIndex;
+						const oObject = objects.options[iObject];
+						const object = oObject.value;
+			const problem = document.getElementById('problem').value;
+			const eFire = document.getElementById('fire');
+						const fire = (eFire.checked) ? 'yes' : 'no';
+		
+			const data = {
+				doit: 'reg_user',
+				object: JSON.stringify(object),
+				problem: JSON.stringify(problem),
+				fire: fire,
+				uid: tgUser.id
+			};
+			if (imgs.ok) {
+				data['images'] = imgs.imgs;
+				data['imagesCount'] = imgs.count;
+			};
+		
+			try {
+				const response = await $.ajax({
+					url: apiUrl_post,
+					method: 'POST',
+					data: data,
+					success: function (response) {
+						$('#result').html(response);
+					},
+					error: function (xhr, status, error) {
+						'произошла ошибка: ' + xhr.responseText;
+					}
+				});
+				return response;
+			} catch (error) {
+				return 'ошибка загрузки: ' + error;
+			}
+		};
+		
 		function addObject(value, label) {
 			const select = document.getElementById('object');
 			const option = document.createElement('option');
@@ -163,27 +318,10 @@
 			callback(false);
 		  });
 		}
-		
-		function sendOrder(url, callback) {
-		 fetch(url)
-		  .then(response => {
-			  if (!response.ok) {
-				  throw new Error(`HTTP error! Status: ${response.error}`);
-			  }
-			  return response.json();
-		  })
-		  .then(data => {
-			  callback(data);
-		  })
-		  .catch(error => {
-			tgAlert(error);
-			callback(false);
-		  });
-		}
 
 		async function getlistofObjects() {
 			try {
-				const r = await fetch(apiUrl+'?doit=objects&uid='+tgUser.id);
+				const r = await fetch(apiUrl_get+'?doit=objects&uid='+tgUser.id);
 				const u = await r.json();
 				return u;
 			}
@@ -191,6 +329,7 @@
 				return false
 			}
 		};
+		
 		function checkForms(arr) {
 			for (const f in arr) {
 				let form = document.getElementById(arr[f]);
@@ -205,34 +344,45 @@
 				ok: true
 			};
 		};
+		
 		function loading(show) {
-			if (!show) {
-				loader.classList.remove('show');
-			}
-			else {
+			if (typeof show === 'boolean') {
+				if (show) {
+					loader.classList.add('show');
+				} else {
+					loader.classList.remove('show');
+					loaderText.innerText = "";
+				}
+			} else if (typeof show === 'string') {
+				loaderText.innerText = show;
 				loader.classList.add('show');
+			} else {
+				throw new Error("неподдерживаемый тип аргумента");
 			}
 		};
+		
 		function tgAlert(text) {
-			tgApp.HapticFeedback.impactOccurred('light');
-			tgApp.showAlert('Сообщение: '+text);
+			tgApp.HapticFeedback.impactOccurred('medium');
+			tgApp.showAlert('Сообщение:\n' + text);
 		};
 
-    document.addEventListener('DOMContentLoaded', function() {
+		document.addEventListener('DOMContentLoaded', function() {
 			loading(true);
-			checkRights(apiUrl+'?doit=check&uid='+tgUser.id, isuser => {
-				if (isuser) {
-					  getlistofObjects().then(iobj => {
+			loading('проверяю ваш статус...');
+			checkRights(apiUrl_get+'?doit=check&uid='+tgUser.id, result => {
+				if (!result) {
+					window.location.replace("https://timusov.github.io/list/denied.html");
+				} else {
+					loading('загружаю список объектов...');
+					getlistofObjects().then(iobj => {
 					  iobj.forEach(obj => {
 						  addObject(obj.sName, obj.lName);
 						});
 						  loading(false);
-					  });
-				} else {
-					  window.location.replace("https://timusov.github.io/list/denied.html");
+					});
 				}
 			});
-	});
+		});
 </script>
 </body>
 </html>
