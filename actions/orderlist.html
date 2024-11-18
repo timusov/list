@@ -346,7 +346,7 @@
                                  TR_comments.className = 'table-warning';
                                 const TD_comments = document.createElement('td');
                                     TD_comments.setAttribute('colspan', '4');
-                                    TD_comments.textContent = `🗨️: ${request['comments']}`;
+                                    TD_comments.innerHTML = `🗨️: ${request['comments'].replace(/\n/g, '<br>')}`;
                                 TR_comments.appendChild(TD_comments);
                             currentTable.appendChild(TR_comments);
                         }
@@ -354,7 +354,7 @@
                             TR_problem.className = 'table-warning';
                             const TD_problem = document.createElement('td');
                                 TD_problem.setAttribute('colspan', '4');
-                                TD_problem.textContent = `🛠️: ${request['problem']}`;
+                                TD_problem.innerHTML = `🛠️: ${request['problem'].replace(/\n/g, '<br>')}`;
                             TR_problem.appendChild(TD_problem);
                         currentTable.appendChild(TR_problem);
                     });
