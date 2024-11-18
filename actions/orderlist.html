@@ -370,7 +370,6 @@
 			checkRights(apiUrl+'?doit=check&uid='+tgUser.id, ismoderator => {
 				if (ismoderator) {
 					  refreshTable()
-					loading(false);
 				} else {
 					loading(false);
 					  window.location.replace("https://timusov.github.io/list/denied.html");
@@ -390,6 +389,7 @@
                     updateTable(nL[i]);
                 }
             }
+			loading(false);
         }
         
         function createActionLink(actionText, actionUrl, func, funcWith) {
