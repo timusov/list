@@ -267,6 +267,7 @@
         }
 
         function updateTable(tab) {
+			loading('загружаю заявки...');
             const url = `https://script.google.com/macros/s/AKfycbwRXVLd8j-F-X9PC6EXNaHMAKcElipLBgPz1poNd5LDmk65z4W3oGSKa-o1f2Io4MTIcw/exec?uid=${window.Telegram.WebApp.initDataUnsafe.user.id}&status=${tab.getAttribute('href').substring(1)}`;
             fetch(url).then(response => response.json()).then(data => {
                 const objects = {};
@@ -358,9 +359,9 @@
                         currentTable.appendChild(TR_problem);
                     });
                 });
-                loader.classList.remove('show');
+                loading(false);
             }).catch(error => {
-                loader.classList.remove('show');
+                loading(false);
             });
         }
 
@@ -379,7 +380,6 @@
         });
         
         function refreshTable() {
-			loading('загружаю заявки...');
             const nL = document.querySelectorAll('.nav-link');
             for (let i = 0; i < nL.length; ++i) {
                 let tE = document.getElementById(nL[i].getAttribute('href').substring(1));
@@ -389,7 +389,6 @@
                     updateTable(nL[i]);
                 }
             }
-			loading(false);
         }
         
         function createActionLink(actionText, actionUrl, func, funcWith) {
