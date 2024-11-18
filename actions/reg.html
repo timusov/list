@@ -355,11 +355,14 @@
 		  })
 		  .then(data => {
 			  if (data.ismoderator) {
-				  result = true;
-			  } else {
-				  result = false;
+				  callback(true);
 			  }
-			  callback(result);
+			  if (data.service) {
+				  callback('service');
+			  }
+			  else {
+				  callback(false);
+			  }
 		  })
 		  .catch(error => {
 			tgAlert(error);
@@ -392,7 +395,11 @@
 			checkRights(apiUrl_get+'?doit=check&uid='+tgUser.id, result => {
 				if (!result) {
 					window.location.replace("https://timusov.github.io/list/denied.html");
-				} else {
+				} 
+				if (result == 'service') {
+					window.location.replace("https://timusov.github.io/list/service.html");
+				}
+				else {
 					loading('загружаю список объектов...');
 					getlistofObjects().then(iobj => {
 					  iobj.forEach(obj => {
