@@ -368,7 +368,7 @@
 						
 						// Создаем карусель
 						const carousel = document.createElement('div');
-						carousel.className = 'carousel slide' + ' carousel-fade';
+						carousel.className = 'carousel slide';
 						carousel.id = 'photo-carousel';
 						carousel.setAttribute('data-bs-ride', 'carousel');
 
@@ -390,18 +390,6 @@
 							innerCarousel.appendChild(item);
 						}
 
-						// Индикаторы карусели
-						const indicators = document.createElement('ol');
-						indicators.className = 'carousel-indicators';
-
-						for (let i = 0; i < 3; i++) {
-							const indicator = document.createElement('li');
-							indicator.datasetBsTarget = '#photo-carousel';
-							indicator.datasetBsSlideTo = `${i}`;
-							indicator.className = i === 0 ? 'active' : '';
-							indicators.appendChild(indicator);
-						}
-
 						// Кнопки управления каруселью
 						const prevBtn = document.createElement('button');
 						prevBtn.type = 'button';
@@ -418,7 +406,6 @@
 						nextBtn.innerHTML = '<span class="carousel-control-next-icon" aria-hidden="true"></span><span class="visually-hidden">Next</span>';
 
 						// Собираем все вместе
-						carousel.appendChild(indicators);
 						carousel.appendChild(innerCarousel);
 						carousel.appendChild(prevBtn);
 						carousel.appendChild(nextBtn);
