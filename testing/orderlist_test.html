@@ -362,58 +362,16 @@
 						const TR_photo = document.createElement('tr');
 						TR_photo.className = 'table-warning';
 						
-						// Создаем ячейку таблицы
 						const TD_photo = document.createElement('td');
 						TD_photo.setAttribute('colspan', '4');
 						
-						// Создаем карусель
-						const carousel = document.createElement('div');
-						carousel.className = 'carousel slide';
-						carousel.id = 'photo-carousel';
-						carousel.setAttribute('data-bs-ride', 'carousel');
-
-						// Внутренний контейнер карусели
-						const innerCarousel = document.createElement('div');
-						innerCarousel.className = 'carousel-inner';
-
-						// Добавляем несколько слайдов
-						for (let i = 1; i <= 3; i++) {
-							const item = document.createElement('div');
-							item.className = 'carousel-item' + (i === 1 ? ' active' : '');
-							
-							const img = document.createElement('img');
+						const img = document.createElement('img');
 							img.src = "https://drive.google.com/uc?export=view&id=1BpGE0OVRx-hsHn6-5F7SKQWjc1Q46Gm-";
-							img.alt = `Фото - ${i}`;
-							img.className = 'd-block w-100';
-
-							item.appendChild(img);
-							innerCarousel.appendChild(item);
-						}
-
-						// Кнопки управления каруселью
-						const prevBtn = document.createElement('button');
-						prevBtn.type = 'button';
-						prevBtn.className = 'carousel-control-prev';
-						prevBtn.setAttribute('data-bs-target', '#photo-carousel');
-						prevBtn.setAttribute('data-bs-slide', 'prev');
-						prevBtn.innerHTML = '<span class="carousel-control-prev-icon" aria-hidden="true"></span><span class="visually-hidden">Previous</span>';
-
-						const nextBtn = document.createElement('button');
-						nextBtn.type = 'button';
-						nextBtn.className = 'carousel-control-next';
-						nextBtn.setAttribute('data-bs-target', '#photo-carousel');
-						nextBtn.setAttribute('data-bs-slide', 'next');
-						nextBtn.innerHTML = '<span class="carousel-control-next-icon" aria-hidden="true"></span><span class="visually-hidden">Next</span>';
-
-						// Собираем все вместе
-						carousel.appendChild(innerCarousel);
-						carousel.appendChild(prevBtn);
-						carousel.appendChild(nextBtn);
-
-						TD_photo.appendChild(carousel);
+							img.alt = `Фото`;
+							img.className = 'img-fluid';
+						TD_photo.appendChild(img);
 						TR_photo.appendChild(TD_photo);
 
-						// Добавляем строку в таблицу
 						currentTable.appendChild(TR_photo);
                     });
                 });
