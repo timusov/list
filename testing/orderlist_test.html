@@ -293,7 +293,7 @@
 						TH.setAttribute('colspan', '4');
 						
 					acc = document.createElement('div');
-						acc.className = 'accordion mb-3';
+						acc.className = 'accordion mb-0';
 					
 					accItem = document.createElement('div');
 						accItem.className = 'accordion-item';
@@ -384,11 +384,13 @@
                                 TD_problem.innerHTML = `🛠️: ${request['problem'].replace(/\n/g, '<br>')}`;
                             TR_problem.appendChild(TD_problem);
 						accBody.appendChild(TR_problem);
-						accCollapse.appendChild(accBody);
                     });
-					accItem.appendChild(accCollapse);
+					
 					accItem.appendChild(accButton);
+					accCollapse.appendChild(accBody);
+					accItem.appendChild(accCollapse);
 					acc.appendChild(accItem);
+			
 					TH.appendChild(acc);
 					TR_1.appendChild(TH);
 					currentTable.appendChild(TR_1);
