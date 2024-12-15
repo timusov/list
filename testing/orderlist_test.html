@@ -64,6 +64,18 @@
 			font-size: 1rem;
 		}
 		
+		.accordion .accordion-body table {
+			width: 100%;
+			border-collapse: collapse;
+		}
+	
+		.accordion .accordion-body th,
+		.accordion .accordion-body td {
+			padding: 8px;
+			text-align: left;
+			border: 1px solid #dddddd;
+		}
+	
         #loader {
 			position: fixed;
 			top: 0;
@@ -305,7 +317,7 @@
 						accButton.setAttribute('data-bs-target', `#object-${tab.getAttribute('href').substring(1)}-${o_id}`);
 						accButton.setAttribute('aria-expanded', 'false');
 						accButton.setAttribute('aria-controls', `object-${tab.getAttribute('href').substring(1)}-${o_id}`);
-						accButton.textContent = `${object} (${objects[object].length})`;
+						accButton.textContent = `🏢 ${object} (${objects[object].length})`;
 						
                     accCollapse = document.createElement('div');
 						accCollapse.id = `object-${tab.getAttribute('href').substring(1)}-${o_id}`;
