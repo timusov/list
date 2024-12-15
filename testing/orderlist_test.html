@@ -6,8 +6,11 @@
     <title>Tabs Example</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <!-- CSS и JavaScript файлы Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+		integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
+	</script>
     <style>
         .btn-outline-primary {
             font-size: 0.7rem;
@@ -282,15 +285,41 @@
                 
                 const currentTable = document.getElementById(`${tab.getAttribute('href').substring(1)}-list`);
                 currentTable.innerHTML = '';
+				var o_id = 0;
                 Object.keys(objects).forEach(object => {
-                    const TR_1 = document.createElement('tr');
-                        TR_1.className = 'table-dark align-bottom';
+					//o_id++
+                     TR_1 = document.createElement('tr');
+                       TR_1.className = 'table-dark align-bottom';
                         const TH = document.createElement('th');
                             TH.setAttribute('colspan', '4');
                             TH.textContent = `${object} (${objects[object].length})`;
                     TR_1.appendChild(TH);
-                    currentTable.appendChild(TR_1);
+					currentTable.appendChild(TR_1);
+					const acc = document.createElement('div');
+						acc.id = "object-"+o_id;
+						acc.classList.add('accordion mb-3');
+					
+					const accItem = document.createElement('div');
+						accItem.classList.add('accordion-item');
                     
+					
+					const accButton = document.createElement('button');
+						accButton.classList.add('accordion-button', 'collapsed');
+						accButton.type = 'button';
+						accButton.setAttribute('data-bs-toggle', 'collapse');
+						accButton.setAttribute('data-bs-target', "#object-"+o_id);
+						accButton.setAttribute('aria-expanded', 'false');
+						accButton.setAttribute('aria-controls', "object-"+o_id);
+						accButton.textContent = `${object} (${objects[object].length})`;
+                    const accCollapse = document.createElement('div');
+						accCollapse.id = "object-"+o_id;
+						accCollapse.classList.add('accordion-collapse', 'collapse');
+						accCollapse.setAttribute('aria-labelledby', 'headingOne');
+						accCollapse.setAttribute('data-bs-parent', "#object-"+o_id);
+						
+					const accBody = document.createElement('div');
+						accBody.classList.add('accordion-body');
+					
                     objects[object].forEach(request => {
                         const TR_2 = document.createElement('tr');
                             TR_2.setAttribute('class', 'table-light');
@@ -333,7 +362,7 @@
                                 TR_2.appendChild(CL_3);
                                 TR_2.appendChild(CL_4);
                             }
-                        currentTable.appendChild(TR_2);
+                        accBody.appendChild(TR_2);
                         if (request['workers']) {
                             const TR_workers = document.createElement('tr');
                                  TR_workers.className = 'table-warning';
@@ -341,16 +370,16 @@
                                     TD_workers.setAttribute('colspan', '4');
                                     TD_workers.textContent = `👷‍♂️: ${request['workers']}`;
                                 TR_workers.appendChild(TD_workers);
-                            currentTable.appendChild(TR_workers);
+                            accBody.appendChild(TR_workers);
                         }
                         if (request['comments']) {
                             const TR_comments = document.createElement('tr');
                                  TR_comments.className = 'table-warning';
                                 const TD_comments = document.createElement('td');
                                     TD_comments.setAttribute('colspan', '4');
-                                    TD_comments.innerHTML = `🗨️: ${request['comments'].replace(/\n/g, '<br>')}`;
+                                    TD_comments.innerHTML = `🗨️: ${request['comments'].replace(/\n/g, '<br>🗨️: ')}`;
                                 TR_comments.appendChild(TD_comments);
-                            currentTable.appendChild(TR_comments);
+                            accBody.appendChild(TR_comments);
                         }
                         const TR_problem = document.createElement('tr');
                             TR_problem.className = 'table-warning';
@@ -358,22 +387,13 @@
                                 TD_problem.setAttribute('colspan', '4');
                                 TD_problem.innerHTML = `🛠️: ${request['problem'].replace(/\n/g, '<br>')}`;
                             TR_problem.appendChild(TD_problem);
-                        currentTable.appendChild(TR_problem);
-						const TR_photo = document.createElement('tr');
-						TR_photo.className = 'table-warning';
-						
-						const TD_photo = document.createElement('td');
-						TD_photo.setAttribute('colspan', '4');
-						
-						const img = document.createElement('img');
-							img.src = "https://drive.google.com/uc?export=view&id=1BpGE0OVRx-hsHn6-5F7SKQWjc1Q46Gm-";
-							img.alt = `Фото`;
-							img.className = 'img-fluid';
-						TD_photo.appendChild(img);
-						TR_photo.appendChild(TD_photo);
-
-						currentTable.appendChild(TR_photo);
+						accBody.appendChild(TR_problem);
+						accCollapse.appendChild(accBody);
                     });
+					accItem.appendChild(accButton);
+					acc.appendChild(accCollapse);
+					acc.appendChild(accItem);
+					currentTable.appendChild(acc);
                 });
                 loading(false);
             }).catch(error => {
