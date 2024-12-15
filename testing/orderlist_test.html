@@ -288,15 +288,11 @@
 				var o_id = 0;
                 Object.keys(objects).forEach(object => {
 					o_id++
-                    //TR_1 = document.createElement('tr');
-                    //   TR_1.className = 'table-dark align-bottom';
-                    //    const TH = document.createElement('th');
-                    //        TH.setAttribute('colspan', '4');
-                    //        TH.textContent = `${object} (${objects[object].length})`;
-                    //TR_1.appendChild(TH);
-					//currentTable.appendChild(TR_1);
+                    TR_1 = document.createElement('tr');
+						TH = document.createElement('th');
+						TH.setAttribute('colspan', '4');
+						
 					acc = document.createElement('div');
-						acc.id = "object-"+o_id;
 						acc.className = 'accordion mb-3';
 					
 					accItem = document.createElement('div');
@@ -306,16 +302,16 @@
 						accButton.className = 'accordion-button collapsed';
 						accButton.type = 'button';
 						accButton.setAttribute('data-bs-toggle', 'collapse');
-						accButton.setAttribute('data-bs-target', "#object-"+o_id);
+						accButton.setAttribute('data-bs-target', `#object-${tab.getAttribute('href').substring(1)}-${o_id}`);
 						accButton.setAttribute('aria-expanded', 'false');
-						accButton.setAttribute('aria-controls', "object-"+o_id);
+						accButton.setAttribute('aria-controls', `object-${tab.getAttribute('href').substring(1)}-${o_id}`);
 						accButton.textContent = `${object} (${objects[object].length})`;
 						
                     accCollapse = document.createElement('div');
-						accCollapse.id = "object-"+o_id;
+						accCollapse.id = `object-${tab.getAttribute('href').substring(1)}-${o_id}`;
 						accCollapse.className = 'accordion-collapse collapse';
 						accCollapse.setAttribute('aria-labelledby', 'headingOne');
-						accCollapse.setAttribute('data-bs-parent', "#object-"+o_id);
+						accCollapse.setAttribute('data-bs-parent', `#object-${tab.getAttribute('href').substring(1)}-${o_id}`);
 						
 					accBody = document.createElement('div');
 						accBody.className = 'accordion-body';
@@ -393,7 +389,9 @@
 					accItem.appendChild(accCollapse);
 					accItem.appendChild(accButton);
 					acc.appendChild(accItem);
-					currentTable.appendChild(acc);
+					TH.appendChild(acc);
+					TR_1.appendChild(TH);
+					currentTable.appendChild(TR_1);
                 });
                 loading(false);
             }).catch(error => {
