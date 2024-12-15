@@ -348,7 +348,7 @@
                                  TR_comments.className = 'table-warning';
                                 const TD_comments = document.createElement('td');
                                     TD_comments.setAttribute('colspan', '4');
-                                    TD_comments.innerHTML = `🗨️: ${request['comments'].replace(/\n/g, '<br>')}`;
+                                    TD_comments.innerHTML = `🗨️: ${request['comments'].replace(/\n/g, '<br>🗨️')}`;
                                 TR_comments.appendChild(TD_comments);
                             currentTable.appendChild(TR_comments);
                         }
