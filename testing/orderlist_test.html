@@ -287,14 +287,14 @@
                 currentTable.innerHTML = '';
 				var o_id = 0;
                 Object.keys(objects).forEach(object => {
-					//o_id++
-                    TR_1 = document.createElement('tr');
-                       TR_1.className = 'table-dark align-bottom';
-                        const TH = document.createElement('th');
-                            TH.setAttribute('colspan', '4');
-                            TH.textContent = `${object} (${objects[object].length})`;
-                    TR_1.appendChild(TH);
-					currentTable.appendChild(TR_1);
+					o_id++
+                    //TR_1 = document.createElement('tr');
+                    //   TR_1.className = 'table-dark align-bottom';
+                    //    const TH = document.createElement('th');
+                    //        TH.setAttribute('colspan', '4');
+                    //        TH.textContent = `${object} (${objects[object].length})`;
+                    //TR_1.appendChild(TH);
+					//currentTable.appendChild(TR_1);
 					acc = document.createElement('div');
 						acc.id = "object-"+o_id;
 						acc.className = 'accordion mb-3';
@@ -313,12 +313,12 @@
 						
                     accCollapse = document.createElement('div');
 						accCollapse.id = "object-"+o_id;
-						accCollapse.classList.add('accordion-collapse', 'collapse');
+						accCollapse.className = 'accordion-collapse collapse';
 						accCollapse.setAttribute('aria-labelledby', 'headingOne');
 						accCollapse.setAttribute('data-bs-parent', "#object-"+o_id);
 						
 					accBody = document.createElement('div');
-						accBody.classList.add('accordion-body');
+						accBody.className = 'accordion-body';
 					
                     objects[object].forEach(request => {
                         const TR_2 = document.createElement('tr');
@@ -390,8 +390,8 @@
 						accBody.appendChild(TR_problem);
 						accCollapse.appendChild(accBody);
                     });
+					accItem.appendChild(accCollapse);
 					accItem.appendChild(accButton);
-					acc.appendChild(accCollapse);
 					acc.appendChild(accItem);
 					currentTable.appendChild(acc);
                 });
