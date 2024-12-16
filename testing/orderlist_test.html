@@ -261,11 +261,11 @@
                 }
                 tgApp.HapticFeedback.impactOccurred('light');
                 tgApp.setHeaderColor(colors[event.target.getAttribute('href').substring(1)].HeaderColor);
-                const trs = targetElement.querySelectorAll('.accordion.mb-0');
+                const trs = targetElement.querySelectorAll('.accordion');
                 
                 tabElements.forEach((el) => el.classList.remove('active'));
                 event.target.classList.add('active');
-                if (trs.length == 1) {
+                if (trs.length === 0) {
                     loader.classList.add('show');
                     updateTable(event.target);
                 }
