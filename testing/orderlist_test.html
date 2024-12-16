@@ -280,10 +280,7 @@
 				var o_id = 0;
                 Object.keys(objects).forEach(object => {
 					o_id++
-                    TR_1 = document.createElement('tr');
-						TH = document.createElement('th');
-						TH.setAttribute('colspan', '4');
-						
+                    				
 					acc = document.createElement('div');
 						acc.className = 'accordion mb-0';
 					
@@ -297,7 +294,7 @@
 						accButton.setAttribute('data-bs-target', `#object-${tab.getAttribute('href').substring(1)}-${o_id}`);
 						accButton.setAttribute('aria-expanded', 'false');
 						accButton.setAttribute('aria-controls', `object-${tab.getAttribute('href').substring(1)}-${o_id}`);
-						accButton.textContent = `🏢 ${object} (${objects[object].length})`;
+						accButton.textContent = `➕ ${object} (${objects[object].length})`;
 						
                     accCollapse = document.createElement('div');
 						accCollapse.id = `object-${tab.getAttribute('href').substring(1)}-${o_id}`;
@@ -382,10 +379,8 @@
 					accCollapse.appendChild(accBody);
 					accItem.appendChild(accCollapse);
 					acc.appendChild(accItem);
-			
-					TH.appendChild(acc);
-					TR_1.appendChild(TH);
-					currentTable.appendChild(TR_1);
+		
+					currentTable.appendChild(acc);
                 });
                 loading(false);
             }).catch(error => {
