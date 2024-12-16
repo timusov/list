@@ -261,7 +261,7 @@
                 }
                 tgApp.HapticFeedback.impactOccurred('light');
                 tgApp.setHeaderColor(colors[event.target.getAttribute('href').substring(1)].HeaderColor);
-                const trs = targetElement.querySelectorAll('tr');
+                const trs = targetElement.querySelectorAll('.accordion.mb-0');
                 
                 tabElements.forEach((el) => el.classList.remove('active'));
                 event.target.classList.add('active');
