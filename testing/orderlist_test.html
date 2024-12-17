@@ -394,17 +394,13 @@
 						
 							// Создаем карусель
 							const carousel = document.createElement('div');
-								carousel.className = 'carousel slide' + ' carousel-fade';
-								carousel.id = `photo-carousel-${tab.getAttribute('href').substring(1)}-${o_id}-${t_id}`;
+								carousel.id = `photo-carousel-${tab.getAttribute('href').substring(1)}-${o_id}-${t_id}`; // Можно задать уникальный ID
+								carousel.className = 'carousel slide';
 								carousel.setAttribute('data-bs-ride', 'carousel');
 						
 							// Внутренний контейнер карусели
 							const innerCarousel = document.createElement('div');
 								innerCarousel.className = 'carousel-inner';
-						
-							// Индикаторы карусели
-							const indicators = document.createElement('ol');
-								indicators.className = 'carousel-indicators';
 						
 							// Добавляем несколько слайдов
 							for (let i = 0; i < request['photos'].length; i++) {
@@ -416,33 +412,26 @@
 									img.alt = `Фото ${i + 1}`;
 									img.className = 'd-block w-100';
 						
-								const indicator = document.createElement('li');
-									indicator.datasetBsTarget = `#photo-carousel-${tab.getAttribute('href').substring(1)}-${o_id}-${t_id}`;
-									indicator.datasetBsSlideTo = `${i}`;
-									indicator.className = i === 0 ? 'active' : '';
-						
 								item.appendChild(img);
 								innerCarousel.appendChild(item);
-								indicators.appendChild(indicator);
 							}
 						
 							// Кнопки управления каруселью
 							const prevBtn = document.createElement('button');
 								prevBtn.type = 'button';
 								prevBtn.className = 'carousel-control-prev';
-								prevBtn.datasetBsTarget = `#photo-carousel-${tab.getAttribute('href').substring(1)}-${o_id}-${t_id}`;
-								prevBtn.datasetBsSlideTo = 'prev';
+								prevBtn.setAttribute('data-bs-target', `#photo-carousel-${tab.getAttribute('href').substring(1)}-${o_id}-${t_id}`); // Укажите целевой элемент
+								prevBtn.setAttribute('data-bs-slide', 'prev');
 								prevBtn.innerHTML = '<span class="carousel-control-prev-icon" aria-hidden="true"></span><span class="visually-hidden">Previous</span>';
 						
 							const nextBtn = document.createElement('button');
 								nextBtn.type = 'button';
 								nextBtn.className = 'carousel-control-next';
-								nextBtn.datasetBsTarget = `#photo-carousel-${tab.getAttribute('href').substring(1)}-${o_id}-${t_id}`;
-								nextBtn.datasetBsSlideTo = 'next';
+								nextBtn.setAttribute('data-bs-target', `#photo-carousel-${tab.getAttribute('href').substring(1)}-${o_id}-${t_id}`); // Укажите целевой элемент
+								nextBtn.setAttribute('data-bs-slide', 'next');
 								nextBtn.innerHTML = '<span class="carousel-control-next-icon" aria-hidden="true"></span><span class="visually-hidden">Next</span>';
 						
 							// Собираем все вместе
-							carousel.appendChild(indicators);
 							carousel.appendChild(innerCarousel);
 							carousel.appendChild(prevBtn);
 							carousel.appendChild(nextBtn);
