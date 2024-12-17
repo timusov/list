@@ -382,6 +382,77 @@
                                 TD_problem.innerHTML = `🛠️: ${request['problem'].replace(/\n/g, '<br>')}`;
                             TR_problem.appendChild(TD_problem);
 						accBody.appendChild(TR_problem);
+						if (request['photos']) {
+							const TR_photo = document.createElement('tr');
+							TR_photo.className = 'table-warning';
+							
+							// Создаем ячейку таблицы
+							const TD_photo = document.createElement('td');
+								TD_photo.setAttribute('colspan', '4');
+							
+							// Создаем карусель
+							const carousel = document.createElement('div');
+								carousel.className = 'carousel slide' + ' carousel-fade';
+								carousel.id = `photo-carousel-${tab.getAttribute('href').substring(1)}-${o_id}`;
+								carousel.setAttribute('data-bs-ride', 'carousel');
+				
+							// Внутренний контейнер карусели
+							const innerCarousel = document.createElement('div');
+								innerCarousel.className = 'carousel-inner';
+				
+							// Добавляем несколько слайдов
+							for (let i = 0; i < request['photos'].length; i++) {
+								const item = document.createElement('div');
+								item.className = 'carousel-item' + (i === 1 ? ' active' : '');
+								
+								const img = document.createElement('img');
+								img.src = request['photos'][i];
+								img.alt = `Фото ${i}`;
+								img.className = 'd-block w-100';
+				
+								item.appendChild(img);
+								innerCarousel.appendChild(item);
+							}
+				
+							// Индикаторы карусели
+							const indicators = document.createElement('ol');
+							indicators.className = 'carousel-indicators';
+				
+							for (let i = 0; i < request['photos'].length; i++) {
+								const indicator = document.createElement('li');
+								indicator.datasetBsTarget = `#photo-carousel-${tab.getAttribute('href').substring(1)}-${o_id}`;
+								indicator.datasetBsSlideTo = `${i}`;
+								indicator.className = i === 0 ? 'active' : '';
+								indicators.appendChild(indicator);
+							}
+				
+							// Кнопки управления каруселью
+							const prevBtn = document.createElement('button');
+							prevBtn.type = 'button';
+							prevBtn.className = 'carousel-control-prev';
+							prevBtn.setAttribute('data-bs-target', `#photo-carousel-${tab.getAttribute('href').substring(1)}-${o_id}`);
+							prevBtn.setAttribute('data-bs-slide', 'prev');
+							prevBtn.innerHTML = '<span class="carousel-control-prev-icon" aria-hidden="true"></span><span class="visually-hidden">Previous</span>';
+				
+							const nextBtn = document.createElement('button');
+							nextBtn.type = 'button';
+							nextBtn.className = 'carousel-control-next';
+							nextBtn.setAttribute('data-bs-target', `#photo-carousel-${tab.getAttribute('href').substring(1)}-${o_id}`);
+							nextBtn.setAttribute('data-bs-slide', 'next');
+							nextBtn.innerHTML = '<span class="carousel-control-next-icon" aria-hidden="true"></span><span class="visually-hidden">Next</span>';
+				
+							// Собираем все вместе
+							carousel.appendChild(indicators);
+							carousel.appendChild(innerCarousel);
+							carousel.appendChild(prevBtn);
+							carousel.appendChild(nextBtn);
+				
+							TD_photo.appendChild(carousel);
+							TR_photo.appendChild(TD_photo);
+				
+							// Добавляем строку в таблицу
+							accBody.appendChild(TR_photo);
+						}
                     });
 					
 					accItem.appendChild(accButton);
