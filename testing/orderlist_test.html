@@ -314,7 +314,9 @@
 					accBody = document.createElement('div');
 						accBody.className = 'accordion-body';
 					
+					var t_id = 0;
                     objects[object].forEach(request => {
+						t_id++
                         const TR_2 = document.createElement('tr');
                             TR_2.setAttribute('class', 'table-light');
                         const CL_1 = document.createElement('td');
@@ -393,7 +395,7 @@
 							// Создаем карусель
 							const carousel = document.createElement('div');
 								carousel.className = 'carousel slide' + ' carousel-fade';
-								carousel.id = `photo-carousel-${tab.getAttribute('href').substring(1)}-${o_id}`;
+								carousel.id = `photo-carousel-${tab.getAttribute('href').substring(1)}-${o_id}-${t_id}`;
 								carousel.setAttribute('data-bs-ride', 'carousel');
 				
 							// Внутренний контейнер карусели
@@ -420,7 +422,7 @@
 				
 							for (let i = 0; i < request['photos'].length; i++) {
 								const indicator = document.createElement('li');
-								indicator.datasetBsTarget = `#photo-carousel-${tab.getAttribute('href').substring(1)}-${o_id}`;
+								indicator.datasetBsTarget = `#photo-carousel-${tab.getAttribute('href').substring(1)}-${o_id}-${t_id}`;
 								indicator.datasetBsSlideTo = `${i}`;
 								indicator.className = i === 0 ? 'active' : '';
 								indicators.appendChild(indicator);
@@ -430,14 +432,14 @@
 							const prevBtn = document.createElement('button');
 							prevBtn.type = 'button';
 							prevBtn.className = 'carousel-control-prev';
-							prevBtn.setAttribute('data-bs-target', `#photo-carousel-${tab.getAttribute('href').substring(1)}-${o_id}`);
+							prevBtn.setAttribute('data-bs-target', `#photo-carousel-${tab.getAttribute('href').substring(1)}-${o_id}-${t_id}`);
 							prevBtn.setAttribute('data-bs-slide', 'prev');
 							prevBtn.innerHTML = '<span class="carousel-control-prev-icon" aria-hidden="true"></span><span class="visually-hidden">Previous</span>';
 				
 							const nextBtn = document.createElement('button');
 							nextBtn.type = 'button';
 							nextBtn.className = 'carousel-control-next';
-							nextBtn.setAttribute('data-bs-target', `#photo-carousel-${tab.getAttribute('href').substring(1)}-${o_id}`);
+							nextBtn.setAttribute('data-bs-target', `#photo-carousel-${tab.getAttribute('href').substring(1)}-${o_id}-${t_id}`);
 							nextBtn.setAttribute('data-bs-slide', 'next');
 							nextBtn.innerHTML = '<span class="carousel-control-next-icon" aria-hidden="true"></span><span class="visually-hidden">Next</span>';
 				
