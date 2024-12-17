@@ -401,6 +401,9 @@
 							// Внутренний контейнер карусели
 							const innerCarousel = document.createElement('div');
 								innerCarousel.className = 'carousel-inner';
+							// Индикаторы карусели
+							const indicators = document.createElement('ol');
+								indicators.className = 'carousel-indicators';
 				
 							// Добавляем несколько слайдов
 							for (let i = 0; i < request['photos'].length; i++) {
@@ -411,21 +414,22 @@
 								img.src = request['photos'][i];
 								img.alt = `Фото ${i}`;
 								img.className = 'd-block w-100';
-				
-								item.appendChild(img);
-								innerCarousel.appendChild(item);
-							}
-				
-							// Индикаторы карусели
-							const indicators = document.createElement('ol');
-							indicators.className = 'carousel-indicators';
-				
-							for (let i = 0; i < request['photos'].length; i++) {
+								
 								const indicator = document.createElement('li');
 								indicator.datasetBsTarget = `#photo-carousel-${tab.getAttribute('href').substring(1)}-${o_id}-${t_id}`;
 								indicator.datasetBsSlideTo = `${i}`;
 								indicator.className = i === 0 ? 'active' : '';
+								
+								item.appendChild(img);
+								innerCarousel.appendChild(item);
 								indicators.appendChild(indicator);
+							}
+				
+							
+							
+				
+							for (let i = 0; i < request['photos'].length; i++) {
+								
 							}
 				
 							// Кнопки управления каруселью
