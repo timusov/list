@@ -408,7 +408,7 @@
 									item.className = 'carousel-item' + (i === 0 ? ' active' : '');
 						
 								const img = document.createElement('img');
-									img.src = request['photos'][i];
+									img.src = `https://drive.google.com/thumbnail?id=${request['photos'][i]}&sz=w1000`;
 									img.alt = `Фото ${i + 1}`;
 									img.className = 'd-block w-100';
 						
