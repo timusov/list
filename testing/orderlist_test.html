@@ -409,17 +409,17 @@
 							// Добавляем несколько слайдов
 							for (let i = 0; i < request['photos'].length; i++) {
 								const item = document.createElement('div');
-									item.className = 'carousel-item' + (i === 0 ? ' active' : ''); // Исправлено
+									item.className = 'carousel-item' + (i === 0 ? ' active' : '');
 						
 								const img = document.createElement('img');
 									img.src = request['photos'][i];
-									img.alt = `Фото ${i + 1}`; // Исправлено
+									img.alt = `Фото ${i + 1}`;
 									img.className = 'd-block w-100';
 						
 								const indicator = document.createElement('li');
 									indicator.datasetBsTarget = `#photo-carousel-${tab.getAttribute('href').substring(1)}-${o_id}-${t_id}`;
 									indicator.datasetBsSlideTo = `${i}`;
-									indicator.className = i === 0 ? 'active' : ''; // Исправлено
+									indicator.className = i === 0 ? 'active' : '';
 						
 								item.appendChild(img);
 								innerCarousel.appendChild(item);
@@ -430,15 +430,15 @@
 							const prevBtn = document.createElement('button');
 								prevBtn.type = 'button';
 								prevBtn.className = 'carousel-control-prev';
-								prevBtn.setAttribute('data-bs-target', `#photo-carousel-${tab.getAttribute('href').substring(1)}-${o_id}-${t_id}`);
-								prevBtn.setAttribute('data-bs-slide', 'prev');
+								prevBtn.datasetBsTarget = `#photo-carousel-${tab.getAttribute('href').substring(1)}-${o_id}-${t_id}`;
+								prevBtn.datasetBsSlideTo = 'prev';
 								prevBtn.innerHTML = '<span class="carousel-control-prev-icon" aria-hidden="true"></span><span class="visually-hidden">Previous</span>';
 						
 							const nextBtn = document.createElement('button');
 								nextBtn.type = 'button';
 								nextBtn.className = 'carousel-control-next';
-								nextBtn.setAttribute('data-bs-target', `#photo-carousel-${tab.getAttribute('href').substring(1)}-${o_id}-${t_id}`);
-								nextBtn.setAttribute('data-bs-slide', 'next');
+								nextBtn.datasetBsTarget = `#photo-carousel-${tab.getAttribute('href').substring(1)}-${o_id}-${t_id}`;
+								nextBtn.datasetBsSlideTo = 'next';
 								nextBtn.innerHTML = '<span class="carousel-control-next-icon" aria-hidden="true"></span><span class="visually-hidden">Next</span>';
 						
 							// Собираем все вместе
