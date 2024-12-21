@@ -477,7 +477,7 @@
         }
 
         document.addEventListener('DOMContentLoaded', function() {
-			if (tgApp) {
+			if (isTelegramWebApp) {
 				loading(true);
 				loading('проверяю ваш статус...');
 				checkRights(apiUrl+'?doit=check&uid='+tgUser.id, ismoderator => {
