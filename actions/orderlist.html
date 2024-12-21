@@ -477,16 +477,19 @@
         }
 
         document.addEventListener('DOMContentLoaded', function() {
-			loading(true);
-			loading('проверяю ваш статус...');
-			checkRights(apiUrl+'?doit=check&uid='+tgUser.id, ismoderator => {
-				if (ismoderator) {
-					  refreshTable()
-				} else {
-					loading(false);
-					  window.location.replace("https://timusov.github.io/list/denied.html");
-				}
-				
+			if (tgApp) {
+				loading(true);
+				loading('проверяю ваш статус...');
+				checkRights(apiUrl+'?doit=check&uid='+tgUser.id, ismoderator => {
+					if (ismoderator) {
+						refreshTable()
+					} else {
+						loading(false);
+						window.location.replace("https://timusov.github.io/list/denied.html");
+					}
+			} else {
+				window.location.replace("https://timusov.github.io/list/denied.html");
+			}			
 			});
         });
         
