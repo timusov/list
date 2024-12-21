@@ -332,6 +332,17 @@
 						t_id++
                         const TR_2 = document.createElement('tr');
                             TR_2.setAttribute('class', 'table-light');
+						const CL_0 = document.createElement('td');
+							let formCheckDiv = document.createElement('div');
+								formCheckDiv.className = 'form-check';
+							
+							let checkboxInput = document.createElement('input');
+								checkboxInput.type = 'checkbox';
+								checkboxInput.className = 'form-check-input';
+								checkboxInput.value = `${request['id']}`;
+								checkboxInput.id = `${request['id']}`;
+							formCheckDiv.appendChild(checkboxInput);
+						CL_0.appendChild(formCheckDiv);
                         const CL_1 = document.createElement('td');
                             if (tbl[tab.getAttribute('href').substring(1)]) {
                                 const button = document.createElement('button');
@@ -376,7 +387,7 @@
                             const TR_workers = document.createElement('tr');
                                  TR_workers.className = 'table-warning';
                                 const TD_workers = document.createElement('td');
-                                    TD_workers.setAttribute('colspan', '4');
+                                    TD_workers.setAttribute('colspan', '5');
                                     TD_workers.textContent = `👷‍♂️: ${request['workers']}`;
                                 TR_workers.appendChild(TD_workers);
                             accBody.appendChild(TR_workers);
@@ -385,7 +396,7 @@
                             const TR_comments = document.createElement('tr');
                                  TR_comments.className = 'table-warning';
                                 const TD_comments = document.createElement('td');
-                                    TD_comments.setAttribute('colspan', '4');
+                                    TD_comments.setAttribute('colspan', '5');
                                     TD_comments.innerHTML = `🗨️: ${request['comments'].replace(/\n/g, '<br>🗨️: ')}`;
                                 TR_comments.appendChild(TD_comments);
                             accBody.appendChild(TR_comments);
@@ -393,7 +404,7 @@
                         const TR_problem = document.createElement('tr');
                             TR_problem.className = 'table-warning';
                             const TD_problem = document.createElement('td');
-                                TD_problem.setAttribute('colspan', '4');
+                                TD_problem.setAttribute('colspan', '5');
                                 TD_problem.innerHTML = `🛠️: ${request['problem'].replace(/\n/g, '<br>')}`;
                             TR_problem.appendChild(TD_problem);
 						accBody.appendChild(TR_problem);
@@ -403,7 +414,7 @@
 						
 							// Создаем ячейку таблицы
 							const TD_photo = document.createElement('td');
-								TD_photo.setAttribute('colspan', '4');
+								TD_photo.setAttribute('colspan', '5');
 						
 							// Создаем карусель
 							const carousel = document.createElement('div');
