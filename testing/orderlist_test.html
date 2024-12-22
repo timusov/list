@@ -224,7 +224,7 @@
             inwork: {
                 url: actionUrl+"work_",
                 title: "\u2705 в работу",
-                func: false
+                func: "new bootstrap.Modal(document.getElementById('refreshModal')).show()"
             },
             del: {
                 url: actionUrl+"del_",
@@ -510,12 +510,6 @@
 				
 			});
         });
-		
-		document.querySelectorAll('a').forEach(link => {
-			link.addEventListener('onclick', event => {
-				new bootstrap.Modal(document.getElementById('refreshModal')).show();
-			});
-		});
         
         function refreshTable() {
             const nL = document.querySelectorAll('.nav-link');
