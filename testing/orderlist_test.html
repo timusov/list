@@ -525,14 +525,17 @@
         
         function createActionLink(actionText, actionUrl, func, funcWith) {
             const link = document.createElement('a');
-            if (func) {
+            if (func && !actionUrl) {
                 link.setAttribute('onclick', funcWith);
             }
-            link.className = 'dropdown-item';
-            link.textContent = actionText;
-            if (!func) {
+			if (func && actionUrl) {
+				link.setAttribute('onclick', `window.location.replace(${actionUrl}); ${funcWith}`);
+			}
+            if (!func && actionUrl) {
                 link.href = actionUrl;
             }
+			link.className = 'dropdown-item';
+            link.textContent = actionText;
             return link;
         }
 
