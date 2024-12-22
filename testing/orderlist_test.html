@@ -512,7 +512,7 @@
         });
 		
 		document.querySelectorAll('a').forEach(link => {
-			link.addEventListener('click', event => {
+			link.addEventListener('onclick', event => {
 				new bootstrap.Modal(document.getElementById('refreshModal')).show();
 			});
 		});
