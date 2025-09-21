@@ -135,39 +135,39 @@
 	<script>
 		document.getElementById('loginForm').addEventListener('submit', async (e) => {
 			e.preventDefault();
-		
+    
 			const username = document.getElementById('username').value;
 			const password = document.getElementById('password').value;
-		
+    
 			try {
-				// Отключаем кнопку во время отправки
+				// Блокируем кнопку во время обработки
 				document.querySelector('button').disabled = true;
 				
 				const response = await fetch('https://script.google.com/macros/s/AKfycbxzHyrAXW20jwQp4DOvBI37QjvJdwUgAm23CaSIu_a2AVMq3xtOg1ocq9a8noLQ1WY/exec', {
 					method: 'POST',
 					headers: {
-					'Content-Type': 'application/json'
+						'Content-Type': 'application/json'
 					},
 					body: JSON.stringify({ username, password })
 				});
-		
+        
 				if (response.ok) {
-				const { token } = await response.json();
-				localStorage.setItem('authToken', token);
-				window.location.href = '/dashboard.html';
+					const { token } = await response.json();
+					localStorage.setItem('authToken', token);
+					window.location.href = '/dashboard.html';
 				} else {
 					alert('Неверное имя пользователя или пароль');
 				}
-		
+        
 			} catch (error) {
 				console.error('Ошибка авторизации:', error);
 				alert('Произошла ошибка при авторизации. Попробуйте позже.');
 			} finally {
-				// Включаем кнопку после завершения
+				// Разблокируем кнопку после завершения
 				document.querySelector('button').disabled = false;
 			}
 		});
-	
+
 		// Анимация при загрузке страницы
 		window.addEventListener('load', () => {
 			document.querySelector('.login-container').classList.add('loaded');
