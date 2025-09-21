@@ -161,7 +161,7 @@
         
 			} catch (error) {
 				console.error('Ошибка авторизации:', error);
-				alert('Произошла ошибка при авторизации. Попробуйте позже.');
+				alert(`Произошла ошибка при авторизации: ${error}. Попробуйте позже.`);
 			} finally {
 				// Разблокируем кнопку после завершения
 				document.querySelector('button').disabled = false;
