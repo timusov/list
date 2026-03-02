@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Редактор Google Sheets</title>
-	<script src="https://code.jquery.com/jquery-3.6.0.min.js" 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" 
             integrity="sha256-hv2c7Lvt4/XyvqreZeE0bO+yR2u0cA/0XnCw4IyY/Y=" 
             crossorigin="anonymous"></script>
     <style>
@@ -150,15 +150,17 @@
     </footer>
 
     <script>
-		class GoogleSheetsEditor {
-			constructor() {
-				this.currentSheet = 0;
-				this.dataCache = {}; // Кэш данных между вкладками
-				this.sheetId = '2PACX-1vQOmfgo5hS7uTGpWF79OUT511I8JRn5H-Ne9UatiR-CCjXAXgmn9qd9aL_OkvKg5WEKiQ9i5IflFLye'; // Замените на ID вашей таблицы
-				this.apiKey = 'AKfycbzHWxTTSyy0ybznF97HPXIvTSWJQuS9XIyHwdAn-xfIZB-E6rDH7oYM5CkdxZU49hNG0Q'; // Замените на ваш API‑ключ
-		
-				this.init();
-			}
+        class GoogleSheetsEditor {
+            constructor() {
+                this.currentSheet = 0;
+                this.dataCache = {};
+                
+                // ВАЖНО: Замените эти значения на ваши собственные
+                this.sheetId = '2PACX-1vQOmfgo5hS7uTGpWF79OUT511I8JRn5H-Ne9UatiR-CCjXAXgmn9qd9aL_OkvKg5WEKiQ9i5IflFLye'; // Получить из URL вашей таблицы
+                this.scriptId = 'AKfycbzHWxTTSyy0ybznF97HPXIvTSWJQuS9XIyHwdAn-xfIZB-E6rDH7oYM5CkdxZU49hNG0Q'; // Получить из Apps Script
+                
+                this.init();
+            }
 		
 			init() {
 				this.setupEventListeners();
@@ -205,45 +207,24 @@
 					await this.loadSheet(sheetName);
 				}
 			}
-		
+			
 			async loadSheet(sheetName) {
-				console.log('=== Начало загрузки листа ===');
-				console.log('Текущий лист:', sheetName);
-				console.log('ID таблицы:', this.sheetId);
-			
-				try {
-					const csvUrl = `https://docs.google.com/spreadsheets/d/e/${this.sheetId}/pub?gid=${sheetName}&single=true&output=csv`;
-					console.log('Формируемый URL:', csvUrl);
-			
-					const response = await fetch(csvUrl);
-					console.log('Статус ответа:', response.status, response.statusText);
-					console.log('Заголовки ответа:', Object.fromEntries(response.headers.entries()));
-			
-					if (!response.ok) {
-						throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-					}
-			
-					const csvText = await response.text();
-					console.log('Получен CSV‑текст (первые 100 символов):', csvText.substring(0, 100));
-			
-					// Проверяем, не вернулся ли HTML вместо CSV
-					if (csvText.includes('<html') || csvText.includes('<!DOCTYPE')) {
-						console.error('Ошибка: получен HTML вместо CSV. Возможно, таблица не опубликована.');
-						throw new Error('Таблица не опубликована или недоступна');
-					}
-			
-					const data = this.parseCSV(csvText);
-					console.log('Распарсенные данные:', data);
-			
-					this.dataCache[sheetName] = data;
-					this.displayTable(data);
-			
-					console.log('=== Загрузка завершена успешно ===');
-				} catch (error) {
-					console.error('=== Ошибка загрузки данных ===', error);
-					alert('Не удалось загрузить данные. Проверьте:\n1. Настройки доступа к таблице\n2. Корректность ID таблицы\n3. Название листа');
-				}
-			}
+                try {
+                    // Используем безопасный способ получения данных
+                    const url = `https://docs.google.com/spreadsheets/d/e/${this.sheetId}/pub?gid=${sheetName}&single=true&output=csv`;
+                    
+                    const response = await fetch(url);
+                    if (!response.ok) {
+                        throw new Error(`Ошибка загрузки: ${response.statusText}`);
+                    }
+                    
+                    const csvText = await response.text();
+                    const data = this.parseCSV(csvText);
+                    this.displayTable(data);
+                } catch (error) {
+                    console.error('Ошибка загрузки:', error);
+                }
+            }
 		
 			parseCSV(csvText) {
 				const lines = csvText.split('\n');
@@ -301,48 +282,26 @@
 			}
 		
 			saveData() {
-			    const dataToSave = this.getTableData(); // Получаем данные из таблицы
-						
-			    // Проверяем наличие данных
-			    if (!dataToSave || Object.keys(dataToSave).length === 0) {
-			        console.warn('Нет данных для сохранения');
-			        return;
-			    }
-			
-			    $.ajax({
-			        url: 'https://script.google.com/macros/s/AKfycbzHWxTTSyy0ybznF97HPXIvTSWJQuS9XIyHwdAn-xfIZB-E6rDH7oYM5CkdxZU49hNG0Q/exec',
-			        type: 'POST',
-			        contentType: 'application/json',
-			        data: JSON.stringify(dataToSave),
-			        success: function(response) {
-			            console.log('Сохранено в Google Таблицу:', response);
-			            this.dataCache[this.currentSheet] = dataToSave;
-			        },
-			        error: function(xhr, status, error) {
-			            console.error('Ошибка при сохранении:', error);
-					
-			            let errorMessage;
-			            switch(xhr.status) {
-			                case 400:
-			                    errorMessage = 'Неверный запрос';
-			                    break;
-			                case 401:
-			                    errorMessage = 'Нет прав доступа';
-			                    break;
-			                case 404:
-			                    errorMessage = 'Ресурс не найден';
-			                    break;
-			                case 500:
-			                    errorMessage = 'Внутренняя ошибка сервера';
-			                    break;
-			                default:
-			                    errorMessage = `Неизвестная ошибка: ${error}`;
-			            }
-					
-			            alert(`Не удалось сохранить в Google Таблицу. Причина: ${errorMessage}`);
-			        }
-			    });
-			}
+                const data = this.getTableData();
+                
+                $.ajax({
+                    url: `https://script.google.com/macros/s/${this.scriptId}/exec`,
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        sheetId: this.sheetId,
+                        sheetName: this.currentSheet,
+                        data: data
+                    }),
+                    success: () => {
+                        alert('Данные сохранены!');
+                    },
+                    error: (error) => {
+                        console.error('Ошибка сохранения:', error);
+                        alert('Не удалось сохранить данные');
+                    }
+                });
+            }
 		
 			async syncData() {
 				await this.loadSheet(this.currentSheet);
@@ -352,8 +311,8 @@
 		
 		// Инициализация приложения после загрузки страницы
 		document.addEventListener('DOMContentLoaded', () => {
-			new GoogleSheetsEditor();
-		});
+            new GoogleSheetsEditor();
+        });
 	</script>
 </body>
 </html>
