@@ -280,26 +280,28 @@
 			}
 		
 			saveData() {
-                const data = this.getTableData();
-                
-                $.ajax({
-                    url: `https://script.google.com/macros/s/${this.scriptId}/exec`,
-                    method: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify({
-                        sheetId: this.sheetId,
-                        sheetName: this.currentSheet,
-                        data: data
-                    }),
-                    success: () => {
-                        alert('Данные сохранены!');
-                    },
-                    error: (error) => {
-                        console.error('Ошибка сохранения:', error);
-                        alert('Не удалось сохранить данные');
-                    }
-                });
-            }
+				const data = this.getTableData();
+
+				$.ajax({
+					url: `https://script.google.com/macros/s/${this.scriptId}/exec`,
+			    	method: 'POST',
+			    	contentType: 'application/json',
+			    	data: JSON.stringify({
+			    		sheetId: this.sheetId,
+			    		sheetName: this.currentSheet,
+			    		data: data
+			    	}),
+			    beforeSend: function(xhr) {
+			    	xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
+			    },
+			    success: () => {
+			    	alert('Данные сохранены!');
+			    },
+			    error: (error) => {
+			    	console.error('Ошибка сохранения:', error);
+			    	alert('Не удалось сохранить данные');
+			    }});
+			}
 		
 			async syncData() {
 				await this.loadSheet(this.currentSheet);
