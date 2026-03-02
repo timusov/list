@@ -336,7 +336,7 @@
 			                    errorMessage = 'Внутренняя ошибка сервера';
 			                    break;
 			                default:
-			                    errorMessage = 'Неизвестная ошибка';
+			                    errorMessage = `Неизвестная ошибка: ${error}`;
 			            }
 					
 			            alert(`Не удалось сохранить в Google Таблицу. Причина: ${errorMessage}`);
