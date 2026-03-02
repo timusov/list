@@ -294,10 +294,11 @@
 			    beforeSend: function(xhr) {
 			    	xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
 			    },
-			    success: () => {
-			    	alert('Данные сохранены!');
+			    success: (response) => {
+			    	console.log('Данные сохранены:', response);
+			    	alert('Данные успешно сохранены!');
 			    },
-			    error: (error) => {
+			    error: (xhr, status, error) => {
 			    	console.error('Ошибка сохранения:', error);
 			    	alert('Не удалось сохранить данные');
 			    }});
