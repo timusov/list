@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Редактор Google Sheets</title>
+    <style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+		
+		body {
+			font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+			background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+			min-height: 100vh;
+		}
+		
+		.navbar {
+			background: rgba(255, 255, 255, 0.95);
+			backdrop-filter: blur(10px);
+			padding: 1rem 2rem;
+			box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+		}
+		
+		.tabs {
+			display: flex;
+			gap: 1rem;
+			flex-wrap: wrap;
+		}
+		
+		.tab-btn {
+			padding: 0.75rem 1.5rem;
+			border: none;
+			background: #f8f9fa;
+			border-radius: 8px;
+			cursor: pointer;
+			transition: all 0.3s ease;
+			font-weight: 500;
+		}
+		
+		.tab-btn.active {
+			background: #007bff;
+			color: white;
+			box-shadow: 0 4px 12px rgba(0, 123, 255, 0.2);
+		}
+		
+		.container {
+			max-width: 1200px;
+			margin: 2rem auto;
+			padding: 0 1rem;
+		}
+		
+		#table-container {
+			background: white;
+			border-radius: 12px;
+			overflow: hidden;
+			box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+		}
+		
+		table {
+			width: 100%;
+			border-collapse: collapse;
+		}
+		
+		th, td {
+			padding: 12px 16px;
+			text-align: left;
+			border-bottom: 1px solid #e9ecef;
+		}
+		
+		th {
+			background: #f8f9fa;
+			font-weight: 600;
+			position: sticky;
+			top: 0;
+		}
+		
+		input, textarea {
+			width: 100%;
+			padding: 8px 12px;
+			border: 1px solid #ddd;
+			border-radius: 6px;
+			transition: border 0.3s;
+		}
+		
+		input:focus, textarea:focus {
+			border-color: #007bff;
+			outline: none;
+		}
+		
+		.footer {
+			max-width: 1200px;
+			margin: 0 auto;
+			padding: 2rem 1rem;
+			display: flex;
+			justify-content: center;
+			gap: 1rem;
+		}
+		
+		.btn {
+			padding: 12px 24px;
+			border: none;
+			border-radius: 8px;
+			cursor: pointer;
+			font-weight: 600;
+			transition: all 0.3s ease;
+		}
+		
+		.btn-primary {
+			background: #28a745;
+			color: white;
+		}
+		
+		.btn-secondary {
+			background: #6c757d;
+			color: white;
+		}
+		
+		.btn:hover {
+			transform: translateY(-2px);
+			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+		}
+	</style>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <header class="navbar">
+        <div class="tabs">
+            <button class="tab-btn active" data-sheet=0>Проверки</button>
+            <button class="tab-btn" data-sheet=295253462>Задачи</button>
+			<button class="tab-btn" data-sheet=1850671412>Тест</button>
+            <!-- Добавьте кнопки для других листов -->
+        </div>
+    </header>
+
+    <main class="container">
+        <div id="table-container">
+            <!-- Таблица будет загружена здесь -->
+        </div>
+    </main>
+
+    <footer class="footer">
+        <button id="save-btn" class="btn btn-primary">Сохранить изменения</button>
+        <button id="sync-btn" class="btn btn-secondary">Синхронизировать</button>
+    </footer>
+
+    <script>
+		class GoogleSheetsEditor {
+			constructor() {
+				this.currentSheet = 0;
+				this.dataCache = {}; // Кэш данных между вкладками
+				this.sheetId = '2PACX-1vQOmfgo5hS7uTGpWF79OUT511I8JRn5H-Ne9UatiR-CCjXAXgmn9qd9aL_OkvKg5WEKiQ9i5IflFLye'; // Замените на ID вашей таблицы
+				this.apiKey = 'AKfycbzHWxTTSyy0ybznF97HPXIvTSWJQuS9XIyHwdAn-xfIZB-E6rDH7oYM5CkdxZU49hNG0Q'; // Замените на ваш API‑ключ
+		
+				this.init();
+			}
+		
+			init() {
+				this.setupEventListeners();
+				this.loadSheet(this.currentSheet);
+			}
+		
+			setupEventListeners() {
+				// Переключение вкладок
+				document.querySelectorAll('.tab-btn').forEach(btn => {
+					btn.addEventListener('click', () => {
+						const sheetName = btn.dataset.sheet;
+						this.switchSheet(sheetName);
+					});
+				});
+		
+				// Сохранение данных
+				document.getElementById('save-btn').addEventListener('click', () => {
+					this.saveData();
+				});
+		
+				// Синхронизация
+				document.getElementById('sync-btn').addEventListener('click', () => {
+					this.syncData();
+				});
+			}
+		
+			async switchSheet(sheetName) {
+				// Сохраняем текущие данные в кэш перед переключением
+				const currentData = this.getTableData();
+				if (currentData) {
+					this.dataCache[this.currentSheet] = currentData;
+				}
+		
+				// Обновляем интерфейс
+				document.querySelector('.tab-btn.active').classList.remove('active');
+				document.querySelector(`[data-sheet="${sheetName}"]`).classList.add('active');
+		
+				this.currentSheet = sheetName;
+		
+				// Загружаем данные для нового листа (из кэша или с сервера)
+				if (this.dataCache[sheetName]) {
+					this.displayTable(this.dataCache[sheetName]);
+				} else {
+					await this.loadSheet(sheetName);
+				}
+			}
+		
+			async loadSheet(sheetName) {
+				console.log('=== Начало загрузки листа ===');
+				console.log('Текущий лист:', sheetName);
+				console.log('ID таблицы:', this.sheetId);
+			
+				try {
+					const csvUrl = `https://docs.google.com/spreadsheets/d/e/${this.sheetId}/pub?gid=${sheetName}&single=true&output=csv`;
+					console.log('Формируемый URL:', csvUrl);
+			
+					const response = await fetch(csvUrl);
+					console.log('Статус ответа:', response.status, response.statusText);
+					console.log('Заголовки ответа:', Object.fromEntries(response.headers.entries()));
+			
+					if (!response.ok) {
+						throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+					}
+			
+					const csvText = await response.text();
+					console.log('Получен CSV‑текст (первые 100 символов):', csvText.substring(0, 100));
+			
+					// Проверяем, не вернулся ли HTML вместо CSV
+					if (csvText.includes('<html') || csvText.includes('<!DOCTYPE')) {
+						console.error('Ошибка: получен HTML вместо CSV. Возможно, таблица не опубликована.');
+						throw new Error('Таблица не опубликована или недоступна');
+					}
+			
+					const data = this.parseCSV(csvText);
+					console.log('Распарсенные данные:', data);
+			
+					this.dataCache[sheetName] = data;
+					this.displayTable(data);
+			
+					console.log('=== Загрузка завершена успешно ===');
+				} catch (error) {
+					console.error('=== Ошибка загрузки данных ===', error);
+					alert('Не удалось загрузить данные. Проверьте:\n1. Настройки доступа к таблице\n2. Корректность ID таблицы\n3. Название листа');
+				}
+			}
+		
+			parseCSV(csvText) {
+				const lines = csvText.split('\n');
+				return lines.map(line => line.split(','));
+			}
+		
+			displayTable(data) {
+				const container = document.getElementById('table-container');
+		
+				if (!data || data.length === 0) {
+					container.innerHTML = '<p>Нет данных для отображения</p>';
+					return;
+				}
+		
+				let tableHTML = '<table><thead><tr>';
+		
+				// Заголовки
+				data[0].forEach(header => {
+					tableHTML += `<th contenteditable="false">${header}</th>`;
+				});
+				tableHTML += '</tr></thead><tbody>';
+		
+				// Данные
+				for (let i = 1; i < data.length; i++) {
+					tableHTML += '<tr>';
+					data[i].forEach(cell => {
+						tableHTML += `<td contenteditable="true">${cell || ''}</td>`;
+					});
+					tableHTML += '</tr>';
+				}
+				tableHTML += '</tbody></table>';
+		
+				container.innerHTML = tableHTML;
+			}
+		
+			getTableData() {
+				const table = document.querySelector('table');
+				if (!table) return null;
+		
+				const data = [];
+				const rows = table.querySelectorAll('tr');
+		
+				rows.forEach((row, rowIndex) => {
+					const rowData = [];
+					const cells = row.querySelectorAll('td, th');
+		
+					cells.forEach(cell => {
+						rowData.push(cell.textContent);
+					});
+		
+					data.push(rowData);
+				});
+				
+				return data;
+			}
+		
+			saveData() {
+				const dataToSave = this.getTableData();
+				
+				// Более строгая проверка данных
+				if (!dataToSave || Object.keys(dataToSave).length === 0) {
+					console.warn('Нет данных для сохранения');
+					return;
+				}
+				
+				fetch('https://script.google.com/macros/s/AKfycbzHWxTTSyy0ybznF97HPXIvTSWJQuS9XIyHwdAn-xfIZB-E6rDH7oYM5CkdxZU49hNG0Q/exec', {
+					method: 'POST',
+					headers: {
+					'Content-Type': 'application/json'
+					},
+					body: JSON.stringify(dataToSave)
+				})
+				.then(response => {
+					// Проверяем статус ответа
+					if (!response.ok) {
+						throw new Error(`HTTP error! Status: ${response.status}`);
+					}
+					return response.json();
+				})
+				.then(data => {
+					console.log('Сохранено в Google Таблицу:', data);
+					this.dataCache[this.currentSheet] = dataToSave;
+				})
+				.catch(err => {
+					console.error('Ошибка при сохранении:', err);
+					alert(`Не удалось сохранить в Google Таблицу. Причина: ${err.message}`);
+				});
+			}
+		
+			async syncData() {
+				await this.loadSheet(this.currentSheet);
+				alert('Данные синхронизированы с таблицей Google Sheets');
+			}
+		}
+		
+		// Инициализация приложения после загрузки страницы
+		document.addEventListener('DOMContentLoaded', () => {
+			new GoogleSheetsEditor();
+		});
+	</script>
+</body>
+</html>
