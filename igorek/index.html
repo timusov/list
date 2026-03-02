@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Редактор Google Sheets</title>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js" 
+            integrity="sha256-hv2c7Lvt4/XyvqreZeE0bO+yR2u0cA/0XnCw4IyY/Y=" 
+            crossorigin="anonymous"></script>
     <style>
 		* {
 			margin: 0;
@@ -298,78 +301,47 @@
 			}
 		
 			saveData() {
-				const dataToSave = getTableData(); // Получаем данные из таблицы
-				
-				// Проверяем наличие данных
-				if (!dataToSave || Object.keys(dataToSave).length === 0) {
-					console.warn('Нет данных для сохранения');
-					return;
-				}
+			    const dataToSave = getTableData(); // Получаем данные из таблицы
+						
+			    // Проверяем наличие данных
+			    if (!dataToSave || Object.keys(dataToSave).length === 0) {
+			        console.warn('Нет данных для сохранения');
+			        return;
+			    }
 			
-				// Создаем XMLHttpRequest
-				const xhr = new XMLHttpRequest();
-				
-				// Конфигурируем запрос
-				xhr.open('POST', 'https://script.google.com/macros/s/AKfycbzHWxTTSyy0ybznF97HPXIvTSWJQuS9XIyHwdAn-xfIZB-E6rDH7oYM5CkdxZU49hNG0Q/exec', true);
-				
-				// Устанавливаем заголовки
-				xhr.setRequestHeader('Content-Type', 'application/json');
-				
-				// Обработчик успешного ответа
-				xhr.onload = function() {
-					if (xhr.status >= 200 && xhr.status < 300) {
-						try {
-							const response = JSON.parse(xhr.responseText);
-							console.log('Сохранено в Google Таблицу:', response);
-							
-							// Обновляем кэш данных
-							dataCache[currentSheet] = dataToSave;
-						} catch (error) {
-							console.error('Ошибка парсинга ответа:', error);
-							this.showError('Не удалось обработать ответ сервера');
-						}
-					} else {
-						this.handleError(xhr.status);
-					}
-				};
-				
-				// Обработчик ошибок
-				xhr.onerror = function() {
-					console.error('Произошла ошибка сети');
-					this.showError('Произошла ошибка при отправке данных');
-				};
-				
-				// Отправляем данные
-				xhr.send(JSON.stringify(dataToSave));
-			}
-			
-			// Вспомогательные функции
-			showError(message) {
-				alert(`Ошибка: ${message}`);
-			}
-			
-			handleError(status) {
-				let errorMessage;
-				
-				switch(status) {
-					case 400:
-						errorMessage = 'Неверный запрос';
-						break;
-					case 401:
-						errorMessage = 'Нет прав доступа';
-						break;
-					case 404:
-						errorMessage = 'Ресурс не найден';
-						break;
-					case 500:
-						errorMessage = 'Внутренняя ошибка сервера';
-						break;
-					default:
-						errorMessage = 'Неизвестная ошибка';
-				}
-				
-				console.error(`HTTP ошибка: ${status}`);
-				showError(errorMessage);
+			    $.ajax({
+			        url: 'https://script.google.com/macros/s/AKfycbzHWxTTSyy0ybznF97HPXIvTSWJQuS9XIyHwdAn-xfIZB-E6rDH7oYM5CkdxZU49hNG0Q/exec',
+			        type: 'POST',
+			        contentType: 'application/json',
+			        data: JSON.stringify(dataToSave),
+			        success: function(response) {
+			            console.log('Сохранено в Google Таблицу:', response);
+			            dataCache[currentSheet] = dataToSave;
+			        },
+			        error: function(xhr, status, error) {
+			            console.error('Ошибка при сохранении:', error);
+					
+			            let errorMessage;
+			            switch(xhr.status) {
+			                case 400:
+			                    errorMessage = 'Неверный запрос';
+			                    break;
+			                case 401:
+			                    errorMessage = 'Нет прав доступа';
+			                    break;
+			                case 404:
+			                    errorMessage = 'Ресурс не найден';
+			                    break;
+			                case 500:
+			                    errorMessage = 'Внутренняя ошибка сервера';
+			                    break;
+			                default:
+			                    errorMessage = 'Неизвестная ошибка';
+			            }
+					
+			            alert(`Не удалось сохранить в Google Таблицу. Причина: ${errorMessage}`);
+			        }
+			    });
 			}
 		
 			async syncData() {
