@@ -301,7 +301,7 @@
 			}
 		
 			saveData() {
-			    const dataToSave = getTableData(); // Получаем данные из таблицы
+			    const dataToSave = this.getTableData(); // Получаем данные из таблицы
 						
 			    // Проверяем наличие данных
 			    if (!dataToSave || Object.keys(dataToSave).length === 0) {
@@ -316,7 +316,7 @@
 			        data: JSON.stringify(dataToSave),
 			        success: function(response) {
 			            console.log('Сохранено в Google Таблицу:', response);
-			            dataCache[currentSheet] = dataToSave;
+			            this.dataCache[this.currentSheet] = dataToSave;
 			        },
 			        error: function(xhr, status, error) {
 			            console.error('Ошибка при сохранении:', error);
